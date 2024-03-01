@@ -1,6 +1,28 @@
-sourceCompatibility = 1.8
+
+
+plugins {
+    id('java')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java'] // Adjust this path if your structure is different
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+dependencies {
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+}
 
 eclipse.project.name = appName + "-core"

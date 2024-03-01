@@ -1,6 +1,40 @@
-sourceCompatibility = 1.8
-sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["../assets"]
+plugins {
+    id('java')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    modularity.inferModulePath = true
+}
+compileJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs += [
+                '--module-path', classpath.asPath
+        ]
+        classpath = files()
+    }
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java'] // Adjust this path if your structure is different
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+dependencies {
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+}
+
+eclipse.project.name = appName + "-core"
 
 project.ext.mainClassName = "gbw.melange.DesktopLauncher"
 project.ext.assetsDir = new File("../assets")

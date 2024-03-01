@@ -1,30 +1,29 @@
 package gbw.melange.observance;
 
-public class PristineObservableValue<T> {
+import gbw.melange.observance.filters.FilterChain;
+import gbw.melange.observance.filters.IFilterChain;
+import gbw.melange.observance.filters.IPristineFilterChain;
+import gbw.melange.observance.filters.PristineFilterChain;
 
-    private EqualityFunction<T> equalityFunction;
-    private T value;
-    private IPristineOnChangeConsumer<T> onChange;
+public class PristineObservableValue<T> extends ObservableValue<T, IPristineBiConsumer<T>>
+        implements IPristineObservableValue<T> {
 
-    public PristineObservableValue(T initialValue, EqualityFunction<T> equalityFunction, IPristineOnChangeConsumer<T> onChange){
-        this.value = initialValue;
-        this.equalityFunction = equalityFunction;
-        this.onChange = onChange;
+    private final IPristineFilterChain<T, Integer> filters = FilterChain.pristine();
+
+    protected PristineObservableValue(T initialValue){
+        super.value = initialValue;
     }
-    public T get(){
-        return value;
-    }
+
+    @Override
     public void set(T newer){
-        if(equalityFunction.test(value, newer)){
-            onChange.accept(value, newer);
+        if(!super.equalityFunction.test(value, newer)){
+            filters.run(value, newer);
         }
         this.value = newer;
     }
-    public void changeEqualityCondition(EqualityFunction<T> predicate){
-        this.equalityFunction = predicate;
-    }
-    public void changeOnChange(IPristineOnChangeConsumer<T> onChange){
-        this.onChange = onChange;
-    }
 
+    @Override
+    public IFilterChain<IPristineBiConsumer<T>, Integer> filters() {
+        return filters;
+    }
 }

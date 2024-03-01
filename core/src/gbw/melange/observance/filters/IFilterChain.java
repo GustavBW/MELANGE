@@ -14,7 +14,7 @@ public interface IFilterChain<T, R> {
 
     /**
      * When trying to add the filter to the chain, the identifier specified might be occupied in which case this method will do nothing. <br/>
-     * To replace an existing filter, use {@link IFilterChain#replaceFilter(T)} instead
+     * To replace an existing filter, use {@link IFilterChain#replaceFilter(R, T)} instead
      * @return the resulting identifier
      */
     R addFilter(T filter, R identifier);
@@ -26,12 +26,6 @@ public interface IFilterChain<T, R> {
     boolean replaceFilter(R identifier, T filter);
 
     /**
-     * Replaces an existing filter using object equivalence.
-     * @return Whether a filter was replaced or not.
-     */
-    boolean replaceFilter(T filter);
-
-    /**
      * @return Whether a filter was removed or not.
      */
     boolean removeFilter(T filter);
@@ -40,4 +34,13 @@ public interface IFilterChain<T, R> {
      * @return Whether a filter was removed or not.
      */
     boolean removeOnId(R identifier);
+
+    /**
+     * @return True if the filter chain currently contains the provider filter.
+     */
+    boolean contains(T filter);
+    /**
+     * @return True if the filter chain currently contains a filter with that id.
+     */
+    boolean containsById(R identifier);
 }

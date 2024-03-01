@@ -5,6 +5,6 @@ package gbw.melange.observance;
  * @param <T>
  */
 @FunctionalInterface
-public interface IPristineOnChangeConsumer<T> extends Action<T> {
+public interface IPristineBiConsumer<T> extends UndeterminedBiConsumer<T> {
     void accept(T old, T newer);
 }

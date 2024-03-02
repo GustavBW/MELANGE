@@ -1,6 +1,6 @@
 module core {
-    requires gdx;
     requires java.desktop;
+    requires gdx;
 
     exports gbw.melange to desktop;
 }

@@ -6,7 +6,6 @@ gwt {
     src = files(file("src/")) // Needs to be in front of "modules" below.
     modules 'gbw.melange.GdxDefinition'
     devModules 'gbw.melange.GdxDefinitionSuperdev'
-    project.webAppDirName = 'webapp'
 
     compiler {
         strict = true;
@@ -88,5 +87,8 @@ tasks.checkGwt.dependsOn(addSource)
 
 sourceCompatibility = 17
 sourceSets.main.java.srcDirs = [ "src/" ]
+
+dependencies {
+}
 
 eclipse.project.name = appName + "-html"

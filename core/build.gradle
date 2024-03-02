@@ -1,19 +1,32 @@
-
-
 plugins {
-    id('java')
+    id 'java-library'
+    id 'org.beryx.jlink' version '3.0.1'
 }
+
+ext.moduleName = 'gbw.melange.core'
+group = 'gbw.melange'
+eclipse.project.name = appName + "-core"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    modularity.inferModulePath = true;
+}
+compileJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs += [
+                '--module-path', classpath.asPath,
+                '--patch-module', 'gdx=gdx.jnigen.loader.jar'
+        ]
+        classpath = files()
+    }
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java'] // Adjust this path if your structure is different
+            srcDirs = ['src/main/java']
         }
         resources {
             srcDirs = ['src/main/resources']
@@ -21,8 +34,17 @@ sourceSets {
     }
 }
 
-dependencies {
-    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+jlink {
+    options.addAll('--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages')
+    launcher{
+        name = 'melange'
+        jvmArgs = ['-Dlog4j.configurationFile=./log4j2.xml']
+    }
 }
 
-eclipse.project.name = appName + "-core"
+dependencies {
+    api("com.badlogicgames.gdx:gdx:$gdxVersion") {
+        exclude module: "gdx.jnigen.loader"
+    }
+}
+

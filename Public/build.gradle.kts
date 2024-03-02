@@ -24,4 +24,7 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+
 }
+ext.set("moduleName", "gbw.melange.Public")
+ext.set("group", "gbw.melange")

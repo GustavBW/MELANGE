@@ -1,3 +1,9 @@
+## Module Specific
+/core/target
+/desktop/target
+/events/target
+/ptg/target
+
 ## Java
 
 *.class

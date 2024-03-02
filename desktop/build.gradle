@@ -1,5 +1,5 @@
 plugins {
-    id('java')
+    id('java-library')
 }
 
 java {
@@ -7,11 +7,15 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
     modularity.inferModulePath = true
 }
+eclipse.project.name = appName + "-core"
+ext.moduleName = 'gbw.melange.desktop'
+group = 'gbw.melange'
 compileJava {
     inputs.property("moduleName", moduleName)
     doFirst {
         options.compilerArgs += [
-                '--module-path', classpath.asPath
+                '--module-path', classpath.asPath,
+                '--patch-module', 'gdx=gdx.jnigen.loader'
         ]
         classpath = files()
     }
@@ -31,10 +35,13 @@ sourceSets {
 }
 
 dependencies {
-    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api("com.badlogicgames.gdx:gdx:$gdxVersion") {
+        exclude module: "gdx.jnigen.loader"
+    }
+    implementation project(":core")
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
-
-eclipse.project.name = appName + "-core"
 
 project.ext.mainClassName = "gbw.melange.DesktopLauncher"
 project.ext.assetsDir = new File("../assets")

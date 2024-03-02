@@ -17,7 +17,7 @@ compileJava {
     doFirst {
         options.compilerArgs += [
                 '--module-path', classpath.asPath,
-                '--patch-module', 'gdx=gdx.jnigen.loader.jar'
+                '--patch-module', 'gdx=C:/Users/gusta/.m2/repository/com/badlogicgames/gdx/gdx-jnigen-loader/2.3.1/gdx-jnigen-loader-2.3.1.jar'
         ]
         classpath = files()
     }
@@ -35,7 +35,7 @@ sourceSets {
 }
 
 jlink {
-    options.addAll('--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages')
+    options.addAll('--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages','--patch-module', 'gdx=C:/Users/gusta/.m2/repository/com/badlogicgames/gdx/gdx-jnigen-loader/2.3.1/gdx-jnigen-loader-2.3.1.jar')
     launcher{
         name = 'melange'
         jvmArgs = ['-Dlog4j.configurationFile=./log4j2.xml']

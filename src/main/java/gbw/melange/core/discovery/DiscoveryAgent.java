@@ -1,8 +1,11 @@
 package gbw.melange.core.discovery;
 
+import gbw.melange.common.MelangeApplication;
 import gbw.melange.common.annotations.Space;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.*;
@@ -12,25 +15,35 @@ import java.util.*;
  */
 public class DiscoveryAgent<T> {
 
-    private final List<Space> userSpaces = new ArrayList<>();
-
+    private static final Logger log = LoggerFactory.getLogger(DiscoveryAgent.class);
     private final Class<T> userMainClass;
     private Package supposedRootPackageOfUser;
-    private Set<Class<?>> spaces = new HashSet<>();
     private AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
 
     public static <T> DiscoveryAgent<T> run(Class<T> mainClassInstance) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassInstance);
         instance.findRootPackage();
         instance.gatherUserSpaces();
+        instance.addUserMainClassToTheMix();
 
         instance.refresh();
         return instance;
     }
 
+    private void addUserMainClassToTheMix() throws ClassConfigurationIssue {
+        if(userMainClass == null){
+            throw new ClassConfigurationIssue("null is not a valid main class parameter.");
+        }
+        String mainClassErr = BeanConstructorValidator.isValidClassForRegistration(userMainClass);
+        if(mainClassErr != null){
+            throw new ClassConfigurationIssue("The provided main class should have a no args constructor or an autowired one. (" + userMainClass + ")");
+        }
+        programContext.registerBean(userMainClass);
+    }
+
     public String findRootPackage(){
         Package userPgk = userMainClass.getPackage();
-        System.out.println("[DA] user package is: " + userPgk);
+        log.info("root package is "+ userPgk);
         this.supposedRootPackageOfUser = userPgk;
         return userPgk.getName();
 
@@ -41,13 +54,13 @@ public class DiscoveryAgent<T> {
         Reflections reflections = new Reflections(basePackage);
 
         Set<Class<?>> spaces = reflections.getTypesAnnotatedWith(Space.class);
-        System.out.println("[DA].gatherUserSpaces() found: " + spaces.stream().map(Class::toString).toList());
+        log.info("Found spaces: " + spaces.stream().map(Class::toString).toList());
 
         // Find all classes annotated with @Space
         for (Class<?> spaceClass : spaces) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceClass);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(constructorErrMsg);
+                throw new ClassConfigurationIssue(spaceClass + constructorErrMsg);
             }
 
             programContext.registerBean(spaceClass);
@@ -60,7 +73,6 @@ public class DiscoveryAgent<T> {
 
 
     private DiscoveryAgent(Class<T> userMainClass){
-        assert userMainClass != null;
         this.userMainClass = userMainClass;
 
     }

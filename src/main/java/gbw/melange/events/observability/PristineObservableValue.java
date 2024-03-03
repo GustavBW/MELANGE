@@ -22,7 +22,7 @@ public class PristineObservableValue<T> extends ObservableValue<T, IPristineBiCo
     }
 
     @Override
-    public IFilterChain<IPristineBiConsumer<T>, Integer> filters() {
+    public IFilterChain<IPristineBiConsumer<T>, Integer> onChange() {
         return filters;
     }
 }

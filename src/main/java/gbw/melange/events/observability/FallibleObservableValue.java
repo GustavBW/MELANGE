@@ -26,7 +26,7 @@ public class FallibleObservableValue<T> extends ObservableValue<T, IFallibleBiCo
         return filters.runAllowExceptions(super.value, newer);
     }
     @Override
-    public IFilterChain<IFallibleBiConsumer<T>, Integer> filters() {
+    public IFilterChain<IFallibleBiConsumer<T>, Integer> onChange() {
         return filters;
     }
 }

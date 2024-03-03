@@ -9,13 +9,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <artifactId>melange</artifactId>
     <name>MELANGE</name>
 
-    <modules>
-        <module>core</module>
-        <module>ptg</module>
-        <module>events</module>
-        <module>desktop</module>
-    </modules>
-
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -138,8 +131,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                     <arguments>
                         <argument>-Dorg.lwjgl.util.Debug=true</argument>
                         <argument>-Djava.library.path=${module.dep.out.dir}</argument>
+                        <argument>-cp</argument><argument>${jnigen.dir}/*</argument>
+                        <argument>-cp</argument><argument>${module.dep.out.dir}/*</argument>
                         <argument>--module-path=${module.out.dir}${path.separator}${module.dep.out.dir}/gdx-backend-lwjgl3-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-platform-1.12.1-natives-desktop.jar</argument>
-                        <argument>--class-path=${module.dep.out.dir}/*${path.separator}${jnigen.dir}/*</argument>
                         <argument>--module=desktop/gbw.melange.DesktopLauncher</argument>
                     </arguments>
                 </configuration>

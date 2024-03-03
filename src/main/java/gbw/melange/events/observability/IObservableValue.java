@@ -24,5 +24,5 @@ public interface IObservableValue<T, R extends UndeterminedBiConsumer<T>, U> {
     /**
      * @return Returns the on change consumers applied to this observable value.
      */
-    IFilterChain<R,U> filters();
+    IFilterChain<R,U> onChange();
 }

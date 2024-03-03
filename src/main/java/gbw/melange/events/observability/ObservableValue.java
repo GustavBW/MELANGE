@@ -8,6 +8,7 @@ package gbw.melange.events.observability;
 public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> implements IObservableValue<T, R, Integer> {
     protected EqualityFunction<T> equalityFunction = (EqualityFunction<T>) EqualityFunction.DEFAULT;
     protected T value;
+
     public static <T> IPristineObservableValue<T> pristine(T initialValue, EqualityFunction<T> equalityFunction){
         IPristineObservableValue<T> instance = new PristineObservableValue<>(initialValue);
         instance.changeEqualityFunction(equalityFunction);

@@ -22,7 +22,7 @@ public class BeanConstructorValidator {
             return null;
         }
         if(hasNoArgs != null && hasAutoWired != null){
-            return clazz + hasNoArgs + " OR" + hasAutoWired;
+            return hasNoArgs + " OR" + hasAutoWired;
         }
 
         return null;

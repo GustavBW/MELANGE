@@ -4,6 +4,11 @@
 /events/target
 /ptg/target
 
+## Execution Specific - change this if the configuration is changes as to not push full shaded artefacts
+/compiled-modules
+/libs
+/that-jnigen-guy
+
 ## Java
 
 *.class

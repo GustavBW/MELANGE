@@ -5,9 +5,7 @@ import gbw.melange.welcomeapp.discovery.CanItFindThis;
 
 public class WelcomeExample {
 
-    public static void main(String[] args) {
-        new CanItFindThis();
-        new SpaceInRootUserPackage();
+    public static void main(String[] args) throws Exception {
         MelangeApplication.run(WelcomeExample.class);
     }
 

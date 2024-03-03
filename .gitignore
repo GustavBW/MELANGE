@@ -10,7 +10,7 @@
 /that-jnigen-guy
 
 ## Java
-
+/target
 *.class
 *.war
 *.ear

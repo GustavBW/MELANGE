@@ -9,6 +9,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <artifactId>melange</artifactId>
     <name>MELANGE</name>
 
+    <packaging>jar</packaging>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -26,16 +28,35 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <module.dep.out.dir>libs</module.dep.out.dir>
     </properties>
 
-    <packaging>pom</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-lwjgl3</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>${gdx.version}</version>
+            <classifier>natives-desktop</classifier>
+        </dependency>
+        <dependency>
+            <groupId>melange</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
 
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>3.2.0</version>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -49,26 +70,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.3.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase> <!-- Adjust phase based on your lifecycle needs -->
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>../${module.dep.out.dir}</outputDirectory> <!-- Adjust path as needed -->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -113,119 +114,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                     <doclint>none</doclint>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal> <!-- Goal to execute a Java class -->
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <workingDirectory>.</workingDirectory>
-                    <longModulepath>false</longModulepath>
-                    <arguments>
-                        <argument>-Dorg.lwjgl.util.Debug=true</argument>
-                        <argument>-Djava.library.path=${module.dep.out.dir}</argument>
-                        <argument>-cp</argument><argument>${jnigen.dir}/*</argument>
-                        <argument>-cp</argument><argument>${module.dep.out.dir}/*</argument>
-                        <argument>--module-path=${module.out.dir}${path.separator}${module.dep.out.dir}/gdx-backend-lwjgl3-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-platform-1.12.1-natives-desktop.jar</argument>
-                        <argument>--module=desktop/gbw.melange.DesktopLauncher</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <!-- parent project should delete ${module.out.dir} -->
-            <id>parent-project</id>
-            <activation>
-                <file>
-                    <missing>src</missing>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-clean-plugin</artifactId>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>${module.out.dir}</directory>
-                                </fileset>
-                                <fileset>
-                                    <directory>${module.dep.out.dir}</directory>
-                                </fileset>
-                                <fileset>
-                                    <directory>${jnigen.dir}</directory>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <!-- child projects should copy artifact into 'mods-mvn' -->
-            <id>child-project</id>
-            <activation>
-                <file>
-                    <exists>src</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>3.6.1</version>
-                        <executions>
-                            <execution>
-                                <id>copy-compiled-modules-to-"${module.out.dir}"</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>${project.groupId}</groupId>
-                                            <artifactId>${project.artifactId}</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>jar</type>
-                                        </artifactItem>
-                                    </artifactItems>
-                                    <outputDirectory>../${module.out.dir}</outputDirectory>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>copy-jnigen-to-"${jnigen.dir}"</id>
-                                <phase>install</phase> <!-- Adjust phase as needed -->
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.badlogicgames.gdx</groupId>
-                                            <artifactId>gdx-jnigen-loader</artifactId>
-                                            <version>2.4.1</version>
-                                            <type>jar</type>
-                                        </artifactItem>
-                                    </artifactItems>
-                                    <outputDirectory>../${jnigen.dir}</outputDirectory>
-                                    <!-- Additional configurations if needed -->
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

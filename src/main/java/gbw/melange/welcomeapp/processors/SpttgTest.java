@@ -8,6 +8,7 @@ import gbw.melange.common.hooks.OnRender;
 import gbw.melange.shading.FragmentShader;
 import gbw.melange.shading.VertexShader;
 import gbw.melange.shading.templating.gradients.GradientFragmentShaderBuilder;
+import gbw.melange.shading.templating.gradients.InterpolationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +34,11 @@ public class SpttgTest implements OnRender {
         spttgTestTexture = new Texture(Gdx.files.internal("badlogic.jpg"));
         FragmentShader fragmentShader = GradientFragmentShaderBuilder.create(12)
                 .addStop(Color.WHITE, 0)
-                .addStop(Color.BLACK, .5)
-                .addStop(Color.WHITE, 1)
+                .addStop(Color.ROYAL, .5)
+                .addStop(Color.CORAL, 1)
+                .setInterpolationType(InterpolationType.HERMIT)
                 .build();
+        System.out.println(fragmentShader.code());
         shader = new ShaderProgram(VertexShader.DEFAULT, fragmentShader.code());
         log.info("Shader is compiled: " + shader.isCompiled());
     }

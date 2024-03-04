@@ -103,11 +103,11 @@ public abstract class FilterChain<T, R extends UndeterminedBiConsumer<T>>
 
     @Override
     public boolean containsById(Integer identifier) {
-        return findFirst(identifier) == null;
+        return findFirst(identifier) != null;
     }
     @Override
     public boolean contains(R filter) {
-        return findFirst(filter) == null;
+        return findFirst(filter) != null;
     }
     @Override
     public boolean removeFilter(R filter) {

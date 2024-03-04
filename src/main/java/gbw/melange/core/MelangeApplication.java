@@ -2,10 +2,10 @@ package gbw.melange.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
 import gbw.melange.core.interactions.InputListener;
 import org.slf4j.Logger;
@@ -22,21 +22,25 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     }
     public static <T> void run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig) throws Exception {
         new Lwjgl3Application(new MelangeApplication<>(mainClass), lwjglConfig);
-    }
-
-    public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
-        log.info("Running discovery agent.");
-        DiscoveryAgent<T> discoveryAgent = DiscoveryAgent.run(userMainClass);
         Gdx.input.setInputProcessor(new InputListener());
+    }
+    private DiscoveryAgent<T> discoveryAgent;
+    public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
+        log.info("Running discovery agent");
+        discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass);
     }
 
     @Override
     public void create(){
-        System.out.println("[MA] Create hit");
+        log.info("[MA] Create hit");
+        discoveryAgent.instatiateAndPrepare();
     }
 
     @Override
     public void render(){
+        for(OnRender renderHook : discoveryAgent.getOnRenderList()){
+            renderHook.onRender();
+        }
     }
 
     @Override

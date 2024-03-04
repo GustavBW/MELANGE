@@ -1,4 +1,4 @@
-package gbw.melange.spttg.shadertemplating;
+package gbw.melange.shading.templating;
 
 import gbw.melange.common.builders.IShaderTemplateBuilder;
 import gbw.melange.common.elementary.IElement;

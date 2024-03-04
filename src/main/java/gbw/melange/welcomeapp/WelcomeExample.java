@@ -1,7 +1,6 @@
 package gbw.melange.welcomeapp;
 
-import gbw.melange.common.MelangeApplication;
-import gbw.melange.welcomeapp.discovery.CanItFindThis;
+import gbw.melange.core.MelangeApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class WelcomeExample {

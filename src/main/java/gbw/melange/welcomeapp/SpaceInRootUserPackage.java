@@ -1,6 +1,5 @@
 package gbw.melange.welcomeapp;
 
-import gbw.melange.common.MelangeApplication;
 import gbw.melange.common.annotations.Space;
 import gbw.melange.welcomeapp.discovery.CanItFindThis;
 import org.slf4j.Logger;

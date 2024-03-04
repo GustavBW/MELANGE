@@ -21,7 +21,7 @@ public class SpttgTest implements OnRender {
     private Texture spttgTestTexture;
     private Matrix4 matrix;
 
-    public SpttgTest(){
+    public SpttgTest() {
         spttgTestMesh = new Mesh(true, 4, 6, VertexAttribute.Position(), VertexAttribute.ColorUnpacked(), VertexAttribute.TexCoords(0));
         spttgTestMesh.setVertices(new float[] {
                 -0.5f, -0.5f, 0, 1, 1, 1, 1, 0, 1,

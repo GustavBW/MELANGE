@@ -46,7 +46,7 @@ public class DiscoveryAgent<T> {
         for (Class<? extends OnInit> onInitImpl : onInitImpls){
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onInitImpl);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(onInitImpl + constructorErrMsg);
+                throw new ClassConfigurationIssue(onInitImpl + ": " + constructorErrMsg);
             }
 
             programContext.registerBean(onInitImpl);
@@ -62,7 +62,7 @@ public class DiscoveryAgent<T> {
         for (Class<? extends OnRender> onRenderImpl : onRenderImpls) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onRenderImpl);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(onRenderImpl + constructorErrMsg);
+                throw new ClassConfigurationIssue(onRenderImpl + ": " + constructorErrMsg);
             }
 
             programContext.registerBean(onRenderImpl);
@@ -75,7 +75,7 @@ public class DiscoveryAgent<T> {
         }
         String mainClassErr = BeanConstructorValidator.isValidClassForRegistration(userMainClass);
         if(mainClassErr != null){
-            throw new ClassConfigurationIssue("The provided main class should have a no args constructor or an autowired one. (" + userMainClass + ")");
+            throw new ClassConfigurationIssue("The provided main class: " + mainClassErr);
         }
         programContext.registerBean(userMainClass);
     }
@@ -95,7 +95,7 @@ public class DiscoveryAgent<T> {
         for (Class<?> spaceClass : spaces) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceClass);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(spaceClass + constructorErrMsg);
+                throw new ClassConfigurationIssue(spaceClass + ": " + constructorErrMsg);
             }
 
             programContext.registerBean(spaceClass);

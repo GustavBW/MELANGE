@@ -2,6 +2,7 @@ package gbw.melange.welcomeapp;
 
 import gbw.melange.common.MelangeApplication;
 import gbw.melange.welcomeapp.discovery.CanItFindThis;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class WelcomeExample {
 
@@ -9,7 +10,8 @@ public class WelcomeExample {
         MelangeApplication.run(WelcomeExample.class);
     }
 
-    public WelcomeExample(){
+    @Autowired
+    public WelcomeExample(SpaceInRootUserPackage thisShouldWork){
         System.out.println("[WE] Constructor hit");
     }
 

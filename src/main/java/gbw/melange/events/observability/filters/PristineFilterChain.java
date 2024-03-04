@@ -1,6 +1,7 @@
 package gbw.melange.events.observability.filters;
 
-import gbw.melange.events.observability.IPristineBiConsumer;
+import gbw.melange.common.events.observability.IPristineBiConsumer;
+import gbw.melange.common.events.observability.filters.IPristineFilterChain;
 
 /**
  * Intercepting Filter Patten

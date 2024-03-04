@@ -1,6 +1,7 @@
 package gbw.melange.events.observability.filters;
 
-import gbw.melange.events.observability.IFallibleBiConsumer;
+import gbw.melange.common.events.observability.IFallibleBiConsumer;
+import gbw.melange.common.events.observability.filters.IFallibleFilterChain;
 
 import java.util.ArrayList;
 import java.util.Collection;

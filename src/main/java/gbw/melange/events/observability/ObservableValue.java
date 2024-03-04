@@ -1,9 +1,12 @@
 package gbw.melange.events.observability;
 
+import gbw.melange.common.events.observability.*;
+
 /**
  * Abstract Factory pattern. Also happens to contain some shared functionality and extend this to the subclasses.
- * @param <T>
- * @param <R>
+ * @param <T> Type of value being observed
+ * @param <R> The OnChange bi consumers that can be appended.
+ * TODO: Refactor to ServiceLoader use when modularized
  */
 public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> implements IObservableValue<T, R, Integer> {
     protected EqualityFunction<T> equalityFunction = (EqualityFunction<T>) EqualityFunction.DEFAULT;

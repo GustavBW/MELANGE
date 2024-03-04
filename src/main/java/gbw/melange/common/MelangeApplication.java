@@ -12,12 +12,16 @@ import org.springframework.lang.NonNull;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
     private static final Logger log = LoggerFactory.getLogger(MelangeApplication.class);
-    public static <T> void run(@NonNull Class<T> mainClass) throws Exception{
+    public static <T> void run(@NonNull Class<T> mainClass) throws Exception {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(60);
         config.setTitle("Melange");
-        new Lwjgl3Application(new MelangeApplication<>(mainClass), config);
+        run(mainClass, config);
     }
+    public static <T> void run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig) throws Exception {
+        new Lwjgl3Application(new MelangeApplication<>(mainClass), lwjglConfig);
+    }
+
     public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
         log.info("Running discovery agent.");
         DiscoveryAgent<T> discoveryAgent = DiscoveryAgent.run(userMainClass);

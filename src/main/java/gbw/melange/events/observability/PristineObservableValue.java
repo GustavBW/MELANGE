@@ -1,8 +1,10 @@
 package gbw.melange.events.observability;
 
+import gbw.melange.common.events.observability.IPristineBiConsumer;
+import gbw.melange.common.events.observability.IPristineObservableValue;
 import gbw.melange.events.observability.filters.FilterChain;
-import gbw.melange.events.observability.filters.IFilterChain;
-import gbw.melange.events.observability.filters.IPristineFilterChain;
+import gbw.melange.common.events.observability.filters.IFilterChain;
+import gbw.melange.common.events.observability.filters.IPristineFilterChain;
 
 public class PristineObservableValue<T> extends ObservableValue<T, IPristineBiConsumer<T>>
         implements IPristineObservableValue<T> {

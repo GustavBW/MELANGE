@@ -2,6 +2,7 @@ package gbw.melange.core.discovery;
 
 import gbw.melange.common.annotations.Space;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.common.hooks.OnRender;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +20,32 @@ public class DiscoveryAgent<T> {
     private Package supposedRootPackageOfUser;
     private AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
 
-    public static <T> DiscoveryAgent<T> run(Class<T> mainClassInstance) throws ClassConfigurationIssue{
+    //Hooks
+    private List<OnRender> onRenderHookImpl = new ArrayList<>();
+
+    public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassInstance) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassInstance);
         instance.findRootPackage();
         instance.gatherUserSpaces();
         instance.addUserMainClassToTheMix();
-
-        instance.refresh();
+        instance.gatherCustomProcessors();
         return instance;
+    }
+
+    private void gatherCustomProcessors() throws ClassConfigurationIssue {
+        String basePackage = supposedRootPackageOfUser.getName();
+        Reflections reflections = new Reflections(basePackage);
+
+        Set<Class<? extends OnRender>> processors = reflections.getSubTypesOf(OnRender.class);
+        log.info("Found onRender hook implementations: " + processors.stream().map(Class::toString).toList());
+        for (Class<? extends OnRender> processorClass : processors) {
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(processorClass);
+            if(constructorErrMsg != null){
+                throw new ClassConfigurationIssue(processorClass + constructorErrMsg);
+            }
+
+            programContext.registerBean(processorClass);
+        }
     }
 
     private void addUserMainClassToTheMix() throws ClassConfigurationIssue {
@@ -40,12 +59,9 @@ public class DiscoveryAgent<T> {
         programContext.registerBean(userMainClass);
     }
 
-    public String findRootPackage(){
+    public void findRootPackage(){
         Package userPgk = userMainClass.getPackage();
-        log.info("root package is "+ userPgk);
         this.supposedRootPackageOfUser = userPgk;
-        return userPgk.getName();
-
     }
 
     public void gatherUserSpaces() throws ClassConfigurationIssue {
@@ -66,9 +82,18 @@ public class DiscoveryAgent<T> {
         }
     }
 
+    public void instatiateAndPrepare() {
+        refresh();
+    }
+    public List<OnRender> getOnRenderList(){
+        return onRenderHookImpl;
+    }
+
     private void refresh(){
         programContext.refresh();
+        onRenderHookImpl = programContext.getBeansOfType(OnRender.class).values().stream().toList();
     }
+
 
 
     private DiscoveryAgent(Class<T> userMainClass){

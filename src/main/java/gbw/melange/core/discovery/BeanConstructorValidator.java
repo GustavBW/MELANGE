@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 
 public class BeanConstructorValidator {
 
+
+
     /**
      * Checks if a given class can be instantiated or not in a bean-way
      * @param clazz
@@ -18,23 +20,37 @@ public class BeanConstructorValidator {
         String hasNoArgs = hasAvailableNoArgsConstructor(clazz);
         String hasAutoWired = hasAutowiredConstructor(clazz);
 
-        if(hasNoArgs == null && hasAutoWired == null){
+        if(hasAutoWired == null || hasNoArgs == null) {
             return null;
         }
-        if(hasNoArgs != null && hasAutoWired != null){
-            return hasNoArgs + " OR" + hasAutoWired;
+
+        if(hasAutoWired != null){
+            return hasAutoWired;
+        }
+
+        if(hasNoArgs != null){
+            return hasNoArgs;
         }
 
         return null;
     }
 
-    public static String hasAutowiredConstructor(Class<?> spaceClass) {
+    public static String doesValidConstructorThrow(Constructor<?> constructors){
+        Class<?>[] throwsAnyOfTypes = constructors.getExceptionTypes();
+        if(throwsAnyOfTypes.length == 0){
+            return null;
+        } else {
+            return " does have an available constructor, but it may throw an exception which is not allowed. Consider using the OnInit hook.";
+        }
+    }
+
+    public static String hasAutowiredConstructor(Class<?> clazz) {
         String latestIssue = null;
-        for (Constructor<?> constructor : spaceClass.getDeclaredConstructors()) {
+        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             if (constructor.isAnnotationPresent(Autowired.class)) {
                 // Check if the @Autowired constructor is public or protected
                 if (Modifier.isPublic(constructor.getModifiers()) || Modifier.isProtected(constructor.getModifiers())) {
-                    return null;
+                    return doesValidConstructorThrow(constructor);
                 }else{
                     latestIssue = " has a constructor marked as @Autowired, but it is not accessible. Consider making it public";
                 }
@@ -55,7 +71,7 @@ public class BeanConstructorValidator {
             Constructor<?> noArgsConstructor = clazz.getDeclaredConstructor();
             // Check if the no-args constructor is public or protected
             if (Modifier.isPublic(noArgsConstructor.getModifiers()) || Modifier.isProtected(noArgsConstructor.getModifiers())) {
-                return null;
+                return doesValidConstructorThrow(noArgsConstructor);
             }else{
                 return " does have a no-args constructor but it is not accessible. Consider making it public.";
             }

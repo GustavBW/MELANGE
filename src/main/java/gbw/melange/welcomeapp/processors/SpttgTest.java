@@ -38,7 +38,6 @@ public class SpttgTest implements OnRender {
                 .addStop(Color.CORAL, 1)
                 .setInterpolationType(InterpolationType.HERMIT)
                 .build();
-        System.out.println(fragmentShader.code());
         shader = new ShaderProgram(VertexShader.DEFAULT, fragmentShader.code());
         log.info("Shader is compiled: " + shader.isCompiled());
     }
@@ -47,7 +46,6 @@ public class SpttgTest implements OnRender {
     public void onRender(){
         shader.bind();
         shader.setUniformMatrix("u_projTrans", matrix);
-
 
         spttgTestMesh.render(shader, GL20.GL_TRIANGLES);
     }

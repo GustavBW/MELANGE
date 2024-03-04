@@ -11,7 +11,7 @@ public class SpaceInRootUserPackage {
 
     private static final Logger log = LoggerFactory.getLogger(SpaceInRootUserPackage.class);
     @Autowired
-    public SpaceInRootUserPackage(CanItFindThis lemmeHaveIt) throws Exception{
+    public SpaceInRootUserPackage(CanItFindThis lemmeHaveIt) {
         log.info("Got it: " + lemmeHaveIt);
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
+import gbw.melange.core.discovery.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.core.interactions.InputListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     public void create(){
         log.info("[MA] Create hit");
         discoveryAgent.instatiateAndPrepare();
+        ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
     }
 
     @Override

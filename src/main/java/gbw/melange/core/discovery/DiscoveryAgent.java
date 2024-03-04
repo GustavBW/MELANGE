@@ -2,6 +2,7 @@ package gbw.melange.core.discovery;
 
 import gbw.melange.common.annotations.Space;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -21,36 +22,56 @@ public class DiscoveryAgent<T> {
     private AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
 
     //Hooks
-    private List<OnRender> onRenderHookImpl = new ArrayList<>();
+    private List<OnRender> onRenderHookImpls = new ArrayList<>();
+    private List<OnInit> onInitHookImpls = new ArrayList<>();
 
-    public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassInstance) throws ClassConfigurationIssue{
-        DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassInstance);
+    public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
+        DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
         instance.findRootPackage();
+
         instance.gatherUserSpaces();
         instance.addUserMainClassToTheMix();
-        instance.gatherCustomProcessors();
+        //Hooks
+        instance.gatherUserOnRenderImpl();
+        instance.gatherUserOnInitImpl();
         return instance;
     }
 
-    private void gatherCustomProcessors() throws ClassConfigurationIssue {
+    private void gatherUserOnInitImpl() throws ClassConfigurationIssue  {
         String basePackage = supposedRootPackageOfUser.getName();
         Reflections reflections = new Reflections(basePackage);
 
-        Set<Class<? extends OnRender>> processors = reflections.getSubTypesOf(OnRender.class);
-        log.info("Found onRender hook implementations: " + processors.stream().map(Class::toString).toList());
-        for (Class<? extends OnRender> processorClass : processors) {
-            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(processorClass);
+        Set<Class<? extends OnInit>> onInitImpls = reflections.getSubTypesOf(OnInit.class);
+        log.info("Found OnInit hooks: " + onInitImpls.stream().map(Class::toString).toList());
+        for (Class<? extends OnInit> onInitImpl : onInitImpls){
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onInitImpl);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(processorClass + constructorErrMsg);
+                throw new ClassConfigurationIssue(onInitImpl + constructorErrMsg);
             }
 
-            programContext.registerBean(processorClass);
+            programContext.registerBean(onInitImpl);
+        }
+    }
+
+    private void gatherUserOnRenderImpl() throws ClassConfigurationIssue {
+        String basePackage = supposedRootPackageOfUser.getName();
+        Reflections reflections = new Reflections(basePackage);
+
+        Set<Class<? extends OnRender>> onRenderImpls = reflections.getSubTypesOf(OnRender.class);
+        log.info("Found onRender hooks: " + onRenderImpls.stream().map(Class::toString).toList());
+        for (Class<? extends OnRender> onRenderImpl : onRenderImpls) {
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onRenderImpl);
+            if(constructorErrMsg != null){
+                throw new ClassConfigurationIssue(onRenderImpl + constructorErrMsg);
+            }
+
+            programContext.registerBean(onRenderImpl);
         }
     }
 
     private void addUserMainClassToTheMix() throws ClassConfigurationIssue {
         if(userMainClass == null){
-            throw new ClassConfigurationIssue("null is not a valid main class parameter.");
+            throw new ClassConfigurationIssue("null is not a valid main class.");
         }
         String mainClassErr = BeanConstructorValidator.isValidClassForRegistration(userMainClass);
         if(mainClassErr != null){
@@ -60,8 +81,7 @@ public class DiscoveryAgent<T> {
     }
 
     public void findRootPackage(){
-        Package userPgk = userMainClass.getPackage();
-        this.supposedRootPackageOfUser = userPgk;
+        this.supposedRootPackageOfUser = userMainClass.getPackage();
     }
 
     public void gatherUserSpaces() throws ClassConfigurationIssue {
@@ -86,12 +106,16 @@ public class DiscoveryAgent<T> {
         refresh();
     }
     public List<OnRender> getOnRenderList(){
-        return onRenderHookImpl;
+        return onRenderHookImpls;
+    }
+    public List<OnInit> getOnInitHookImpls(){
+        return onInitHookImpls;
     }
 
     private void refresh(){
         programContext.refresh();
-        onRenderHookImpl = programContext.getBeansOfType(OnRender.class).values().stream().toList();
+        onRenderHookImpls.addAll(programContext.getBeansOfType(OnRender.class).values());
+        onInitHookImpls.addAll(programContext.getBeansOfType(OnInit.class).values());
     }
 
 

@@ -1,6 +1,6 @@
-package gbw.melange.events.observability;
+package gbw.melange.common.events.observability;
 
-import gbw.melange.events.observability.filters.IFilterChain;
+import gbw.melange.common.events.observability.filters.IFilterChain;
 
 /**
  * An Observer pattern employing an Intercepting Filters pattern to handle observers.

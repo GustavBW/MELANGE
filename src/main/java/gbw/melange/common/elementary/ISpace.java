@@ -1,4 +1,6 @@
-package gbw.melange.elements;
+package gbw.melange.common.elementary;
+
+import gbw.melange.common.builders.IElementBuilder;
 
 public interface ISpace {
 

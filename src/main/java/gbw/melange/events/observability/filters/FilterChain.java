@@ -1,6 +1,9 @@
 package gbw.melange.events.observability.filters;
 
-import gbw.melange.events.observability.UndeterminedBiConsumer;
+import gbw.melange.common.events.observability.UndeterminedBiConsumer;
+import gbw.melange.common.events.observability.filters.IFallibleFilterChain;
+import gbw.melange.common.events.observability.filters.IFilterChain;
+import gbw.melange.common.events.observability.filters.IPristineFilterChain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.function.Predicate;
  * Entrypoint for retrieving FilterChain implementations. Both pristine and fallible.
  * @param <T> Type of the type the consumers (filters) consume
  * @param <R> Actual type of the consumer itself
+ *
+ * TODO: Refactor to ServiceLoader use when modularized
  */
 public abstract class FilterChain<T, R extends UndeterminedBiConsumer<T>>
         implements IFilterChain<R, Integer> {

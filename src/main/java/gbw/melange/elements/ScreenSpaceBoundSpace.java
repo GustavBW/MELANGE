@@ -1,6 +1,9 @@
 package gbw.melange.elements;
 
-public class ScreenSpaceBoundSpace implements ISpace{
+import gbw.melange.common.builders.IElementBuilder;
+import gbw.melange.common.elementary.ISpace;
+
+public class ScreenSpaceBoundSpace implements ISpace {
 
 
     @Override

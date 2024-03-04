@@ -1,4 +1,4 @@
-package gbw.melange.common;
+package gbw.melange.common.builders;
 
 public interface IBuilder<T> {
 

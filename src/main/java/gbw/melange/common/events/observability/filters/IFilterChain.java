@@ -1,4 +1,4 @@
-package gbw.melange.events.observability.filters;
+package gbw.melange.common.events.observability.filters;
 
 /**
  *

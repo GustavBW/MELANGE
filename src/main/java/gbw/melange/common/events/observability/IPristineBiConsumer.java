@@ -1,4 +1,4 @@
-package gbw.melange.events.observability;
+package gbw.melange.common.events.observability;
 
 /**
  * Promises not to throw exceptions during runtime.

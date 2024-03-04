@@ -1,5 +1,7 @@
 package gbw.melange.elements.constraints;
 
+import gbw.melange.common.elementary.IElementConstraints;
+
 /**
  * Physical relations between a given Element and another.
  * A Child will always render on top of a parent

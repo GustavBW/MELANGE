@@ -1,6 +1,5 @@
 package gbw.melange.core.discovery;
 
-import gbw.melange.common.MelangeApplication;
 import gbw.melange.common.annotations.Space;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import org.reflections.Reflections;

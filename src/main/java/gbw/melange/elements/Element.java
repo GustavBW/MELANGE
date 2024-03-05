@@ -1,12 +1,10 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.MeshTable;
 import gbw.melange.common.elementary.IElement;
 import gbw.melange.common.elementary.IElementConstraints;
-import gbw.melange.common.elementary.ISpace;
+import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.elements.constraints.ElementConstraints;
 import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.elements.rules.IElementRuleBuilder;

@@ -1,9 +1,11 @@
 package gbw.melange.core.discovery;
 
-import gbw.melange.common.elementary.ISpace;
+import gbw.melange.common.annotations.View;
+import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
+import gbw.melange.core.CoreRootMarker;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,28 +21,44 @@ public class DiscoveryAgent<T> {
     private static final Logger log = LoggerFactory.getLogger(DiscoveryAgent.class);
     private final Class<T> userMainClass;
     private Package supposedRootPackageOfUser;
-    private Reflections rootPackageReflections;
+    private Reflections userRootReflections, systemRootReflections;
     private final AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
-
     //Hooks
     private final List<OnRender> onRenderHookImpls = new ArrayList<>();
     private final List<OnInit> onInitHookImpls = new ArrayList<>();
-    private final List<ISpace> userSpaces = new ArrayList<>();
+    private final Map<Class<?>, Integer> userViewOrdering = new HashMap<>();
 
     public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
-        instance.findRootPackage();
-
-        instance.gatherUserSpaces();
-        instance.addUserMainClassToTheMix();
+        //System
+        log.info("______________________SYSTEM_______________________");
+        instance.setUpReflections();
+        instance.registerUserAvailableSpaces();
+        //User
+        log.info("______________________USER_______________________");
+        instance.registerUserMainClass();
+        instance.registerUserViews();
         //Hooks
         instance.gatherUserOnRenderImpl();
         instance.gatherUserOnInitImpl();
+
         return instance;
     }
+    private void registerUserAvailableSpaces() throws ClassConfigurationIssue {
+        Set<Class<? extends ISpace>> spaceTypes = systemRootReflections.getSubTypesOf(ISpace.class);
+        spaceTypes = TypeFilter.onlyBeanables(spaceTypes);
+        log.info("Found space types: " + spaceTypes.stream().map(Class::toString).toList());
+        for (Class<? extends ISpace> spaceType : spaceTypes) {
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceType);
+            if(constructorErrMsg != null){
+                throw new ClassConfigurationIssue(spaceType + ": " + constructorErrMsg);
+            }
 
+            programContext.registerBean(spaceType);
+        }
+    }
     private void gatherUserOnInitImpl() throws ClassConfigurationIssue  {
-        Set<Class<? extends OnInit>> onInitImpls = rootPackageReflections.getSubTypesOf(OnInit.class);
+        Set<Class<? extends OnInit>> onInitImpls = userRootReflections.getSubTypesOf(OnInit.class);
         log.info("Found OnInit hooks: " + onInitImpls.stream().map(Class::toString).toList());
         for (Class<? extends OnInit> onInitImpl : onInitImpls){
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onInitImpl);
@@ -51,9 +69,8 @@ public class DiscoveryAgent<T> {
             programContext.registerBean(onInitImpl);
         }
     }
-
     private void gatherUserOnRenderImpl() throws ClassConfigurationIssue {
-        Set<Class<? extends OnRender>> onRenderImpls = rootPackageReflections.getSubTypesOf(OnRender.class);
+        Set<Class<? extends OnRender>> onRenderImpls = userRootReflections.getSubTypesOf(OnRender.class);
         log.info("Found onRender hooks: " + onRenderImpls.stream().map(Class::toString).toList());
         for (Class<? extends OnRender> onRenderImpl : onRenderImpls) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onRenderImpl);
@@ -64,8 +81,7 @@ public class DiscoveryAgent<T> {
             programContext.registerBean(onRenderImpl);
         }
     }
-
-    private void addUserMainClassToTheMix() throws ClassConfigurationIssue {
+    private void registerUserMainClass() throws ClassConfigurationIssue {
         if(userMainClass == null){
             throw new ClassConfigurationIssue("null is not a valid main class.");
         }
@@ -75,22 +91,26 @@ public class DiscoveryAgent<T> {
         }
         programContext.registerBean(userMainClass);
     }
-
-    public void findRootPackage(){
+    private void setUpReflections(){
         this.supposedRootPackageOfUser = userMainClass.getPackage();
-        this.rootPackageReflections = new Reflections(supposedRootPackageOfUser.getName());
+        this.userRootReflections = new Reflections(supposedRootPackageOfUser.getName());
+        this.systemRootReflections = new Reflections(CoreRootMarker.class.getPackage().getName());
     }
-
-    public void gatherUserSpaces() throws ClassConfigurationIssue {
-        Set<Class<? extends ISpace>> spaces = rootPackageReflections.getSubTypesOf(ISpace.class);
-        log.info("Found spaces: " + spaces.stream().map(Class::toString).toList());
-        for (Class<? extends ISpace> spaceClass : spaces) {
-            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceClass);
+    private void registerUserViews() throws ClassConfigurationIssue {
+        Set<Class<?>> views = userRootReflections.getTypesAnnotatedWith(View.class);
+        views = TypeFilter.onlyBeanables(views);
+        log.info("Found views: " + views.stream().map(Class::toString).toList());
+        for (Class<?> viewType : views) {
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(viewType);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(spaceClass + ": " + constructorErrMsg);
+                throw new ClassConfigurationIssue(viewType + ": " + constructorErrMsg);
             }
 
-            programContext.registerBean(spaceClass);
+            View viewAnnotationOfView = viewType.getAnnotation(View.class);
+            int layerOfView = viewAnnotationOfView.layer();
+            userViewOrdering.put(viewType, layerOfView);
+
+            programContext.registerBean(viewType);
         }
     }
 
@@ -103,14 +123,11 @@ public class DiscoveryAgent<T> {
     public List<OnInit> getOnInitHookImpls(){
         return onInitHookImpls;
     }
-    public List<ISpace> getUserSpaces() {
-        return userSpaces;
-    }
     private void refresh(){
         programContext.refresh();
         onRenderHookImpls.addAll(programContext.getBeansOfType(OnRender.class).values());
         onInitHookImpls.addAll(programContext.getBeansOfType(OnInit.class).values());
-        userSpaces.addAll(programContext.getBeansOfType(ISpace.class).values());
+
     }
 
 

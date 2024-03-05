@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import gbw.melange.common.elementary.ISpace;
+import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
@@ -27,17 +27,19 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputListener());
     }
     private DiscoveryAgent<T> discoveryAgent;
+    private final long bootTimeA;
     public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
-        log.info("Running discovery agent");
+        bootTimeA = System.currentTimeMillis();
+        log.info("Welcome to the spice, MELANGE.");
         discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass);
     }
 
     @Override
     public void create(){
-        log.info("[MA] Create hit");
         discoveryAgent.instatiateAndPrepare();
-
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
+        final long bootTimeB = System.currentTimeMillis();
+        log.info("MELANGE Framework startup time: " + (bootTimeB - bootTimeA) + "ms");
     }
 
     @Override
@@ -50,7 +52,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
     @Override
     public void dispose(){
-        discoveryAgent.getUserSpaces().forEach(ISpace::dispose);
     }
 
 }

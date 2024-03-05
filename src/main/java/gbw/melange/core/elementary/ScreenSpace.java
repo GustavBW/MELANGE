@@ -1,15 +1,17 @@
-package gbw.melange.elements;
+package gbw.melange.core.elementary;
 
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.elementary.IElementRenderer;
-import gbw.melange.common.elementary.ISpace;
+import gbw.melange.common.elementary.space.IScreenSpace;
+import gbw.melange.elements.ElementBuilder;
 
-public class ScreenSpaceBoundSpace implements ISpace {
+public class ScreenSpace implements IScreenSpace {
 
+    public ScreenSpace(){}
 
     @Override
     public IElementBuilder createElement() {
-        return ElementBuilder.forSpace(this);
+        return new ElementBuilder(this);
     }
 
     @Override

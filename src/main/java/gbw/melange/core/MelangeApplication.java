@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import gbw.melange.common.elementary.ISpace;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
@@ -35,6 +36,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     public void create(){
         log.info("[MA] Create hit");
         discoveryAgent.instatiateAndPrepare();
+
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
     }
 
@@ -43,11 +45,12 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         for(OnRender renderHook : discoveryAgent.getOnRenderList()){
             renderHook.onRender();
         }
+
     }
 
     @Override
     public void dispose(){
-
+        discoveryAgent.getUserSpaces().forEach(ISpace::dispose);
     }
 
 }

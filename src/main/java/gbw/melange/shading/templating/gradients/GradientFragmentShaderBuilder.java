@@ -13,8 +13,8 @@ public class GradientFragmentShaderBuilder {
     private List<Color> colors = new ArrayList<>();
     private List<Double> positions = new ArrayList<>();
 
-    public static GradientFragmentShaderBuilder create(double rotation){
-        return new GradientFragmentShaderBuilder(rotation);
+    public static GradientFragmentShaderBuilder create(double rotationDeg){
+        return new GradientFragmentShaderBuilder(rotationDeg);
     }
 
     public GradientFragmentShaderBuilder(double rotationDeg){

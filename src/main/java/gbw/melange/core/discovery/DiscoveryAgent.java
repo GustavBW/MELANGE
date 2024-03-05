@@ -1,6 +1,6 @@
 package gbw.melange.core.discovery;
 
-import gbw.melange.common.annotations.Space;
+import gbw.melange.common.elementary.ISpace;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
@@ -20,11 +20,12 @@ public class DiscoveryAgent<T> {
     private final Class<T> userMainClass;
     private Package supposedRootPackageOfUser;
     private Reflections rootPackageReflections;
-    private AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
+    private final AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
 
     //Hooks
-    private List<OnRender> onRenderHookImpls = new ArrayList<>();
-    private List<OnInit> onInitHookImpls = new ArrayList<>();
+    private final List<OnRender> onRenderHookImpls = new ArrayList<>();
+    private final List<OnInit> onInitHookImpls = new ArrayList<>();
+    private final List<ISpace> userSpaces = new ArrayList<>();
 
     public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
@@ -81,9 +82,9 @@ public class DiscoveryAgent<T> {
     }
 
     public void gatherUserSpaces() throws ClassConfigurationIssue {
-        Set<Class<?>> spaces = rootPackageReflections.getTypesAnnotatedWith(Space.class);
+        Set<Class<? extends ISpace>> spaces = rootPackageReflections.getSubTypesOf(ISpace.class);
         log.info("Found spaces: " + spaces.stream().map(Class::toString).toList());
-        for (Class<?> spaceClass : spaces) {
+        for (Class<? extends ISpace> spaceClass : spaces) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceClass);
             if(constructorErrMsg != null){
                 throw new ClassConfigurationIssue(spaceClass + ": " + constructorErrMsg);
@@ -102,11 +103,14 @@ public class DiscoveryAgent<T> {
     public List<OnInit> getOnInitHookImpls(){
         return onInitHookImpls;
     }
-
+    public List<ISpace> getUserSpaces() {
+        return userSpaces;
+    }
     private void refresh(){
         programContext.refresh();
         onRenderHookImpls.addAll(programContext.getBeansOfType(OnRender.class).values());
         onInitHookImpls.addAll(programContext.getBeansOfType(OnInit.class).values());
+        userSpaces.addAll(programContext.getBeansOfType(ISpace.class).values());
     }
 
 
@@ -115,6 +119,7 @@ public class DiscoveryAgent<T> {
         this.userMainClass = userMainClass;
 
     }
+
 
 
 }

@@ -19,6 +19,7 @@ public class DiscoveryAgent<T> {
     private static final Logger log = LoggerFactory.getLogger(DiscoveryAgent.class);
     private final Class<T> userMainClass;
     private Package supposedRootPackageOfUser;
+    private Reflections rootPackageReflections;
     private AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
 
     //Hooks
@@ -38,10 +39,7 @@ public class DiscoveryAgent<T> {
     }
 
     private void gatherUserOnInitImpl() throws ClassConfigurationIssue  {
-        String basePackage = supposedRootPackageOfUser.getName();
-        Reflections reflections = new Reflections(basePackage);
-
-        Set<Class<? extends OnInit>> onInitImpls = reflections.getSubTypesOf(OnInit.class);
+        Set<Class<? extends OnInit>> onInitImpls = rootPackageReflections.getSubTypesOf(OnInit.class);
         log.info("Found OnInit hooks: " + onInitImpls.stream().map(Class::toString).toList());
         for (Class<? extends OnInit> onInitImpl : onInitImpls){
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onInitImpl);
@@ -54,10 +52,7 @@ public class DiscoveryAgent<T> {
     }
 
     private void gatherUserOnRenderImpl() throws ClassConfigurationIssue {
-        String basePackage = supposedRootPackageOfUser.getName();
-        Reflections reflections = new Reflections(basePackage);
-
-        Set<Class<? extends OnRender>> onRenderImpls = reflections.getSubTypesOf(OnRender.class);
+        Set<Class<? extends OnRender>> onRenderImpls = rootPackageReflections.getSubTypesOf(OnRender.class);
         log.info("Found onRender hooks: " + onRenderImpls.stream().map(Class::toString).toList());
         for (Class<? extends OnRender> onRenderImpl : onRenderImpls) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onRenderImpl);
@@ -82,16 +77,12 @@ public class DiscoveryAgent<T> {
 
     public void findRootPackage(){
         this.supposedRootPackageOfUser = userMainClass.getPackage();
+        this.rootPackageReflections = new Reflections(supposedRootPackageOfUser.getName());
     }
 
     public void gatherUserSpaces() throws ClassConfigurationIssue {
-        String basePackage = supposedRootPackageOfUser.getName();
-        Reflections reflections = new Reflections(basePackage);
-
-        Set<Class<?>> spaces = reflections.getTypesAnnotatedWith(Space.class);
+        Set<Class<?>> spaces = rootPackageReflections.getTypesAnnotatedWith(Space.class);
         log.info("Found spaces: " + spaces.stream().map(Class::toString).toList());
-
-        // Find all classes annotated with @Space
         for (Class<?> spaceClass : spaces) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceClass);
             if(constructorErrMsg != null){

@@ -11,7 +11,7 @@ public class Element implements IElement {
 
     private Mesh mesh;
     private ElementConstraints constrains;
-    //An element is initially concidered volatile until its contrains have resolved.
+    //An element is initially concidered volatile until its contraints have resolved.
     private ElementState state = ElementState.VOLATILE;
 
     public IElementRuleBuilder when(){

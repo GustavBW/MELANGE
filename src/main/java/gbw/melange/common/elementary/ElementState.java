@@ -1,4 +1,4 @@
-package gbw.melange.elements;
+package gbw.melange.common.elementary;
 
 public enum ElementState {
     /**
@@ -13,5 +13,9 @@ public enum ElementState {
     /**
      * This element can receive updates and changes without issue.
      */
-    STABLE;
+    STABLE,
+    /**
+     * Something went wrong, usually a failed OnInit. Regardless, this element is not expected to ever work quite right, so, do what you must.
+     */
+    ERROR;
 }

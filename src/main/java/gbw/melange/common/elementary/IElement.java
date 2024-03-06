@@ -1,21 +1,21 @@
 package gbw.melange.common.elementary;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import gbw.melange.elements.ElementState;
-import gbw.melange.elements.rules.IElementRuleBuilder;
-import gbw.melange.elements.styling.IElementStyleDefinition;
+import gbw.melange.common.elementary.rules.IElementRuleSet;
+import gbw.melange.elements.Element;
+import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 
 public interface IElement {
+
+    IElement NULL = null; //TODO: Find a way to involve a neat null-object pattern here.
 
     //Standard state getters
     IElementConstraints getConstraints();
     ElementState getState();
     IElementStyleDefinition getStylings();
-
     Mesh getMesh();
-
     //The spice
     IElementRuleBuilder when();
+    IElementRuleSet getRuleset();
 
 }

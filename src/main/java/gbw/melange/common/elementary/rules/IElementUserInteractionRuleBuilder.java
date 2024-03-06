@@ -1,4 +1,4 @@
-package gbw.melange.elements.rules;
+package gbw.melange.common.elementary.rules;
 
 public interface IElementUserInteractionRuleBuilder {
 }

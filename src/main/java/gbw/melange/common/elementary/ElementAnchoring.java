@@ -1,6 +1,4 @@
-package gbw.melange.elements.constraints;
-
-import com.badlogic.gdx.math.Vector2;
+package gbw.melange.common.elementary;
 
 /**
  * In relation to the extends and mesh of the element this element is attached to.

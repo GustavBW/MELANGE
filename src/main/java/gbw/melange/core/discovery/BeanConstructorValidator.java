@@ -1,6 +1,5 @@
 package gbw.melange.core.discovery;
 
-import gbw.melange.core.MelangeApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

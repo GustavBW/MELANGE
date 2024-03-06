@@ -37,7 +37,7 @@ public class SpttgTest implements OnRender {
         shader.bind();
         shader.setUniformMatrix("u_projTrans", matrix);
 
-        MeshTable.EQUILATERAL_TRIANGLE.getMesh().render(shader, GL20.GL_TRIANGLES);
+        MeshTable.CIRCLE_64.getMesh().render(shader, GL20.GL_TRIANGLES);
 
     }
 }

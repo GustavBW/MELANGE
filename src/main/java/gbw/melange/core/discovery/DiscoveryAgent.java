@@ -47,7 +47,7 @@ public class DiscoveryAgent<T> {
     private void registerUserAvailableSpaces() throws ClassConfigurationIssue {
         Set<Class<? extends ISpace>> spaceTypes = systemRootReflections.getSubTypesOf(ISpace.class);
         spaceTypes = TypeFilter.onlyBeanables(spaceTypes);
-        log.info("Found space types: " + spaceTypes.stream().map(Class::toString).toList());
+        log.info("Found space implementations: " + spaceTypes.stream().map(Class::toString).toList());
         for (Class<? extends ISpace> spaceType : spaceTypes) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceType);
             if(constructorErrMsg != null){
@@ -105,7 +105,6 @@ public class DiscoveryAgent<T> {
             if(constructorErrMsg != null){
                 throw new ClassConfigurationIssue(viewType + ": " + constructorErrMsg);
             }
-
             View viewAnnotationOfView = viewType.getAnnotation(View.class);
             int layerOfView = viewAnnotationOfView.layer();
             userViewOrdering.put(viewType, layerOfView);

@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.elementary.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
-import gbw.melange.common.elementary.IInitElement;
+import gbw.melange.common.elementary.IVolatileElement;
 import gbw.melange.common.elementary.IPureElement;
 import gbw.melange.common.elementary.space.IScreenSpace;
+import gbw.melange.common.hooks.OnInit;
 import gbw.melange.elements.ElementBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,17 @@ public class ScreenSpace implements IScreenSpace {
 
     @Override
     public IElementBuilder<?> createElement() {
-        return new ElementBuilder<>(this);
+        return createElement(null);
+    }
+
+    @Override
+    public <T> IElementBuilder<T> createElement(T content) {
+        return new ElementBuilder<>(this, content);
+    }
+
+    @Override
+    public <T> IElementBuilder<T> createElement(OnInit<T> contentProvider) {
+        return new ElementBuilder<>(this, contentProvider);
     }
 
     @Override
@@ -48,7 +58,7 @@ public class ScreenSpace implements IScreenSpace {
     }
 
     @Override
-    public void addOnInitElement(IInitElement element) {
+    public void addVolatileElement(IVolatileElement element) {
         loadingQueue.add(element);
     }
 

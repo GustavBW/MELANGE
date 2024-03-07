@@ -1,35 +1,40 @@
 package gbw.melange.shading.templating.gradients;
 
 import com.badlogic.gdx.graphics.Color;
+import gbw.melange.common.builders.IBuilder;
 import gbw.melange.shading.FragmentShader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class GradientFragmentShaderBuilder {
+public class GradientFragmentShaderBuilder implements IGradientBuilder {
 
     private double rotationDeg = 0;
     private InterpolationType interpolationType = InterpolationType.HERMIT;
     private List<Color> colors = new ArrayList<>();
     private List<Double> positions = new ArrayList<>();
 
-    public static GradientFragmentShaderBuilder create(double rotationDeg){
-        return new GradientFragmentShaderBuilder(rotationDeg);
+    public GradientFragmentShaderBuilder(){
+        this(0);
     }
 
     public GradientFragmentShaderBuilder(double rotationDeg){
         this.rotationDeg = rotationDeg;
     }
 
-    public GradientFragmentShaderBuilder addStop(Color color, double relativePosition){
-        colors.add(color);
-        positions.add(relativePosition);
+    @Override
+    public IGradientBuilder setRotation(double degrees){
+        this.rotationDeg = degrees;
         return this;
     }
-    public GradientFragmentShaderBuilder setInterpolationType(InterpolationType type){
+
+    @Override
+    public IGradientBuilder setInterpolationType(InterpolationType type){
         this.interpolationType = type;
         return this;
     }
+    @Override
     public FragmentShader build() {
         StringBuilder codeBuilder = new StringBuilder();
 
@@ -119,5 +124,32 @@ public class GradientFragmentShaderBuilder {
     private void appendGlSetColorStatement(StringBuilder shader) {
         shader.append("\tgl_FragColor = color;\n")
                 .append("}\n");
+    }
+    @Override
+    public IGradientBuilder addStops(Color color, double relativePosition){
+        colors.add(color);
+        positions.add(relativePosition);
+        return this;
+    }
+
+    @Override
+    public IGradientBuilder addStops(Color c0, double pos0, Color c1, double pos1) {
+        colors.addAll(List.of(c0, c1));
+        positions.addAll(List.of(pos0, pos1));
+        return this;
+    }
+
+    @Override
+    public IGradientBuilder addStops(Color c0, double pos0, Color c1, double pos1, Color c2, double pos2) {
+        colors.addAll(List.of(c0, c1, c2));
+        positions.addAll(List.of(pos0, pos1, pos2));
+        return this;
+    }
+
+    @Override
+    public IGradientBuilder addStops(Color c0, double pos0, Color c1, double pos1, Color c2, double pos2, Color c3, double pos3) {
+        colors.addAll(List.of(c0, c1, c2, c3));
+        positions.addAll(List.of(pos0, pos1, pos2, pos3));
+        return this;
     }
 }

@@ -1,7 +1,7 @@
 package gbw.melange.elements.events;
 
 
-public enum IElementEventType {
+public enum ElementEventType {
     /**
      * The moment that caused this event may affect other elements meaning further investigation and propegating updates is needed.<br/>
      * Events that match this type: ElementMoveEvent

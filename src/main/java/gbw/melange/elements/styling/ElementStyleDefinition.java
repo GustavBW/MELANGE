@@ -1,22 +1,23 @@
 package gbw.melange.elements.styling;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.common.elementary.IElementStyleDefinition;
+import gbw.melange.common.elementary.IReferenceStyleDefinition;
 import gbw.melange.shading.templating.ShaderProgramBuilder;
-import org.lwjgl.opengl.GL20;
 
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
     private ShaderProgram backgroundShader = ShaderProgramBuilder.DEFAULT;
     private ShaderProgram borderShader = ShaderProgramBuilder.DEFAULT;
-    private int backgroundDrawStyle = GL20.GL_TRIANGLES;
-    private int borderDrawStyle = GL20.GL_LINE_LOOP;
+    private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
+    private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
 
-    public ElementStyleDefinition(ReferenceStyleDefinition def){
-        if(def.backgroundShader     != null)    this.backgroundShader       = def.backgroundShader;
-        if(def.borderShader         != null)    this.borderShader           = def.borderShader;
-        if(def.backgroundDrawStyle  != -1)      this.backgroundDrawStyle    = def.backgroundDrawStyle;
-        if(def.borderDrawStyle      != -1)      this.borderDrawStyle        = def.borderDrawStyle;
+    public ElementStyleDefinition(IReferenceStyleDefinition def){
+        if(def.backgroundShader()     != null)    this.backgroundShader       = def.backgroundShader();
+        if(def.borderShader()         != null)    this.borderShader           = def.borderShader();
+        if(def.backgroundDrawStyle()  != GLDrawStyle.INVALID)      this.backgroundDrawStyle    = def.backgroundDrawStyle();
+        if(def.borderDrawStyle()     != GLDrawStyle.INVALID)      this.borderDrawStyle        = def.borderDrawStyle();
     }
 
     @Override
@@ -30,12 +31,12 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     }
 
     @Override
-    public int getBackgroundDrawStyle() {
+    public GLDrawStyle getBackgroundDrawStyle() {
         return backgroundDrawStyle;
     }
 
     @Override
-    public int getBorderDrawStyle() {
+    public GLDrawStyle getBorderDrawStyle() {
         return borderDrawStyle;
     }
 

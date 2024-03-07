@@ -2,6 +2,7 @@ package gbw.melange.common.elementary;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 import gbw.melange.elements.styling.ReferenceStyleDefinition;
 
@@ -11,7 +12,7 @@ public interface IElementStyleDefinition extends Disposable {
     ShaderProgram getBackgroundShader();
     ShaderProgram getBorderShader();
 
-    int getBackgroundDrawStyle(); //TODO: Swap to Enum
-    int getBorderDrawStyle();//TODO: Swap to Enum
+    GLDrawStyle getBackgroundDrawStyle(); //TODO: Swap to Enum
+    GLDrawStyle getBorderDrawStyle();//TODO: Swap to Enum
 
 }

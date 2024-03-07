@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 @View
 public class CanItFindThis{
     private static final Logger log = LoggerFactory.getLogger(CanItFindThis.class);
-    //This should cause a problem
     public CanItFindThis(int hi){}
 
     @Autowired
     public CanItFindThis(IHomeScreen homeScreen){
-        log.info("Got it: " + homeScreen);
     }
 }
 

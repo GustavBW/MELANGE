@@ -3,16 +3,20 @@ package gbw.melange.common;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 
+/**
+ * All vertex parameters (x, y, z) are always within a -1 to 1 space.
+ * This effectively centers all meshes for rotation and positional purposes.
+ */
 public enum MeshTable {
     SQUARE(
         new float[] { // x, y, z
-            -0.5f,  -0.5f,  0, //v0
-            0.5f,   -0.5f,  0, //v1
-            0.5f,   0.5f,   0, //v2
-            -0.5f,  0.5f,   0, //v3
+            -1f,  -1f,  0, //v0
+            1f,   -1f,  0, //v1
+            1f,   1f,   0, //v2
+            -1f,  1f,   0, //v3
         }, new float[]{ //u, v
             0, 1, 1, 1, 1, 0, 0, 0
-        }, new short[] {0, 1, 2, 2, 3, 0}
+        }, new short[] {0, 1, 2, 2, 3, 0} //Tris
     ),
     EQUILATERAL_TRIANGLE(
         new float[]{
@@ -81,10 +85,10 @@ public enum MeshTable {
 
     private static float[] createCircleVertices(int vertexCount) {
         float[] vertices = new float[vertexCount * 3]; // 3 coordinates (x, y, z) per vertex
-        float angleStep = (float)(2 * Math.PI / vertexCount);
+        double angleStep = 2 * Math.PI / vertexCount;
 
         for (int i = 0; i < vertexCount; i++) {
-            float angle = i * angleStep;
+            double angle = i * angleStep;
             vertices[i * 3] = (float)Math.cos(angle); // x
             vertices[i * 3 + 1] = (float)Math.sin(angle); // y
             vertices[i * 3 + 2] = 0; // z
@@ -94,10 +98,10 @@ public enum MeshTable {
 
     private static float[] createCircleUVs(int vertexCount) {
         float[] uvs = new float[vertexCount * 2]; // 2 coordinates (u, v) per vertex
-        float angleStep = (float)(2 * Math.PI / vertexCount);
+        double angleStep = 2 * Math.PI / vertexCount;
 
         for (int i = 0; i < vertexCount; i++) {
-            float angle = i * angleStep;
+            double angle = i * angleStep;
             uvs[i * 2] = (float)Math.cos(angle) * 0.5f + 0.5f; // u
             uvs[i * 2 + 1] = (float)Math.sin(angle) * 0.5f + 0.5f; // v
         }

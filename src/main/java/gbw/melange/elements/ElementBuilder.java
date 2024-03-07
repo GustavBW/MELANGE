@@ -1,6 +1,7 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
+import gbw.melange.common.MeshTable;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementConstraintBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
@@ -28,7 +29,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     private IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
     private IReferenceConstraintDefinition referenceConstraints = new ReferenceConstraintDefinition();
 
-    private Mesh mesh;
+    private Mesh mesh = MeshTable.SQUARE.getMesh();
     private T content;
 
     public ElementBuilder(@NonNull ISpace parentSpace){

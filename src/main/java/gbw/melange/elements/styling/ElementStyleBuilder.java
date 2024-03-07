@@ -1,5 +1,6 @@
 package gbw.melange.elements.styling;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementConstraintBuilder;
@@ -32,6 +33,17 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
         referenceStyling.borderDrawStyle(style);
         return this;
     }
+
+    @Override
+    public IElementStyleBuilder<T> setBackgroundColor(Color color) {
+        return setBackgroundColor(FragmentShader.constant(color));
+    }
+
+    @Override
+    public IElementStyleBuilder<T> setBorderColor(Color color) {
+        return setBorderColor(FragmentShader.constant(color));
+    }
+
     @Override
     public IElementStyleBuilder<T> setBackgroundColor(FragmentShader fragment) {
         return setBackgroundColor(new ShaderProgram(VertexShader.DEFAULT, fragment.code()));

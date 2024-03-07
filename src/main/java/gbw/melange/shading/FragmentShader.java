@@ -1,11 +1,29 @@
 package gbw.melange.shading;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.Objects;
 
 /**
  * String alias for now
  */
 public class FragmentShader {
+
+    public static FragmentShader constant(Color color){
+        // Convert the RGBA color components to GLSL float literals
+        float r = color.r, g = color.g, b = color.b, a = color.a;
+
+        final String code = "#ifdef GL_ES\n" +
+                "precision mediump float;\n" +
+                "#endif\n" +
+                "void main() {\n" +
+                "\tgl_FragColor = vec4(" + r + ", " + g + ", " + b + ", " + a + ");\n" +
+                "}\n";
+
+        return new FragmentShader(code);
+    }
+
+
 
     private final String code;
 
@@ -16,7 +34,6 @@ public class FragmentShader {
     public String code() {
         return code;
     }
-
 
     public static final String DEFAULT = """
         #ifdef GL_ES
@@ -37,6 +54,19 @@ public class FragmentShader {
             gl_FragColor = gradientColor;
         }
     """;
+    public static final FragmentShader DEBUG_UV = new FragmentShader(
+        """
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        
+        varying vec4 v_color;
+        varying vec2 v_texCoords;
+            
+        void main() {
+            gl_FragColor = vec4(v_texCoords.x, v_texCoords.y, 0, 1);
+        }
+    """);
 
     @Override
     public boolean equals(Object obj) {

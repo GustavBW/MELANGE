@@ -2,13 +2,16 @@ package gbw.melange.core.discovery;
 
 import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.ISpace;
+import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.CoreRootMarker;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.*;
@@ -25,15 +28,16 @@ public class DiscoveryAgent<T> {
     private final AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
     //Hooks
     private final List<OnRender> onRenderHookImpls = new ArrayList<>();
+
     private final List<OnInit> onInitHookImpls = new ArrayList<>();
-    private final Map<Class<?>, Integer> userViewOrdering = new HashMap<>();
 
     public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
         //System
         log.info("______________________SYSTEM_______________________");
         instance.setUpReflections();
-        instance.registerUserAvailableSpaces();
+        instance.registerSpaceProviders();
+        instance.scanCoreForGoodMeasure();
         //User
         log.info("______________________USER_______________________");
         instance.registerUserMainClass();
@@ -44,17 +48,23 @@ public class DiscoveryAgent<T> {
 
         return instance;
     }
-    private void registerUserAvailableSpaces() throws ClassConfigurationIssue {
-        Set<Class<? extends ISpace>> spaceTypes = systemRootReflections.getSubTypesOf(ISpace.class);
-        spaceTypes = TypeFilter.onlyBeanables(spaceTypes);
-        log.info("Found space implementations: " + spaceTypes.stream().map(Class::toString).toList());
-        for (Class<? extends ISpace> spaceType : spaceTypes) {
-            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(spaceType);
+
+    private void scanCoreForGoodMeasure() {
+        programContext.scan(CoreRootMarker.class.getPackageName());
+    }
+
+    private void registerSpaceProviders() throws ClassConfigurationIssue {
+        //Damn, var is actually useful for avoiding "oh no our type erasure forces you to use raw types - we're still going to make a yellow line anyways" - issues
+        var providers = systemRootReflections.getSubTypesOf(ISpaceProvider.class);
+        providers = TypeFilter.onlyBeanables(providers);
+        log.info("Found space providers: " + providers.stream().map(Class::toString).toList());
+        for (var provider : providers) {
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(provider);
             if(constructorErrMsg != null){
-                throw new ClassConfigurationIssue(spaceType + ": " + constructorErrMsg);
+                throw new ClassConfigurationIssue(provider + ": " + constructorErrMsg);
             }
 
-            programContext.registerBean(spaceType);
+            programContext.registerBean(provider);
         }
     }
     private void gatherUserOnInitImpl() throws ClassConfigurationIssue  {
@@ -98,13 +108,16 @@ public class DiscoveryAgent<T> {
     }
     private void registerUserViews() throws ClassConfigurationIssue {
         Set<Class<?>> views = userRootReflections.getTypesAnnotatedWith(View.class);
+
         views = TypeFilter.onlyBeanables(views);
         log.info("Found views: " + views.stream().map(Class::toString).toList());
+        final Map<Class<?>, Integer> userViewOrdering = new HashMap<>();
         for (Class<?> viewType : views) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(viewType);
             if(constructorErrMsg != null){
                 throw new ClassConfigurationIssue(viewType + ": " + constructorErrMsg);
             }
+
             View viewAnnotationOfView = viewType.getAnnotation(View.class);
             int layerOfView = viewAnnotationOfView.layer();
             userViewOrdering.put(viewType, layerOfView);
@@ -113,7 +126,7 @@ public class DiscoveryAgent<T> {
         }
     }
 
-    public void instatiateAndPrepare() {
+    public void instatiateAndPrepare() throws ViewConfigurationIssue {
         refresh();
     }
     public List<OnRender> getOnRenderList(){
@@ -122,11 +135,10 @@ public class DiscoveryAgent<T> {
     public List<OnInit> getOnInitHookImpls(){
         return onInitHookImpls;
     }
-    private void refresh(){
+    private void refresh() {
         programContext.refresh();
         onRenderHookImpls.addAll(programContext.getBeansOfType(OnRender.class).values());
         onInitHookImpls.addAll(programContext.getBeansOfType(OnInit.class).values());
-
     }
 
 
@@ -137,5 +149,7 @@ public class DiscoveryAgent<T> {
     }
 
 
-
+    public ApplicationContext getContext() {
+        return programContext;
+    }
 }

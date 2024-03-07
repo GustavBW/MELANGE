@@ -1,6 +1,7 @@
 package gbw.melange.core.elementary;
 
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.elementary.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ScreenSpace implements IScreenSpace {
 
@@ -19,25 +21,25 @@ public class ScreenSpace implements IScreenSpace {
     private final IElementRenderer renderer = new ElementRenderer();
     private final List<IElement> renderQueue = new ArrayList<>();
     private final List<IElement> loadingQueue = new ArrayList<>();
-
-    @Autowired
-    public ScreenSpace(){
-
-    }
+    private final List<IElement> errorQueue = new ArrayList<>();
 
     @Override
-    public IElementBuilder createElement() {
-        return new ElementBuilder(this);
+    public IElementBuilder<?> createElement() {
+        return new ElementBuilder<>(this);
     }
 
     @Override
     public void render() {
-
+        //Draw stuff
+        renderer.draw(matrix, renderQueue);
+        //Evaluate OnInits
     }
 
     @Override
     public void dispose() {
-
+        Stream.of(renderQueue, loadingQueue, errorQueue)
+                .flatMap(List::stream)
+                .forEach(Disposable::dispose);
     }
 
     @Override

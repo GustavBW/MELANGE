@@ -1,5 +1,6 @@
 package gbw.melange.elements.constraints;
 
+import gbw.melange.common.elementary.Anchor;
 import gbw.melange.common.elementary.ElementAnchoring;
 import gbw.melange.common.elementary.IElementConstraints;
 
@@ -13,16 +14,49 @@ public class ElementConstraints implements IElementConstraints {
      * Cascading <br/>
      * What part of this element anchors to the parents self anchor
      */
-    private ElementAnchoring attachedAnchor = ElementAnchoring.TOP_LEFT;
+    private Anchor attachingAnchor = ElementAnchoring.TOP_LEFT.anchor;
 
     /**
      * Cascading <br/>
      * Where on this element, other elements attach
      */
-    private ElementAnchoring selfAnchor = ElementAnchoring.TOP_LEFT;
+    private Anchor selfAnchor = ElementAnchoring.TOP_LEFT.anchor;
     //Contained change
-    private ElementSizing sizingPolicy = ElementSizing.FILL_PARENT;
+    private SizingPolicy sizingPolicy = SizingPolicy.FILL_PARENT;
 
+    private double borderWidth = 1;
+    private double padding = 1;
 
+    public ElementConstraints(ReferenceConstraintDefinition def){
+        if(def.selfAnchor != null) this.selfAnchor = def.selfAnchor;
+        if(def.attachingAnchor != null) this.attachingAnchor = def.attachingAnchor;
+        if(def.sizingPolicy != null) this.sizingPolicy = def.sizingPolicy;
+        this.borderWidth = def.borderWidth;
+        this.padding = def.padding;
+    }
 
+    @Override
+    public Anchor getAttachingAnchor() {
+        return attachingAnchor;
+    }
+
+    @Override
+    public Anchor getSelfAnchor() {
+        return selfAnchor;
+    }
+
+    @Override
+    public SizingPolicy getSizingPolicy() {
+        return sizingPolicy;
+    }
+
+    @Override
+    public double getBorderWidth() {
+        return borderWidth;
+    }
+
+    @Override
+    public double getPadding() {
+        return padding;
+    }
 }

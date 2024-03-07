@@ -1,6 +1,6 @@
 package gbw.melange.elements.constraints;
 
-public enum ElementSizing {
+public enum SizingPolicy {
     /**
      * Take up all available space in the element this is attached to
      */

@@ -8,25 +8,29 @@ import gbw.melange.common.elementary.IElement;
 import gbw.melange.common.elementary.IElementConstraints;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.elements.constraints.ElementConstraints;
+import gbw.melange.elements.constraints.ReferenceConstraintDefinition;
 import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.common.elementary.IElementStyleDefinition;
 import gbw.melange.elements.rules.ElementRuleSet;
+import gbw.melange.elements.styling.ElementStyleDefinition;
+import gbw.melange.elements.styling.ReferenceStyleDefinition;
 
 public abstract class Element implements IElement {
 
-    private IElementConstraints constraints = new ElementConstraints();
+    private IElementConstraints constraints;
     //An element is initially considered volatile until its constraints have resolved.
     private ElementState state = ElementState.VOLATILE;
-    private IElementStyleDefinition styling = IElementStyleDefinition.DEFAULT;
+    private IElementStyleDefinition styling;
     private IElementRuleSet ruleset = new ElementRuleSet();
-    private Mesh mesh = MeshTable.SQUARE.getMesh();
+    private Mesh mesh;
     private IElement attachedTo;
 
-    Element(IElement attachedTo, IElementStyleDefinition styling, IElementConstraints constraints){
-        this.constraints = constraints;
+    Element(Mesh mesh, IElement attachedTo, ReferenceStyleDefinition styling, ReferenceConstraintDefinition constraints){
+        this.constraints = new ElementConstraints(constraints);
         this.attachedTo = attachedTo;
-        this.styling = styling;
+        this.styling = new ElementStyleDefinition(styling);
+        this.mesh = mesh;
     }
 
     public IElementRuleBuilder when(){
@@ -56,6 +60,11 @@ public abstract class Element implements IElement {
     @Override
     public IElementRuleSet getRuleset(){
         return ruleset;
+    }
+    @Override
+    public void dispose(){
+        styling.dispose();
+        mesh.dispose();
     }
 
 

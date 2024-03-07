@@ -1,5 +1,6 @@
 package gbw.melange.core.elementary;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
@@ -29,9 +30,20 @@ public class ElementRenderer implements IElementRenderer {
     }
 
     private void drawElement(Matrix4 matrix, IElement element){
+        //Background
         ShaderProgram backgroundShader = element.getStylings().getBackgroundShader();
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", matrix);
-        element.getMesh().render(backgroundShader, GL20.GL_TRIANGLES);
+        element.getMesh().render(backgroundShader, element.getStylings().getBackgroundDrawStyle());
+
+        //Border
+        ShaderProgram borderShader = element.getStylings().getBorderShader();
+        borderShader.bind();
+        borderShader.setUniformMatrix("u_projTrans", matrix);
+        Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
+        element.getMesh().render(borderShader, element.getStylings().getBorderDrawStyle());
+
+        //Content
+        //...
     }
 }

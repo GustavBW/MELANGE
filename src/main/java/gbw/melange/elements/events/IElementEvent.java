@@ -11,5 +11,5 @@ public interface IElementEvent {
     /**
      * The characteristic of the moment that caused this event to be fired.
      */
-    IElementEventType type();
+    ElementEventType type();
 }

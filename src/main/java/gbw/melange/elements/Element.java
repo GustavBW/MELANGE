@@ -2,16 +2,12 @@ package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.MeshTable;
-import gbw.melange.common.elementary.Anchor;
-import gbw.melange.common.elementary.ElementState;
-import gbw.melange.common.elementary.IElement;
-import gbw.melange.common.elementary.IElementConstraints;
+import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.elements.constraints.ElementConstraints;
 import gbw.melange.elements.constraints.ReferenceConstraintDefinition;
 import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
-import gbw.melange.common.elementary.IElementStyleDefinition;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 import gbw.melange.elements.styling.ReferenceStyleDefinition;
@@ -26,7 +22,7 @@ public abstract class Element implements IElement {
     private Mesh mesh;
     private IElement attachedTo;
 
-    Element(Mesh mesh, IElement attachedTo, ReferenceStyleDefinition styling, ReferenceConstraintDefinition constraints){
+    Element(Mesh mesh, IElement attachedTo, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints){
         this.constraints = new ElementConstraints(constraints);
         this.attachedTo = attachedTo;
         this.styling = new ElementStyleDefinition(styling);

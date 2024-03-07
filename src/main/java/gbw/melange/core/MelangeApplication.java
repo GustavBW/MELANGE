@@ -93,12 +93,15 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     }
 
     public void resize(int width, int height) {
+
     }
 
     public void pause() {
+
     }
 
     public void resume() {
+
     }
 
     @Override

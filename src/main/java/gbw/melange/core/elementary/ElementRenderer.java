@@ -34,14 +34,14 @@ public class ElementRenderer implements IElementRenderer {
         ShaderProgram backgroundShader = element.getStylings().getBackgroundShader();
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", matrix);
-        element.getMesh().render(backgroundShader, element.getStylings().getBackgroundDrawStyle());
+        element.getMesh().render(backgroundShader, element.getStylings().getBackgroundDrawStyle().value);
 
         //Border
         ShaderProgram borderShader = element.getStylings().getBorderShader();
         borderShader.bind();
         borderShader.setUniformMatrix("u_projTrans", matrix);
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
-        element.getMesh().render(borderShader, element.getStylings().getBorderDrawStyle());
+        element.getMesh().render(borderShader, element.getStylings().getBorderDrawStyle().value);
 
         //Content
         //...

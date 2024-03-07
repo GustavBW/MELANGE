@@ -12,6 +12,8 @@ import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 import gbw.melange.elements.styling.ReferenceStyleDefinition;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public abstract class Element implements IElement {
 
     private IElementConstraints constraints;
@@ -19,6 +21,10 @@ public abstract class Element implements IElement {
     private ElementState state = ElementState.VOLATILE;
     private IElementStyleDefinition styling;
     private IElementRuleSet ruleset = new ElementRuleSet();
+    private final IComputedTransforms computed = new ComputedTransforms();
+    /**
+     * All vertex parameters (x, y, z) are always within a -1 to 1 space.
+     */
     private Mesh mesh;
     private IElement attachedTo;
 
@@ -61,6 +67,10 @@ public abstract class Element implements IElement {
     public void dispose(){
         styling.dispose();
         mesh.dispose();
+    }
+    @Override
+    public IComputedTransforms computed(){
+        return computed;
     }
 
 

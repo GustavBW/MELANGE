@@ -9,7 +9,7 @@ import java.util.List;
 public class GradientFragmentShaderBuilder {
 
     private double rotationDeg = 0;
-    private InterpolationType interpolationType = InterpolationType.LINEAR;
+    private InterpolationType interpolationType = InterpolationType.HERMIT;
     private List<Color> colors = new ArrayList<>();
     private List<Double> positions = new ArrayList<>();
 
@@ -33,16 +33,19 @@ public class GradientFragmentShaderBuilder {
     public FragmentShader build() {
         StringBuilder codeBuilder = new StringBuilder();
 
-        // GLSL version and precision
+        // Initialize shader and define varying v_texCoords
         codeBuilder.append("#ifdef GL_ES\n")
                 .append("precision mediump float;\n")
                 .append("#endif\n")
                 .append("varying vec2 v_texCoords;\n");
 
-        // Constants for rotation
+        // Calculate rotation in radians
         double radians = Math.toRadians(rotationDeg);
-        codeBuilder.append("const float angle = "+radians+";\n")
-              .append("const vec2 direction = vec2(cos(angle), sin(angle));\n");
+        // Calculate directional vector for the gradient post-rotation
+        codeBuilder.append("const float angle = ").append(radians).append(";\n")
+                .append("const vec2 center = vec2(0.5, 0.5);\n") // Center for rotation
+                .append("const vec2 preRotationDirection = vec2(1.0, 0.0);\n") // Horizontal gradient pre-rotation
+                .append("const vec2 direction = vec2(cos(angle), sin(angle));\n"); // Direction after rotation
 
         // Constants for color stops
         for (int i = 0; i < colors.size(); i++) {
@@ -52,9 +55,14 @@ public class GradientFragmentShaderBuilder {
                   .append("const float position"+i+" = "+positions.get(i)+";\n");
         }
 
-        // Main codeBuilder logic
+        // Main shader logic
         codeBuilder.append("void main() {\n")
-                .append("\tfloat progress = dot(v_texCoords, direction);\n");
+                // Adjust v_texCoords to rotate around the center
+                .append("\tvec2 adjustedCoords = v_texCoords - center;\n") // Move pivot to center
+                .append("\tvec2 rotatedCoords = adjustedCoords * mat2(direction.x, -direction.y, direction.y, direction.x);\n") // Apply rotation
+                .append("\trotatedCoords += center;\n") // Move pivot back
+                // Calculate progress in the rotated coordinate space
+                .append("\tfloat progress = dot(rotatedCoords - center, preRotationDirection) + 0.5;\n");
 
         // Color interpolation logic
         codeBuilder.append("\tvec4 color = vec4(color0);\n");

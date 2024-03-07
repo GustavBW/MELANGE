@@ -17,12 +17,22 @@ public class BeanConstructorValidator {
      * @return An error message or null;
      */
     public static String isValidClassForRegistration(Class<?> clazz) {
+        return isValidClassForRegistration(clazz, null, null);
+    }
+
+    public static String isValidClassForRegistration(Class<?> clazz, Constructor<?>[] noArgsOut, Constructor<?>[] autowiredOut){
         Constructor<?> noArgsConstructor = locateNoArgsConstructor(clazz);
         Constructor<?> autowiredConstructor = locateAutoWiredConstructor(clazz);
 
-        boolean noArgsConstructorValid = noArgsConstructor != null && isConstructorVisible(noArgsConstructor) && !doesValidConstructorThrow(noArgsConstructor);
-        boolean autowiredConstructorValid = autowiredConstructor != null && isConstructorVisible(autowiredConstructor) && !doesValidConstructorThrow(autowiredConstructor);
+        boolean noArgsConstructorValid = isConstructorVisible(noArgsConstructor) && !doesValidConstructorThrow(noArgsConstructor);
+        boolean autowiredConstructorValid = isConstructorVisible(autowiredConstructor) && !doesValidConstructorThrow(autowiredConstructor);
 
+        if(noArgsConstructorValid && noArgsOut != null){
+            noArgsOut[0] = noArgsConstructor;
+        }
+        if(autowiredConstructorValid && autowiredOut != null){
+            autowiredOut[0] = autowiredConstructor;
+        }
         // Both constructors are missing
         if (noArgsConstructor == null && autowiredConstructor == null) {
             return "A class must have either a no-args constructor or an @Autowired constructor.";
@@ -78,11 +88,10 @@ public class BeanConstructorValidator {
                     return constructor;
                 }
             }
+            return null;
         } catch (Exception e){
             return null;
         }
-
-        return null;
     }
 
     /**

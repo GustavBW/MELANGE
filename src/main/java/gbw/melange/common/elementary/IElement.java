@@ -1,11 +1,12 @@
 package gbw.melange.common.elementary;
 
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.elements.Element;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 
-public interface IElement {
+public interface IElement extends Disposable {
 
     IElement NULL = null; //TODO: Find a way to involve a neat null-object pattern here.
 

@@ -6,4 +6,8 @@ public record Anchor(double x, double y) {
         //Constructor
         assert x > 0 && x <= 1 && y > 0 && y <= 1;
     }
+    public Anchor(Anchor ref) {
+        //Constructor
+        this(ref.x, ref.y);
+    }
 }

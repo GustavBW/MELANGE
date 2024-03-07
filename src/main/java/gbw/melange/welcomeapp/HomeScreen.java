@@ -23,8 +23,6 @@ public class HomeScreen implements IHomeScreen {
                 .addStop(Color.CORAL, 1)
                 .build();
 
-        log.info("Got it: " + provider);
-        System.out.println(fragmentShader.code());
         provider.getScreenSpace(this)
                 .createElement()
                 .setMesh(MeshTable.SQUARE.getMesh())

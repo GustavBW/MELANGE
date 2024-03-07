@@ -28,21 +28,27 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         config.setForegroundFPS(60);
         config.setTitle("Melange");
         config.setDecorated(true);
-        config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
+        config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); //Samples == AA passes
         return run(mainClass, config);
     }
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig) throws Exception {
+        bootTimeA = System.currentTimeMillis();
         MelangeApplication<T> app = new MelangeApplication<>(mainClass);
-        new Lwjgl3Application(app, lwjglConfig);
-        Gdx.input.setInputProcessor(new InputListener());
+
+        lwjglInitTimeA = System.currentTimeMillis();
+        new Lwjgl3Application(app, lwjglConfig); //TODO: THIS GUY NEVER RETURNS. Time for threads
+
         return app.getContext();
     }
+    private static long lwjglTimeB, lwjglInitTimeA;
     private DiscoveryAgent<T> discoveryAgent;
-    private final long bootTimeA;
+    private static long bootTimeA;
     public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
-        bootTimeA = System.currentTimeMillis();
         log.info("Welcome to the spice, MELANGE.");
+
+        long discoveryTimeA = System.currentTimeMillis();
         discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass);
+        log.info("Discovery pass time: " + (System.currentTimeMillis() - discoveryTimeA) + "ms");
     }
 
     public ApplicationContext getContext(){
@@ -51,6 +57,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private final ISpaceManager spaceManager = new SpaceManager();
     @Override
     public void create(){
+        lwjglTimeB = System.currentTimeMillis();
+        log.info("LWJGL init time: " + (lwjglTimeB - lwjglInitTimeA) + "ms");
+
+        Gdx.input.setInputProcessor(new InputListener());
         ISpaceRegistry spaceRegistry;
         try {
             discoveryAgent.instatiateAndPrepare();
@@ -61,8 +71,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             throw new RuntimeException(e);
         }
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
-        final long bootTimeB = System.currentTimeMillis();
-        log.info("MELANGE Framework startup time: " + (bootTimeB - bootTimeA) + "ms");
+        final long totalBootTime = System.currentTimeMillis() - bootTimeA;
+
+        log.info("Total startup time: " + (totalBootTime) + "ms");
+        log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
+
     }
 
     @Override

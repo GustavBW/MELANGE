@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.postprocessing.PostProcessShader;
 
 public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder<T>> {
 
@@ -19,4 +20,5 @@ public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder
     IElementStyleBuilder<T> setBorderRadius(BevelConfig config);
     IElementStyleBuilder<T> setBorderRadius(double width);
     IElementStyleBuilder<T> setBorderRadius(double width, int subdivs);
+    IElementStyleBuilder<T> addPostProcess(PostProcessShader postProcess);
 }

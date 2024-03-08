@@ -6,7 +6,11 @@ import gbw.melange.common.elementary.styling.IBevelOperation;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
+import gbw.melange.shading.postprocessing.PostProcessShader;
 import gbw.melange.shading.templating.ShaderProgramBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
@@ -15,13 +19,15 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
     private BevelConfig bevelConfig = BevelConfig.DEFAULT;
+    private final List<PostProcessShader> postProcesses = new ArrayList<>();
 
     public ElementStyleDefinition(IReferenceStyleDefinition def){
-        if(def.backgroundShader()     != null)      this.backgroundShader       = def.backgroundShader();
-        if(def.borderShader()         != null)      this.borderShader           = def.borderShader();
-        if(def.backgroundDrawStyle()  != GLDrawStyle.INVALID)     this.backgroundDrawStyle    = def.backgroundDrawStyle();
-        if(def.borderDrawStyle()     != GLDrawStyle.INVALID)      this.borderDrawStyle        = def.borderDrawStyle();
-        if(def.borderBevel() != null)               this.bevelConfig = def.borderBevel();
+        if(def.backgroundShader() != null) this.backgroundShader = def.backgroundShader();
+        if(def.borderShader() != null) this.borderShader = def.borderShader();
+        if(def.backgroundDrawStyle() != GLDrawStyle.INVALID) this.backgroundDrawStyle = def.backgroundDrawStyle();
+        if(def.borderDrawStyle() != GLDrawStyle.INVALID) this.borderDrawStyle = def.borderDrawStyle();
+        if(def.borderBevel() != null) this.bevelConfig = def.borderBevel();
+        if(def.postProcesses() != null) this.postProcesses.addAll(def.postProcesses());
     }
 
     @Override
@@ -45,8 +51,13 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     }
 
     @Override
-    public BevelConfig borderBevel() {
+    public BevelConfig getBorderBevel() {
         return bevelConfig;
+    }
+
+    @Override
+    public List<PostProcessShader> getPostProcesses() {
+        return postProcesses;
     }
 
     @Override

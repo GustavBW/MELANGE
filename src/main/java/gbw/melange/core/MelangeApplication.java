@@ -75,11 +75,22 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         log.info("Total startup time: " + (totalBootTime) + "ms");
         log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
-
+        appStartTime = System.currentTimeMillis();
     }
+    private long appTime = 0;
+    private long frame = 0;
+    private double frameTime = 0;
+    private long appStartTime = 0;
+    private long lastFrameTimeStamp = 0;
 
     @Override
     public void render(){
+        frame++;
+        final long now = System.currentTimeMillis();
+        appTime = now - appStartTime; //TODO: Clean this mess up
+        frameTime = now - lastFrameTimeStamp;
+        lastFrameTimeStamp = now;
+
         //Clear to black
         Gdx.gl.glClearColor(1,1,1,1);
         //Render spaces
@@ -88,7 +99,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         }
         //Hooks
         for(OnRender renderHook : discoveryAgent.getOnRenderList()){
-            renderHook.onRender();
+            renderHook.onRender(frameTime);
         }
     }
 

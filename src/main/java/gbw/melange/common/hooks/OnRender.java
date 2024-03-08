@@ -5,5 +5,5 @@ package gbw.melange.common.hooks;
  */
 @FunctionalInterface
 public interface OnRender {
-    void onRender();
+    void onRender(double deltaT);
 }

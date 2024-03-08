@@ -57,7 +57,7 @@ public class ElementRenderer implements IElementRenderer {
         //TODO: Move this to reactive rule resolution
         element.computed().update();
         IComputedTransforms eComputed = element.computed();
-        //log.info("Element translation: " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
+        log.info("Element translation: " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
 
 
         //Content

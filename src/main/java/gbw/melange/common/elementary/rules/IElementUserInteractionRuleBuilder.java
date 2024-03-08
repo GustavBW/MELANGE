@@ -1,4 +1,6 @@
 package gbw.melange.common.elementary.rules;
 
-public interface IElementUserInteractionRuleBuilder {
+import gbw.melange.common.builders.IPartialBuilder;
+
+public interface IElementUserInteractionRuleBuilder extends IPartialBuilder<IElementRuleBuilder> {
 }

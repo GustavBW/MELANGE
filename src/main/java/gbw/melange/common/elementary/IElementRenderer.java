@@ -1,6 +1,7 @@
 package gbw.melange.common.elementary;
 
 import com.badlogic.gdx.math.Matrix4;
+import gbw.melange.common.elementary.types.IElement;
 
 import java.util.Collection;
 

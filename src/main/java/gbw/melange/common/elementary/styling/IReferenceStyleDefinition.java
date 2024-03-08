@@ -1,4 +1,4 @@
-package gbw.melange.common.elementary;
+package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
@@ -12,5 +12,8 @@ public interface IReferenceStyleDefinition {
     void backgroundDrawStyle(GLDrawStyle style);
     GLDrawStyle borderDrawStyle();
     void borderDrawStyle(GLDrawStyle style);
+    BevelConfig borderBevel();
+    void borderBevel(BevelConfig op);
+
 
 }

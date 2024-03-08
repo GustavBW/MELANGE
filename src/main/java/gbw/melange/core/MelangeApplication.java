@@ -27,8 +27,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(60);
         config.setTitle("Melange");
-        config.setDecorated(true);
+        config.setDecorated(false);
         config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); //Samples == AA passes
+        // Attempt to make the window transparent
+        config.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
+        config.setTransparentFramebuffer(true);
         return run(mainClass, config);
     }
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig) throws Exception {
@@ -75,31 +78,25 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         log.info("Total startup time: " + (totalBootTime) + "ms");
         log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
-        appStartTime = System.currentTimeMillis();
     }
-    private long appTime = 0;
     private long frame = 0;
-    private double frameTime = 0;
-    private long appStartTime = 0;
-    private long lastFrameTimeStamp = 0;
 
     @Override
     public void render(){
         frame++;
-        final long now = System.currentTimeMillis();
-        appTime = now - appStartTime; //TODO: Clean this mess up
-        frameTime = now - lastFrameTimeStamp;
-        lastFrameTimeStamp = now;
 
         //Clear to black
-        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
         //Render spaces
         for(ISpace space : spaceManager.getOrderedList()){
             space.render();
         }
         //Hooks
         for(OnRender renderHook : discoveryAgent.getOnRenderList()){
-            renderHook.onRender(frameTime);
+            renderHook.onRender(Gdx.graphics.getDeltaTime());
         }
     }
 

@@ -1,15 +1,11 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
-import gbw.melange.common.MeshTable;
 import gbw.melange.common.elementary.IComputedTransforms;
-import gbw.melange.common.elementary.IElement;
+import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
-import gbw.melange.core.MelangeApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +53,7 @@ public class ElementRenderer implements IElementRenderer {
         //TODO: Move this to reactive rule resolution
         element.computed().update();
         IComputedTransforms eComputed = element.computed();
-        log.info("Element translation: " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
+        //log.info("Element translation: " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
 
 
         //Content

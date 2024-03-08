@@ -1,18 +1,16 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.common.MeshTable;
 import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
+import gbw.melange.common.elementary.styling.IElementStyleDefinition;
+import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
+import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.elements.constraints.ElementConstraints;
-import gbw.melange.elements.constraints.ReferenceConstraintDefinition;
 import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
-import gbw.melange.elements.styling.ReferenceStyleDefinition;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class Element implements IElement {
 

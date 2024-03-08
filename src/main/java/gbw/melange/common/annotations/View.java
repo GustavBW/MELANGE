@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Component //NB: This annotation is only marked with Component so Spring stops complaining. No ApplicationContext.scan() is ever run, all discovery is partially manual.
+@Component //NB: This annotation is only marked with Component so Spring stops complaining. Discovery of Views is manual using Reflections
 public @interface View {
     int HOME_SCREEN = -1;
     int DEFAULT = 0;

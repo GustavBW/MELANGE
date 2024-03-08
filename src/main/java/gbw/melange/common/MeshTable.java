@@ -2,6 +2,7 @@ package gbw.melange.common;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 
 /**
  * All vertex parameters (x, y, z) are always within a -1 to 1 space.
@@ -56,6 +57,7 @@ public enum MeshTable {
         // Assuming coordsXYZ.length / 3 == uvs.length / 2, meaning every vertex has a corresponding UV pair
         this.mesh = new Mesh(true, coordsXYZ.length / 3, indices.length,
                 VertexAttribute.Position(), VertexAttribute.TexCoords(0));
+
 
         // The combined array size should be based on the number of vertices,
         // with each vertex contributing 3 position floats and 2 UV floats

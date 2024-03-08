@@ -1,11 +1,10 @@
 package gbw.melange.common.builders;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.elementary.*;
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
+import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.hooks.OnInit;
-import gbw.melange.shading.FragmentShader;
 
 /**
  * @param <T> return type of OnInit if any

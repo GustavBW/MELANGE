@@ -35,7 +35,7 @@ public class FragmentShader {
         return code;
     }
 
-    public static final String DEFAULT = """
+    public static final FragmentShader DEFAULT = new FragmentShader("""
         #ifdef GL_ES
         precision mediump float;
         #endif
@@ -53,7 +53,7 @@ public class FragmentShader {
         
             gl_FragColor = gradientColor;
         }
-    """;
+    """);
     public static final FragmentShader DEBUG_UV = new FragmentShader(
         """
         #ifdef GL_ES
@@ -67,6 +67,20 @@ public class FragmentShader {
             gl_FragColor = vec4(v_texCoords.x, v_texCoords.y, 0, 1);
         }
     """);
+
+    public static final FragmentShader TRANSPARENT = new FragmentShader(
+    """
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        
+        const vec4 color = vec4(0,0,0,0);
+            
+        void main() {
+            gl_FragColor = color;
+        }
+        """
+    );
 
     @Override
     public boolean equals(Object obj) {

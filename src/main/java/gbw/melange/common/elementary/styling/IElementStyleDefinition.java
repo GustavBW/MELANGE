@@ -1,4 +1,4 @@
-package gbw.melange.common.elementary;
+package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
@@ -14,5 +14,7 @@ public interface IElementStyleDefinition extends Disposable {
 
     GLDrawStyle getBackgroundDrawStyle(); //TODO: Swap to Enum
     GLDrawStyle getBorderDrawStyle();//TODO: Swap to Enum
+
+    BevelConfig borderBevel();
 
 }

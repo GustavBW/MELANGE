@@ -1,18 +1,29 @@
 package gbw.melange.elements.styling;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import gbw.melange.common.elementary.styling.BevelConfig;
+import gbw.melange.common.elementary.styling.IBevelOperation;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
-import gbw.melange.common.elementary.IElementStyleDefinition;
-import gbw.melange.common.elementary.IReferenceStyleDefinition;
+import gbw.melange.common.elementary.styling.IElementStyleDefinition;
+import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.shading.templating.ShaderProgramBuilder;
 
 public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
-    public static final ReferenceStyleDefinition DEFAULT = new ReferenceStyleDefinition();
+
+    public static final IReferenceStyleDefinition DEFAULT = new ReferenceStyleDefinition();
+    public static final IReferenceStyleDefinition NONE = new ReferenceStyleDefinition();
+    static {
+        NONE.borderShader(ShaderProgramBuilder.NONE);
+        NONE.backgroundShader(ShaderProgramBuilder.NONE);
+        NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
+        NONE.borderDrawStyle(GLDrawStyle.POINTS);
+    }
 
     public ShaderProgram backgroundShader = ShaderProgramBuilder.DEFAULT;
     public ShaderProgram borderShader = ShaderProgramBuilder.DEFAULT;
     public GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     public GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
+    public BevelConfig bevelConfig = BevelConfig.DEFAULT;
 
     public ReferenceStyleDefinition(){}
 
@@ -28,6 +39,9 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
         }
         if(reference.getBorderDrawStyle() != GLDrawStyle.INVALID){
             this.borderDrawStyle = reference.getBorderDrawStyle();
+        }
+        if(reference.borderBevel() != null){
+            this.bevelConfig = reference.borderBevel();
         }
     }
 
@@ -69,5 +83,15 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
     @Override
     public void borderDrawStyle(GLDrawStyle style) {
         this.borderDrawStyle = style;
+    }
+
+    @Override
+    public BevelConfig borderBevel() {
+        return bevelConfig;
+    }
+
+    @Override
+    public void borderBevel(BevelConfig config) {
+        this.bevelConfig = config;
     }
 }

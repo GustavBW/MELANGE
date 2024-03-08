@@ -3,16 +3,16 @@ package gbw.melange.elements.styling;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.builders.IElementBuilder;
-import gbw.melange.common.builders.IElementConstraintBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
-import gbw.melange.common.builders.IPartialBuilder;
-import gbw.melange.common.elementary.IReferenceStyleDefinition;
+import gbw.melange.common.elementary.styling.BevelConfig;
+import gbw.melange.common.elementary.styling.IBevelOperation;
+import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.shading.FragmentShader;
 import gbw.melange.shading.VertexShader;
 
 public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
-    private IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
+    private final IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
     private final IElementBuilder<T> parentBuilder;
     public ElementStyleBuilder(IElementBuilder<T> parentBuilder){
         this.parentBuilder = parentBuilder;
@@ -46,12 +46,12 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
 
     @Override
     public IElementStyleBuilder<T> setBackgroundColor(FragmentShader fragment) {
-        return setBackgroundColor(new ShaderProgram(VertexShader.DEFAULT, fragment.code()));
+        return setBackgroundColor(new ShaderProgram(VertexShader.DEFAULT.code(), fragment.code()));
     }
 
     @Override
     public IElementStyleBuilder<T> setBorderColor(FragmentShader fragment) {
-        return setBorderColor(new ShaderProgram(VertexShader.DEFAULT, fragment.code()));
+        return setBorderColor(new ShaderProgram(VertexShader.DEFAULT.code(), fragment.code()));
     }
 
     @Override
@@ -63,6 +63,23 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
     @Override
     public IElementStyleBuilder<T> setBorderColor(ShaderProgram shader) {
         referenceStyling.borderShader(shader);
+        return this;
+    }
+
+    @Override
+    public IElementStyleBuilder<T> setBorderRadius(BevelConfig operation) {
+        return this;
+    }
+
+    @Override
+    public IElementStyleBuilder<T> setBorderRadius(double width) {
+
+        return this;
+    }
+
+    @Override
+    public IElementStyleBuilder<T> setBorderRadius(double width, int subdivs) {
+
         return this;
     }
 }

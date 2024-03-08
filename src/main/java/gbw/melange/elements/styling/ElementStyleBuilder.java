@@ -10,6 +10,7 @@ import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.shading.FragmentShader;
 import gbw.melange.shading.VertexShader;
+import gbw.melange.shading.postprocessing.PostProcessShader;
 
 public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
     private final IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
@@ -67,19 +68,26 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
     }
 
     @Override
-    public IElementStyleBuilder<T> setBorderRadius(BevelConfig operation) {
+    public IElementStyleBuilder<T> setBorderRadius(BevelConfig config) {
+        referenceStyling.borderBevel(config);
         return this;
     }
 
     @Override
     public IElementStyleBuilder<T> setBorderRadius(double width) {
-
+        referenceStyling.borderBevel(new BevelConfig(BevelConfig.DEFAULT.subdivs(), BevelConfig.DEFAULT.angleThreshold(), width));
         return this;
     }
 
     @Override
     public IElementStyleBuilder<T> setBorderRadius(double width, int subdivs) {
+        referenceStyling.borderBevel(new BevelConfig(subdivs, BevelConfig.DEFAULT.angleThreshold(), width));
+        return this;
+    }
 
+    @Override
+    public IElementStyleBuilder<T> addPostProcess(PostProcessShader postProcess) {
+        referenceStyling.postProcesses().add(postProcess);
         return this;
     }
 }

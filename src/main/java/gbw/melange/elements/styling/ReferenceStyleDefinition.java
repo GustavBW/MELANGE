@@ -2,11 +2,14 @@ package gbw.melange.elements.styling;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.elementary.styling.BevelConfig;
-import gbw.melange.common.elementary.styling.IBevelOperation;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
+import gbw.melange.shading.postprocessing.PostProcessShader;
 import gbw.melange.shading.templating.ShaderProgramBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 
@@ -18,7 +21,7 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
         NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
         NONE.borderDrawStyle(GLDrawStyle.POINTS);
     }
-
+    public final List<PostProcessShader> postProcesses = new ArrayList<>();
     public ShaderProgram backgroundShader = ShaderProgramBuilder.DEFAULT;
     public ShaderProgram borderShader = ShaderProgramBuilder.DEFAULT;
     public GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
@@ -40,8 +43,11 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
         if(reference.getBorderDrawStyle() != GLDrawStyle.INVALID){
             this.borderDrawStyle = reference.getBorderDrawStyle();
         }
-        if(reference.borderBevel() != null){
-            this.bevelConfig = reference.borderBevel();
+        if(reference.getBorderBevel() != null){
+            this.bevelConfig = reference.getBorderBevel();
+        }
+        if(reference.getPostProcesses() != null){
+            this.postProcesses.addAll(reference.getPostProcesses());
         }
     }
 
@@ -93,5 +99,10 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
     @Override
     public void borderBevel(BevelConfig config) {
         this.bevelConfig = config;
+    }
+
+    @Override
+    public List<PostProcessShader> postProcesses() {
+        return postProcesses;
     }
 }

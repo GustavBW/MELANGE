@@ -10,6 +10,7 @@ import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.elements.ComputedTransforms;
+import gbw.melange.elements.Element;
 import gbw.melange.shading.FragmentShader;
 import gbw.melange.shading.templating.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
@@ -49,14 +50,13 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         space.createSpace().build();
 
-        //TODO: Hella illegal moves
-        ((ComputedTransforms) element.computed()).getMatrix().setToScaling(.9f, .9f, .9f);
+        ((ComputedTransforms) element.computed()).setScale(.9f, .9f, .9f);
     }
     private double acc = 0;
     @Override
     public void onRender(double deltaT) {
         acc += deltaT;
-        ((ComputedTransforms) element.computed()).getMatrix()
+        ((ComputedTransforms) element.computed())
                 .setTranslation(MathUtils.sin((float) acc), MathUtils.cos((float) acc), 0);
     }
 }

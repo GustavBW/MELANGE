@@ -1,6 +1,10 @@
 package gbw.melange.elements;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -12,6 +16,10 @@ public class ComputedTransforms implements IComputedTransforms {
     private Vector3 scale = new Vector3();
     private Quaternion rotation = new Quaternion();
 
+    //TODO: Framebuffer size has to be adjusted to viewport resolution
+    private final FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, false);
+    private final TextureRegion textureRegion = new TextureRegion(frameBuffer.getColorBufferTexture());
+
     public ComputedTransforms(){}
 
     public void update(){
@@ -20,8 +28,11 @@ public class ComputedTransforms implements IComputedTransforms {
         matrix.getRotation(rotation);
     }
 
-    public Matrix4 getMatrix(){ //TODO: NO PUBLIC ACCESS!
-        return matrix;
+    public void setScale(double x, double y, double z){ //TODO: REMOVE THIS
+        matrix.setToScaling((float) x,(float) y,(float) z);
+    }
+    public void setTranslation(double x, double y, double z){ //TODO: REMOVE THIS
+        matrix.setTranslation((float) x, (float) y, (float) z);
     }
 
     @Override
@@ -47,5 +58,17 @@ public class ComputedTransforms implements IComputedTransforms {
     @Override
     public Quaternion getRotation() {
         return rotation;
+    }
+
+
+    //These are package private and not declared in the IComputedTransforms interface, as noone but the IElementRenderer implementation should have access to them
+    Matrix4 getMatrix(){
+        return matrix;
+    }
+    FrameBuffer getFrameBuffer(){
+        return frameBuffer;
+    }
+    TextureRegion getTextureRegion(){
+        return textureRegion;
     }
 }

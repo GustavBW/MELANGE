@@ -27,7 +27,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(60);
         config.setTitle("Melange");
-        config.setDecorated(false);
+        config.setDecorated(true);
         config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); //Samples == AA passes
         // Attempt to make the window transparent
         config.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
@@ -84,11 +84,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     @Override
     public void render(){
         frame++;
-
-        //Clear to black
-        Gdx.gl.glClearColor(0,0,0,0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         //Render spaces
         for(ISpace space : spaceManager.getOrderedList()){

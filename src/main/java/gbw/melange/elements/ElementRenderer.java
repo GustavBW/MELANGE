@@ -60,9 +60,12 @@ public class ElementRenderer implements IElementRenderer {
         elementFBO.end();
 
         TextureRegion region = ((ComputedTransforms) element.computed()).getTextureRegion();
+        region.setTexture(elementFBO.getColorBufferTexture());
         postProcessPass(region, element, elementFBO, appliedMatrix);
 
-        batch.draw(region, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        IComputedTransforms computed = element.computed();
+        region.setRegion(0, 0, elementFBO.getWidth(), elementFBO.getHeight());
+        batch.draw(region, (float) computed.getPositionX(), (float) computed.getPositionY(), (float) computed.getWidth(), (float) computed.getHeight());
 
         //TODO: Move this to reactive rule resolution
         element.computed().update();
@@ -75,10 +78,11 @@ public class ElementRenderer implements IElementRenderer {
     }
 
     private static void postProcessPass(TextureRegion region, IElement element, FrameBuffer elementFBO, Matrix4 appliedMatrix) {
-        region.setTexture(elementFBO.getColorBufferTexture());
         region.flip(false, true);
 
         for(PostProcessShader postShader : element.getStylings().getPostProcesses()){
+            region.setTexture(elementFBO.getColorBufferTexture());
+
             postShader.program().bind();
             postShader.program().setUniformMatrix("u_projTrans", appliedMatrix);
             region.getTexture().bind();

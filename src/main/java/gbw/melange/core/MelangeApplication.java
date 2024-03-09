@@ -76,6 +76,9 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
 
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
         log.info("Total startup time: " + (totalBootTime) + "ms");
         log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
     }
@@ -84,11 +87,15 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     @Override
     public void render(){
         frame++;
-
         //Render spaces
         for(ISpace space : spaceManager.getOrderedList()){
             space.render();
         }
+        int glErrCausedBySpaces = Gdx.gl.glGetError();
+        if(glErrCausedBySpaces != GL20.GL_NO_ERROR){
+            log.warn("OpenGL error after rendering spaces: " + glErrCausedBySpaces);
+        }
+
         //Hooks
         for(OnRender renderHook : discoveryAgent.getOnRenderList()){
             renderHook.onRender(Gdx.graphics.getDeltaTime());

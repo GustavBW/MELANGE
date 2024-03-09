@@ -11,14 +11,14 @@ import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.IComputedTransforms;
 
 public class ComputedTransforms implements IComputedTransforms {
-    private Matrix4 matrix = new Matrix4();
-    private Vector3 position = new Vector3();
-    private Vector3 scale = new Vector3();
-    private Quaternion rotation = new Quaternion();
+    private final Matrix4 matrix = new Matrix4();
+    private final Vector3 position = new Vector3();
+    private final Vector3 scale = new Vector3();
+    private final Quaternion rotation = new Quaternion();
 
     //TODO: Framebuffer size has to be adjusted to viewport resolution
     private final FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, false);
-    private final TextureRegion textureRegion = new TextureRegion(frameBuffer.getColorBufferTexture());
+    private final TextureRegion textureRegion = new TextureRegion();
 
     public ComputedTransforms(){}
 

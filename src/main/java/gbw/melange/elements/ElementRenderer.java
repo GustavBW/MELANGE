@@ -12,6 +12,7 @@ import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.templating.ShaderProgramBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class ElementRenderer implements IElementRenderer {
 
         TextureRegion region = ((ComputedTransforms) element.computed()).getTextureRegion();
         region.setTexture(elementFBO.getColorBufferTexture());
-        postProcessPass(region, element, elementFBO, appliedMatrix);
+        //postProcessPass(region, element, elementFBO, appliedMatrix);
 
         IComputedTransforms computed = element.computed();
         region.setRegion(0, 0, elementFBO.getWidth(), elementFBO.getHeight());

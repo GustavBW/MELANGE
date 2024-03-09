@@ -50,7 +50,6 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
 
     @Override
     public IElement build() {
-
         if(onInit != null){
             IVolatileElement element = new OnInitElement<>(
                     mesh,

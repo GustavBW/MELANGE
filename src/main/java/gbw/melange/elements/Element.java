@@ -12,6 +12,8 @@ import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 
+import java.util.UUID;
+
 public abstract class Element implements IElement {
 
     private IElementConstraints constraints;
@@ -71,5 +73,13 @@ public abstract class Element implements IElement {
         return computed;
     }
 
-
+    private static int elementIdTracker = 0;
+    private final int id = elementIdTracker++;
+    @Override
+    public int getId(){
+        return id;
+    }
+    static int nextIdInSequence(){
+        return elementIdTracker + 1;
+    }
 }

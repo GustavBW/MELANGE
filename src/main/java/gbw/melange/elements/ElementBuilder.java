@@ -112,7 +112,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
 
     @Override
     public IElementStyleBuilder<T> styling() {
-        return new ElementStyleBuilder<>(this);
+        return new ElementStyleBuilder<>(this, Element.nextIdInSequence());
     }
 
     @Override

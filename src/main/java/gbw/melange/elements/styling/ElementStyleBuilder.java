@@ -9,14 +9,17 @@ import gbw.melange.common.elementary.styling.IBevelOperation;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.ShaderProgramWrapper;
 import gbw.melange.shading.VertexShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
     private final IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
     private final IElementBuilder<T> parentBuilder;
-    public ElementStyleBuilder(IElementBuilder<T> parentBuilder){
+    private final int expectedElementId;
+    public ElementStyleBuilder(IElementBuilder<T> parentBuilder, int expectedElementId){
         this.parentBuilder = parentBuilder;
+        this.expectedElementId = expectedElementId;
     }
     @Override
     public IElementBuilder<T> apply() {
@@ -47,22 +50,26 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
 
     @Override
     public IElementStyleBuilder<T> setBackgroundColor(FragmentShader fragment) {
-        return setBackgroundColor(new ShaderProgram(VertexShader.DEFAULT.code(), fragment.code()));
+        return setBackgroundColor(new ShaderProgramWrapper(generateShaderLocalName("background"), VertexShader.DEFAULT, fragment));
     }
 
     @Override
     public IElementStyleBuilder<T> setBorderColor(FragmentShader fragment) {
-        return setBorderColor(new ShaderProgram(VertexShader.DEFAULT.code(), fragment.code()));
+        return setBorderColor(new ShaderProgramWrapper(generateShaderLocalName("border"), VertexShader.DEFAULT, fragment));
+    }
+
+    private String generateShaderLocalName(String type){
+        return "Element(" + expectedElementId + ") " + type + " shader";
     }
 
     @Override
-    public IElementStyleBuilder<T> setBackgroundColor(ShaderProgram shader) {
+    public IElementStyleBuilder<T> setBackgroundColor(ShaderProgramWrapper shader) {
         referenceStyling.backgroundShader(shader);
         return this;
     }
 
     @Override
-    public IElementStyleBuilder<T> setBorderColor(ShaderProgram shader) {
+    public IElementStyleBuilder<T> setBorderColor(ShaderProgramWrapper shader) {
         referenceStyling.borderShader(shader);
         return this;
     }

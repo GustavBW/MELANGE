@@ -14,13 +14,15 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
     private InterpolationType interpolationType = InterpolationType.HERMIT;
     private List<Color> colors = new ArrayList<>();
     private List<Double> positions = new ArrayList<>();
+    private String localName;
 
-    public GradientFragmentShaderBuilder(){
-        this(0);
+    public GradientFragmentShaderBuilder(String localName){
+        this(localName,0);
     }
 
-    public GradientFragmentShaderBuilder(double rotationDeg){
+    public GradientFragmentShaderBuilder(String localName, double rotationDeg){
         this.rotationDeg = rotationDeg;
+        this.localName = localName;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
 
         appendGlSetColorStatement(codeBuilder);
 
-        return new FragmentShader(codeBuilder.toString());
+        return new FragmentShader(localName, codeBuilder.toString());
     }
 
     private void appendStops(StringBuilder shader) {

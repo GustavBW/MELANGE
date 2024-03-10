@@ -42,13 +42,9 @@ public class HomeScreen implements IHomeScreen, OnRender {
         element = space.createElement()
             .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
             .styling()
-                .setBackgroundColor(fragmentShader)
+                .setBackgroundColor(new ShaderProgram(FragmentShader.DEBUG_UV.code(), VertexShader.DEFAULT.code()))
                 .setBorderColor(Color.WHITE)
-                .setBackgroundDrawStyle(GLDrawStyle.TRIANGLE_STRIP)
                 //.addPostProcess(new PostProcessShader(new ShaderProgram(FragmentShader.DEBUG_UV.code(), VertexShader.DEFAULT.code())))
-                .apply()
-            .constraints()
-                .setBorderWidth(2)
                 .apply()
             .build();
 

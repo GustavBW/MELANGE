@@ -87,6 +87,7 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
 
     @Override
     public IElementStyleBuilder<T> addPostProcess(PostProcessShader postProcess) {
+
         referenceStyling.postProcesses().add(postProcess);
         return this;
     }

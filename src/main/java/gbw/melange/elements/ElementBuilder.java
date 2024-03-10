@@ -67,7 +67,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
                     referenceStyling,
                     referenceConstraints
             );
-            parentSpace.addPureElement(element);
+            parentSpace.addVolatileElement(element);
             return element;
         }
     }

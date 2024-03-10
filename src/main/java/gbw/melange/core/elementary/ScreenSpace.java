@@ -12,11 +12,14 @@ import gbw.melange.common.elementary.types.IPureElement;
 import gbw.melange.common.elementary.types.ISpacerElement;
 import gbw.melange.common.elementary.types.IVolatileElement;
 import gbw.melange.common.hooks.OnInit;
+import gbw.melange.core.MelangeApplication;
 import gbw.melange.core.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.elements.ElementBuilder;
 import gbw.melange.elements.ElementRenderer;
 import gbw.melange.elements.SpaceBuilder;
 import gbw.melange.shading.postprocessing.PostProcessShader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.stream.Stream;
 
 public class ScreenSpace implements IScreenSpace {
 
+    private static final Logger log = LoggerFactory.getLogger(ScreenSpace.class);
     private final Matrix4 matrix = new Matrix4();
     private final IElementRenderer renderer = new ElementRenderer();
     private final List<ISpacerElement> spacers = new ArrayList<>();
@@ -91,15 +95,7 @@ public class ScreenSpace implements IScreenSpace {
     }
 
     private boolean dostShadersBeCompiled(IElement element){
-        boolean postProcessIsGood = true;
-
-
-        for(PostProcessShader postProcess : element.getStylings().getPostProcesses()){
-            postProcessIsGood = postProcessIsGood && postProcess.program().isCompiled();
-        }
-        boolean backgroundIsGood = element.getStylings().getBackgroundShader().isCompiled();
-        boolean borderIsGood = element.getStylings().getBorderShader().isCompiled();
-        return postProcessIsGood && backgroundIsGood && borderIsGood;
+        return true; //TODO: Shader handling has been moved to wrapper instantiation.
     }
 
 

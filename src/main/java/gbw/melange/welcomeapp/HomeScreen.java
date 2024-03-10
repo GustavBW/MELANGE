@@ -13,6 +13,7 @@ import gbw.melange.common.hooks.OnRender;
 import gbw.melange.elements.ComputedTransforms;
 import gbw.melange.elements.Element;
 import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.ShaderProgramWrapper;
 import gbw.melange.shading.VertexShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 import gbw.melange.shading.templating.gradients.GradientFragmentShaderBuilder;
@@ -26,7 +27,7 @@ public class HomeScreen implements IHomeScreen, OnRender {
     private IElement element;
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider) {
-        FragmentShader fragmentShader = new GradientFragmentShaderBuilder()
+        FragmentShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient")
             .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
             .setRotation(45)
             .build();
@@ -35,14 +36,14 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
                 .styling()
-                .setBackgroundColor(FragmentShader.DEBUG_UV)
+                //.setBackgroundColor(FragmentShader.DEBUG_UV)
                 .apply()
                 .build();
 
         element = space.createElement()
             .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
             .styling()
-                .setBackgroundColor(new ShaderProgram(FragmentShader.DEBUG_UV.code(), VertexShader.DEFAULT.code()))
+                .setBackgroundColor(FragmentShader.DEBUG_UV)
                 .setBorderColor(Color.WHITE)
                 //.addPostProcess(new PostProcessShader(new ShaderProgram(FragmentShader.DEBUG_UV.code(), VertexShader.DEFAULT.code())))
                 .apply()

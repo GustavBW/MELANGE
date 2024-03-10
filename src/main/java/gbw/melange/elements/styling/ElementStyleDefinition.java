@@ -1,21 +1,25 @@
 package gbw.melange.elements.styling;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.common.elementary.styling.IBevelOperation;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
+import gbw.melange.shading.ShaderProgramWrapper;
 import gbw.melange.shading.postprocessing.PostProcessShader;
-import gbw.melange.shading.templating.ShaderProgramBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
-    private ShaderProgram backgroundShader = ShaderProgramBuilder.DEFAULT;
-    private ShaderProgram borderShader = ShaderProgramBuilder.DEFAULT;
+    private ShaderProgramWrapper backgroundShader = ShaderProgramWrapper.mlg_default();
+    private ShaderProgramWrapper borderShader = ShaderProgramWrapper.mlg_default();
+    private Texture backgroundImage = new Texture(Gdx.files.internal("assets/fallback/errors/stderr.jpg"));
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
     private BevelConfig bevelConfig = BevelConfig.DEFAULT;
@@ -31,12 +35,12 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     }
 
     @Override
-    public ShaderProgram getBackgroundShader() {
+    public ShaderProgramWrapper getBackgroundShader() {
         return backgroundShader;
     }
 
     @Override
-    public ShaderProgram getBorderShader() {
+    public ShaderProgramWrapper getBorderShader() {
         return borderShader;
     }
 
@@ -63,10 +67,10 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     @Override
     public void dispose(){
         if(backgroundShader != null){
-            backgroundShader.dispose();
+            backgroundShader.getProgram().dispose();
         }
         if(borderShader != null){
-            borderShader.dispose();
+            borderShader.getProgram().dispose();
         }
     }
 }

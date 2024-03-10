@@ -3,8 +3,11 @@ package gbw.melange.shading;
 /**
  * String alias for now
  */
-public record VertexShader(String code) {
-    public static final VertexShader DEFAULT = new VertexShader("""
+public record VertexShader(String localName, String code) {
+    public static final VertexShader DEFAULT = new VertexShader("MELANGE_DEFAULT_VERTEX","""
+        #ifdef GL_ES
+            precision mediump float;
+        #endif
         attribute vec4 a_position;
         attribute vec2 a_texCoord0;
         uniform mat4 u_projTrans;
@@ -14,8 +17,11 @@ public record VertexShader(String code) {
             gl_Position =  u_projTrans * a_position;
         }
     """);
-    public static final VertexShader NONE = new VertexShader(
+    public static final VertexShader NONE = new VertexShader("MELANGE_NONE_VERTEX",
     """
+        #ifdef GL_ES
+            precision mediump float;
+        #endif
         void main() {
             gl_Position = 0;
         }

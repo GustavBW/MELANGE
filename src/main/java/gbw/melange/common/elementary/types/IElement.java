@@ -19,6 +19,7 @@ public interface IElement extends Disposable {
     IElementStyleDefinition getStylings();
     Mesh getMesh();
     IComputedTransforms computed();
+    int getId();
     //The spice
     IElementRuleBuilder when();
     IElementRuleSet getRuleset();

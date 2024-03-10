@@ -11,8 +11,8 @@ import gbw.melange.common.elementary.IComputedTransforms;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.shading.ShaderProgramWrapper;
 import gbw.melange.shading.postprocessing.PostProcessShader;
-import gbw.melange.shading.templating.ShaderProgramBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +94,7 @@ public class ElementRenderer implements IElementRenderer {
 
     private static void mainRenderPass(IElement element, Matrix4 appliedMatrix) {
         //Border - Rendered first so that the same mesh can be reused, as the fragment of the background is drawn on top
-        ShaderProgram borderShader = element.getStylings().getBorderShader();
+        ShaderProgram borderShader = element.getStylings().getBorderShader().getProgram();
         borderShader.bind();
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
@@ -102,9 +102,10 @@ public class ElementRenderer implements IElementRenderer {
         //TODO: Reset borderWidth so that draw style can be properly misused for creative purposes
 
         //Background
-        ShaderProgram backgroundShader = element.getStylings().getBackgroundShader();
+        ShaderProgram backgroundShader = element.getStylings().getBackgroundShader().getProgram();
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
+
         element.getMesh().render(backgroundShader, element.getStylings().getBackgroundDrawStyle().value);
     }
 }

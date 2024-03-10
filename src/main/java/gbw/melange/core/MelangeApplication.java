@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import gbw.melange.common.assets.Selector;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.elementary.space.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
@@ -78,7 +79,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         ParallelMonitoredExecutionEnvironment.setInstance(this);
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
-
 
         Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha

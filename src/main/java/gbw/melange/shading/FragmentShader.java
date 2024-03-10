@@ -8,6 +8,20 @@ import java.util.Objects;
  * String alias for now
  */
 public class FragmentShader {
+    private final String code;
+    private final String localName;
+
+    public FragmentShader(String localName, String code) {
+        this.code = code;
+        this.localName = localName;
+    }
+
+    public String code() {
+        return code;
+    }
+    public String name(){
+        return localName;
+    }
 
     public static FragmentShader constant(Color color){
         // Convert the RGBA color components to GLSL float literals
@@ -20,22 +34,11 @@ public class FragmentShader {
                 "\tgl_FragColor = vec4(" + r + ", " + g + ", " + b + ", " + a + ");\n" +
                 "}\n";
 
-        return new FragmentShader(code);
+        return new FragmentShader("CONSTANT_RGBA_FRAGMENT("+r+","+g+","+b+","+a+")",code);
     }
 
-
-
-    private final String code;
-
-    public FragmentShader(String code) {
-        this.code = code;
-    }
-
-    public String code() {
-        return code;
-    }
-
-    public static final FragmentShader DEFAULT = new FragmentShader("""
+    public static final FragmentShader DEFAULT = new FragmentShader("MELANGE_DEFAULT_FRAGMENT",
+    """
         #ifdef GL_ES
         precision mediump float;
         #endif
@@ -54,7 +57,7 @@ public class FragmentShader {
             gl_FragColor = gradientColor;
         }
     """);
-    public static final FragmentShader DEBUG_UV = new FragmentShader(
+    public static final FragmentShader DEBUG_UV = new FragmentShader("MELANGE_DEBUG_UV_FRAGMENT",
         """
         #ifdef GL_ES
         precision mediump float;
@@ -68,12 +71,12 @@ public class FragmentShader {
         }
     """);
 
-    public static final FragmentShader TRANSPARENT = new FragmentShader(
+    public static final FragmentShader TRANSPARENT = new FragmentShader("MELANGE_TRANSPARENT_FRAGMENT",
     """
         #ifdef GL_ES
         precision mediump float;
         #endif
-        
+                
         const vec4 color = vec4(0,0,0,0);
             
         void main() {

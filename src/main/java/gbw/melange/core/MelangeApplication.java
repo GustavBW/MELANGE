@@ -12,7 +12,6 @@ import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
-import gbw.melange.core.discovery.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.core.interactions.InputListener;
 import gbw.melange.elements.navigation.ISpaceManager;
 import gbw.melange.elements.navigation.SpaceManager;
@@ -20,6 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
     private static final Logger log = LoggerFactory.getLogger(MelangeApplication.class);
@@ -73,20 +75,35 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);
         }
+        ParallelMonitoredExecutionEnvironment.setInstance(this);
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
 
         log.info("Total startup time: " + (totalBootTime) + "ms");
         log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
     }
     private long frame = 0;
+    /**
+     * Task backlog from last render pass or within last render pass
+     */
+    private final ConcurrentLinkedQueue<Runnable> runOnMainThread = new ConcurrentLinkedQueue<>();
+    void handleOnMain(Runnable any){
+        if(any == null) return;
+        runOnMainThread.add(any);
+    }
 
     @Override
     public void render(){
         frame++;
+        //Handle backlog
+        while(runOnMainThread.peek() != null){
+            runOnMainThread.poll().run();
+        }
+
         //Render spaces
         for(ISpace space : spaceManager.getOrderedList()){
             space.render();

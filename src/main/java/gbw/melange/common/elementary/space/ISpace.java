@@ -2,6 +2,7 @@ package gbw.melange.common.elementary.space;
 
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.builders.ISpaceBuilder;
+import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.types.ISpacerElement;
 import gbw.melange.common.elementary.types.IVolatileElement;
 import gbw.melange.common.elementary.types.IPureElement;
@@ -27,6 +28,6 @@ public interface ISpace extends Disposable {
 
     void render();
     void addPureElement(IPureElement element);
-    void addVolatileElement(IVolatileElement element);
+    void addVolatileElement(IElement element);
 
 }

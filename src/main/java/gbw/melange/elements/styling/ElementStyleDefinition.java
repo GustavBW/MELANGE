@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
-    private ShaderProgramWrapper backgroundShader = ShaderProgramWrapper.mlg_default();
-    private ShaderProgramWrapper borderShader = ShaderProgramWrapper.mlg_default();
+    private ShaderProgramWrapper backgroundShader = ShaderProgramWrapper.DEFAULT;
+    private ShaderProgramWrapper borderShader = ShaderProgramWrapper.DEFAULT;
     private Texture backgroundImage = new Texture(Gdx.files.internal("assets/fallback/errors/stderr.jpg"));
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;

@@ -16,14 +16,14 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
     public static final IReferenceStyleDefinition DEFAULT = new ReferenceStyleDefinition();
     public static final IReferenceStyleDefinition NONE = new ReferenceStyleDefinition();
     static {
-        NONE.borderShader(ShaderProgramWrapper.mlg_none());
-        NONE.backgroundShader(ShaderProgramWrapper.mlg_none());
+        NONE.borderShader(ShaderProgramWrapper.NONE);
+        NONE.backgroundShader(ShaderProgramWrapper.NONE);
         NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
         NONE.borderDrawStyle(GLDrawStyle.POINTS);
     }
     public final List<PostProcessShader> postProcesses = new ArrayList<>();
-    public ShaderProgramWrapper backgroundShader = ShaderProgramWrapper.mlg_default();
-    public ShaderProgramWrapper borderShader = ShaderProgramWrapper.mlg_default();
+    public ShaderProgramWrapper backgroundShader = ShaderProgramWrapper.DEFAULT;
+    public ShaderProgramWrapper borderShader = ShaderProgramWrapper.DEFAULT;
     public GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     public GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
     public BevelConfig bevelConfig = BevelConfig.DEFAULT;

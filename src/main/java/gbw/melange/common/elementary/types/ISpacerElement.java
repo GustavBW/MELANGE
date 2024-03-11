@@ -1,15 +1,11 @@
 package gbw.melange.common.elementary.types;
 
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.common.elementary.IElementConstraints;
+import gbw.melange.common.elementary.SizingPolicy;
 
 /**
- * Represents empty space. If a nearby element has {@link gbw.melange.elements.constraints.SizingPolicy#FIT_CONTENT}, it will take priority in terms of space use.
+ * Represents empty space. If a nearby element has {@link SizingPolicy#FIT_CONTENT}, it will take priority in terms of space use.
  */
-public interface ISpacerElement extends Disposable {
+public interface ISpacerElement extends IConstrainedElement {
     double getRequestedHeight();
     double getRequestedWidth();
-    IElementConstraints getConstraints();
-    Mesh getMesh();
 }

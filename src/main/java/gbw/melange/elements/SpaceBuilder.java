@@ -3,8 +3,9 @@ package gbw.melange.elements;
 import gbw.melange.common.builders.ISpaceBuilder;
 import gbw.melange.common.elementary.Anchor;
 import gbw.melange.common.elementary.ElementAnchoring;
-import gbw.melange.common.elementary.types.ISpacerElement;
+import gbw.melange.common.elementary.types.IConstrainedElement;
 import gbw.melange.common.elementary.space.ISpace;
+import gbw.melange.common.elementary.types.ISpacerElement;
 import gbw.melange.elements.constraints.ReferenceConstraintDefinition;
 
 public class SpaceBuilder implements ISpaceBuilder {
@@ -19,7 +20,7 @@ public class SpaceBuilder implements ISpaceBuilder {
     }
 
     @Override
-    public ISpacerElement build() {
+    public IConstrainedElement build() {
         ISpacerElement spacer = new SpacerElement(refConDef, width, height);
         parentSpace.addSpace(spacer);
         return new SpacerElement(refConDef, width, height);

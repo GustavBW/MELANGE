@@ -1,15 +1,17 @@
 package gbw.melange.core.elementary;
 
+import gbw.melange.common.elementary.types.IConstrainedElement;
 import gbw.melange.common.elementary.types.IElement;
+import gbw.melange.elements.ElementTransformAccess;
 
 import java.util.*;
 
-public class AutomaticElementTransformResolver {
+public class AutomaticElementTransformResolver implements IAETR {
 
     public static class ElementSubTree {
-        public IElement<?> root;
+        public IConstrainedElement root;
         public List<ElementSubTree> children = new ArrayList<>();
-        public ElementSubTree(IElement<?> element){
+        public ElementSubTree(IConstrainedElement element){
             this.root = element;
         }
     }
@@ -17,20 +19,22 @@ public class AutomaticElementTransformResolver {
     private final List<ElementSubTree> roots = new ArrayList<>();
     private double avgRootElementInitialSize = 1;
 
-    public AutomaticElementTransformResolver(List<IElement<?>> elements) {
+    public void load(List<? extends IConstrainedElement> elements){
         if(elements.isEmpty()) return;
 
-        Map<IElement<?>, ElementSubTree> elementToNodeMap = new HashMap<>();
+        roots.clear();
+
+        Map<IConstrainedElement, ElementSubTree> elementToNodeMap = new HashMap<>();
 
         // First pass: create nodes for all elements and map them
-        for (IElement<?> element : elements) {
+        for (IConstrainedElement element : elements) {
             ElementSubTree node = new ElementSubTree(element);
             elementToNodeMap.put(element, node);
         }
 
         // Second pass: establish parent-child relationships
-        for (IElement<?> element : elements) {
-            IElement<?> parent = element.getConstraints().getAttachedTo();
+        for (IConstrainedElement element : elements) {
+            IConstrainedElement parent = element.getConstraints().getAttachedTo();
             ElementSubTree currentNode = elementToNodeMap.get(element);
 
             if (parent != null) {
@@ -46,11 +50,19 @@ public class AutomaticElementTransformResolver {
         avgRootElementInitialSize = 1.0 / roots.size();
     }
 
-    public void resolve(ElementSubTree root){
+    public void resolve(){
+        ElementTransformAccess transformAccess = new ElementTransformAccess();
+        //Pass 1: Evenly distribute everything, ignore SizingPolicy
+
+
+        //Pass 2: Backwards propegate from all SizingPolicy.fitContent
+    }
+
+    /**
+     * Resolve only this element and elements attached to it
+     */
+    public void resolveFrom(IConstrainedElement element){
 
     }
 
-    public List<ElementSubTree> getRoots() {
-        return roots;
-    }
 }

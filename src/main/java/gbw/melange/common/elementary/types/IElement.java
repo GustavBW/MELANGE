@@ -9,16 +9,13 @@ import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 
-public interface IElement<T> extends Disposable, Comparable<IElement<?>> {
+public interface IElement<T> extends Disposable, Comparable<IElement<?>>, IConstrainedElement {
 
     IElement NULL = null; //TODO: Find a way to involve a neat null-object pattern here.
 
     //Standard state getters
-    IElementConstraints getConstraints();
     ElementState getState();
     IElementStyleDefinition getStylings();
-    Mesh getMesh();
-    IComputedTransforms computed();
     int getId();
     //The spice
     IElementRuleBuilder when();

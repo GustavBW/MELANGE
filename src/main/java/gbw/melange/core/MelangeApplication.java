@@ -72,11 +72,15 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         ISpaceRegistry spaceRegistry;
         try {
             discoveryAgent.instatiateAndPrepare();
+            //The space manager is the navigator, why isn't that fetched from here instead of the registry? Anyway, the registry
+            //should be available to users, while the manager should.
             spaceRegistry = discoveryAgent.getContext().getBean(ISpaceRegistry.class);
             spaceManager.loadFromRegistry(spaceRegistry);
+
             final long shaderPipelineTimeA = System.currentTimeMillis();
             ManagedShaderPipeline.run();
             log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
+
         } catch (ViewConfigurationIssue | ShaderCompilationIssue e) {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);

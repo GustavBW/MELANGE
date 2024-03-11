@@ -1,9 +1,6 @@
 package gbw.melange.elements.constraints;
 
-import gbw.melange.common.elementary.Anchor;
-import gbw.melange.common.elementary.ElementAnchoring;
-import gbw.melange.common.elementary.IElementConstraints;
-import gbw.melange.common.elementary.IReferenceConstraintDefinition;
+import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.types.IElement;
 
 public class ReferenceConstraintDefinition implements IReferenceConstraintDefinition {

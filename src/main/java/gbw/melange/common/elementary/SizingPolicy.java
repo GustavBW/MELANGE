@@ -1,4 +1,4 @@
-package gbw.melange.elements.constraints;
+package gbw.melange.common.elementary;
 
 public enum SizingPolicy {
     /**

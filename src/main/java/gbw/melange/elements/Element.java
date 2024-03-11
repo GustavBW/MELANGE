@@ -22,6 +22,7 @@ public abstract class Element<T> implements IElement<T> {
     private IElementStyleDefinition styling;
     private IElementRuleSet ruleset = new ElementRuleSet();
     private final IComputedTransforms computed = new ComputedTransforms();
+    private final ComputedShading computedShading = new ComputedShading();
     /**
      * All vertex parameters (x, y, z) are always within a -1 to 1 space.
      */
@@ -82,6 +83,9 @@ public abstract class Element<T> implements IElement<T> {
     }
     static int nextIdInSequence(){
         return elementIdTracker + 1;
+    }
+    ComputedShading getComputedShading(){
+        return computedShading;
     }
 
     @Override

@@ -1,8 +1,14 @@
 package gbw.melange.core;
 
+import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.hooks.OnInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -11,7 +17,9 @@ import java.util.function.Predicate;
  */
 public class ParallelMonitoredExecutionEnvironment {
 
+    private static final Logger log = LoggerFactory.getLogger(ParallelMonitoredExecutionEnvironment.class);
     private static ParallelMonitoredExecutionEnvironment instance;
+    private static final ExecutorService executor = Executors.newFixedThreadPool(16);
     private final MelangeApplication<?> appInstance;
     private ParallelMonitoredExecutionEnvironment(MelangeApplication<?> appInstance){
         this.appInstance = appInstance;
@@ -25,24 +33,45 @@ public class ParallelMonitoredExecutionEnvironment {
         instance = new ParallelMonitoredExecutionEnvironment(appInstance);
     }
 
-    public static void handleThis(List<OnInit> onInit){
-        //If is IElement, throw them into Loading state and move them to Loading render queue in their space
-        //When it resolves, go stable or dedicated error.
-
-        onInit.forEach(e -> {
-            try {
-                e.onInit();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+    public static void handleThis(List<OnInit<?>> onInits){
+        //VolatileElements are handled separately, and if reflections pick any of these up, its a mistake.
+        List<OnInit<?>> filtered = new ArrayList<>();
+        for(OnInit<?> onInit : onInits){
+            if(!(onInit instanceof ILoadingElement<?>)){
+                filtered.add(onInit);
             }
-        });
-    }
+        }
 
-    public static <T> void handle(T object, Predicate<T> completeWhenTrue, Consumer<T> whenCompleteDo){
-        Thread handleThread = new Thread(() -> handle0(object, completeWhenTrue, whenCompleteDo));
-        handleThread.start();
+        filtered.forEach(e ->
+            executor.submit(() ->
+                {
+                    try {
+                        e.onInit();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            ));
     }
-    private static <T> void handle0(T object, Predicate<T> completeWhenTrue, Consumer<T> whenCompleteDo){
+    public static <T> void offloadVolatileElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
+        executor.submit(() -> instance.handleVolatileElement(element, moveToStable, moveToError));
+    }
+    private <T> void handleVolatileElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
+        try{
+            element.onInit();
+            moveToStable.run();
+        }catch(Exception handled){
+            log.warn("LoadingElement "+element+" onInit failed! " + handled.getMessage());
+            moveToError.run();
+        }
+    }
+    /**
+     * Awaits the predicate in 100ms sleep intervals, then submits whenCompletedDo to be run on the main thread.
+     */
+    public static <T> void offloadAny(T object, Predicate<T> completeWhenTrue, Consumer<T> whenCompleteDo){
+        executor.submit(() -> instance.handle0(object, completeWhenTrue, whenCompleteDo));
+    }
+    private <T> void handle0(T object, Predicate<T> completeWhenTrue, Consumer<T> whenCompleteDo){
         boolean complete = false;
         while(!complete){
             complete = completeWhenTrue.test(object);
@@ -50,7 +79,12 @@ public class ParallelMonitoredExecutionEnvironment {
                 Thread.sleep(100);
             }catch (Exception ignored){}
         }
+        //Since we don't know what this task might be, its probably best to run it on the main thread.
         instance.runOnMain(() -> whenCompleteDo.accept(object));
+    }
+
+    static void shutdown(){
+        executor.shutdown();
     }
 
 }

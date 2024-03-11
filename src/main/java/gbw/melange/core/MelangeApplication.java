@@ -10,12 +10,14 @@ import gbw.melange.common.assets.Selector;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.elementary.space.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.common.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
 import gbw.melange.core.interactions.InputListener;
 import gbw.melange.elements.navigation.ISpaceManager;
 import gbw.melange.elements.navigation.SpaceManager;
+import gbw.melange.shading.ManagedShaderPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -72,17 +74,23 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             discoveryAgent.instatiateAndPrepare();
             spaceRegistry = discoveryAgent.getContext().getBean(ISpaceRegistry.class);
             spaceManager.loadFromRegistry(spaceRegistry);
-        } catch (ViewConfigurationIssue e) {
+            final long shaderPipelineTimeA = System.currentTimeMillis();
+            ManagedShaderPipeline.run();
+            log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
+        } catch (ViewConfigurationIssue | ShaderCompilationIssue e) {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);
         }
         ParallelMonitoredExecutionEnvironment.setInstance(this);
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
-        final long totalBootTime = System.currentTimeMillis() - bootTimeA;
+
+        final long elementResolvePassTimeA = System.currentTimeMillis();
+
 
         Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
 
+        final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         log.info("Total startup time: " + (totalBootTime) + "ms");
         log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
     }
@@ -136,6 +144,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         for(ISpace space : spaceManager.getOrderedList()){
             space.dispose();
         }
+        ParallelMonitoredExecutionEnvironment.shutdown();
     }
 
 }

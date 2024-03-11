@@ -10,7 +10,7 @@ import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.types.IPureElement;
-import gbw.melange.common.elementary.types.IVolatileElement;
+import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.hooks.OnInit;
 import gbw.melange.elements.constraints.ElementConstraintBuilder;
 import gbw.melange.elements.constraints.ReferenceConstraintDefinition;
@@ -48,13 +48,13 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     @Override
     public IElement build() {
         if(onInit != null){
-            IVolatileElement element = new VolatileElement<>(
+            ILoadingElement element = new LoadingElement<>(
                     mesh,
                     onInit,
                     referenceStyling,
                     referenceConstraints
             );
-            parentSpace.addVolatileElement(element);
+            parentSpace.addLoadingElement(element);
             return element;
         } else {
             IPureElement element = new PureElement(

@@ -28,21 +28,21 @@ public class ElementRenderer implements IElementRenderer {
     public ElementRenderer(){}
 
     @Override
-    public void draw(Matrix4 parentMatrix, IElement... elements) {
-        for(IElement e : elements){
+    public void draw(Matrix4 parentMatrix, IElement<?>... elements) {
+        for(IElement<?> e : elements){
             drawElementToBatch(batch, parentMatrix, e);
         }
     }
 
     @Override
-    public void draw(Matrix4 parentMatrix, Collection<IElement> elements) {
-        for(IElement e : elements){
+    public void draw(Matrix4 parentMatrix, Collection<IElement<?>> elements) {
+        for(IElement<?> e : elements){
             drawElementToBatch(batch, parentMatrix, e);
         }
     }
 
 
-    private void drawElementToBatch(SpriteBatch batch, Matrix4 parentMatrix, IElement element){
+    private void drawElementToBatch(SpriteBatch batch, Matrix4 parentMatrix, IElement<?> element){
 
         Matrix4 elementMatrix = ((ComputedTransforms) element.computed()).getMatrix();
         Matrix4 appliedMatrix = new Matrix4(parentMatrix).mul(elementMatrix);
@@ -69,7 +69,7 @@ public class ElementRenderer implements IElementRenderer {
         //...
     }
 
-    private static void outputToScreen(FrameBuffer fbo, IElement element, Matrix4 appliedMatrix){
+    private static void outputToScreen(FrameBuffer fbo, IElement<?> element, Matrix4 appliedMatrix){
         // The long way of clearing only some of the screen
         final double[] bounds = element.computed().getAxisAlignedBounds();
         final double appWidth = Gdx.graphics.getWidth(), appHeight = Gdx.graphics.getHeight();
@@ -95,7 +95,7 @@ public class ElementRenderer implements IElementRenderer {
         element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.value);
     }
 
-    private static FrameBuffer postProcessPass(IElement element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
+    private static FrameBuffer postProcessPass(IElement<?> element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
         boolean flip = true; // Determine which FBO is the source and which is the destination
 
         for (PostProcessShader shader : element.getStylings().getPostProcesses()) {
@@ -135,7 +135,7 @@ public class ElementRenderer implements IElementRenderer {
     }
 
 
-    private static void mainRenderPass(FrameBuffer fbo, IElement element, Matrix4 appliedMatrix) {
+    private static void mainRenderPass(FrameBuffer fbo, IElement<?> element, Matrix4 appliedMatrix) {
         fbo.begin();
         //Clear to transparent
         Gdx.gl.glClearColor(0,0,0,0);

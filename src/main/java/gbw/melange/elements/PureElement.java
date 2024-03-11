@@ -21,6 +21,7 @@ public class PureElement<T> extends Element<T> implements IPureElement<T> {
     PureElement(T content, Mesh mesh,IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
         super(mesh, styling, constraints);
         this.content = ObservableValue.blockingPristine(content);
+        super.setState(ElementState.STABLE);
     }
 
     @Override

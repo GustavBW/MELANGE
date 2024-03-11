@@ -9,6 +9,7 @@ import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.hooks.OnRender;
+import gbw.melange.common.navigation.ISpaceNavigator;
 import gbw.melange.elements.ComputedTransforms;
 import gbw.melange.shading.FragmentShader;
 import gbw.melange.shading.VertexShader;
@@ -22,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class HomeScreen implements IHomeScreen, OnRender {
     private static final Logger log = LoggerFactory.getLogger(HomeScreen.class);
     @Autowired
-    public HomeScreen(ISpaceProvider<IScreenSpace> provider) {
+    public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator) {
         IScreenSpace space = provider.getScreenSpace(this);
         FragmentShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient")
                 .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)

@@ -2,28 +2,28 @@ package gbw.melange.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import gbw.melange.common.assets.Selector;
 import gbw.melange.common.elementary.space.ISpace;
-import gbw.melange.common.elementary.space.ISpaceRegistry;
+import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
+import gbw.melange.core.interactions.IInputListener;
 import gbw.melange.core.interactions.InputListener;
-import gbw.melange.elements.navigation.ISpaceManager;
-import gbw.melange.elements.navigation.SpaceManager;
+import gbw.melange.common.navigation.ISpaceNavigator;
+import gbw.melange.core.elementary.SpaceNavigator;
 import gbw.melange.shading.ManagedShaderPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
@@ -48,7 +48,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         return app.getContext();
     }
-    private static long lwjglTimeB, lwjglInitTimeA;
+    private static long lwjglInitTimeA;
     private DiscoveryAgent<T> discoveryAgent;
     private static long bootTimeA;
     public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
@@ -62,20 +62,25 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private ApplicationContext getContext(){
         return discoveryAgent.getContext();
     }
-    private final ISpaceManager spaceManager = new SpaceManager();
+    private ISpaceNavigator spaceNavigator;
     @Override
     public void create(){
-        lwjglTimeB = System.currentTimeMillis();
-        log.info("LWJGL init time: " + (lwjglTimeB - lwjglInitTimeA) + "ms");
+        final long lwjglInitTime = (System.currentTimeMillis() - lwjglInitTimeA);
+        log.info("LWJGL init time: " + lwjglInitTime + "ms");
 
-        Gdx.input.setInputProcessor(new InputListener());
+        ParallelMonitoredExecutionEnvironment.setInstance(this);
         ISpaceRegistry spaceRegistry;
+        InputProcessor inputListener;
         try {
-            discoveryAgent.instatiateAndPrepare();
+            discoveryAgent.instantiateAndPrepare();
             //The space manager is the navigator, why isn't that fetched from here instead of the registry? Anyway, the registry
             //should be available to users, while the manager should.
-            spaceRegistry = discoveryAgent.getContext().getBean(ISpaceRegistry.class);
-            spaceManager.loadFromRegistry(spaceRegistry);
+            spaceRegistry = getContext().getBean(ISpaceRegistry.class);
+            spaceNavigator = getContext().getBean(ISpaceNavigator.class);
+            ((SpaceNavigator) spaceNavigator).loadFromRegistry(spaceRegistry); //NB: Direct implementation reference!
+
+            inputListener = getContext().getBean(IInputListener.class);
+            Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
             ManagedShaderPipeline.run();
@@ -85,18 +90,18 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);
         }
-        ParallelMonitoredExecutionEnvironment.setInstance(this);
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
 
         final long elementResolvePassTimeA = System.currentTimeMillis();
-
+        spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
+        log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
 
         Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         log.info("Total startup time: " + (totalBootTime) + "ms");
-        log.info("MELANGE Framework startup time: " + (totalBootTime - (lwjglTimeB - lwjglInitTimeA)) + "ms");
+        log.info("MELANGE Framework startup time: " + (totalBootTime - lwjglInitTime) + "ms");
     }
     private long frame = 0;
     /**
@@ -117,7 +122,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         }
 
         //Render spaces
-        for(ISpace space : spaceManager.getOrderedList()){
+        for(ISpace space : spaceNavigator.getOrderedList()){
             space.render();
         }
         int glErrCausedBySpaces = Gdx.gl.glGetError();
@@ -145,7 +150,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
     @Override
     public void dispose(){
-        for(ISpace space : spaceManager.getOrderedList()){
+        for(ISpace space : spaceNavigator.getOrderedList()){
             space.dispose();
         }
         ParallelMonitoredExecutionEnvironment.shutdown();

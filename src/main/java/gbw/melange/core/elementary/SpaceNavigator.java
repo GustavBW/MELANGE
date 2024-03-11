@@ -1,18 +1,19 @@
-package gbw.melange.elements.navigation;
+package gbw.melange.core.elementary;
 
 import gbw.melange.common.elementary.space.ISpace;
-import gbw.melange.common.elementary.space.ISpaceRegistry;
+import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.elementary.space.SpaceLayerEntry;
+import gbw.melange.common.navigation.ISpaceNavigator;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class SpaceManager implements ISpaceManager{
+@Service
+public class SpaceNavigator implements ISpaceNavigator {
     private final List<ISpace> ordered = new ArrayList<>();
-    @Override
     public void loadFromRegistry(ISpaceRegistry registry) {
         // Clear the existing ordered list to reload it from the registry
         ordered.clear();
@@ -34,6 +35,11 @@ public class SpaceManager implements ISpaceManager{
 
     @Override
     public void goToLayer(int layer) {
+
+    }
+
+    @Override
+    public void goToSpace(ISpace space) {
 
     }
 

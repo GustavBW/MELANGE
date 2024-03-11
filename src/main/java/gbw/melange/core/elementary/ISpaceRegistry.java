@@ -1,4 +1,7 @@
-package gbw.melange.common.elementary.space;
+package gbw.melange.core.elementary;
+
+import gbw.melange.common.elementary.space.ISpace;
+import gbw.melange.common.elementary.space.SpaceLayerEntry;
 
 import java.util.List;
 import java.util.Map;

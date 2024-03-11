@@ -2,7 +2,6 @@ package gbw.melange.core.elementary;
 
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
-import gbw.melange.common.elementary.space.ISpaceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

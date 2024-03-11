@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @View( layer = View.HOME_SCREEN )
 public class HomeScreen implements IHomeScreen, OnRender {
     private static final Logger log = LoggerFactory.getLogger(HomeScreen.class);
-    private final IElement element;
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider) {
         IScreenSpace space = provider.getScreenSpace(this);
@@ -29,35 +28,49 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
                 .setRotation(45)
                 .build();
-
-        space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
-                .styling()
-                .setBackgroundColor(FragmentShader.DEBUG_UV)
-                .apply()
-                .build();
-
-        space.createElement().setMesh(MeshTable.EQUILATERAL_TRIANGLE.getMesh())
-                .styling()
-                .setBackgroundColor(FragmentShader.DEBUG_UV)
-                .apply()
-                .build();
+        final double borderWidth = 5;
 
         space.createElement().setMesh(MeshTable.SQUARE.getMesh())
-                .styling()
-                .setBackgroundColor(fragmentShader)
+            .styling()
+                .setBackgroundColor(FragmentShader.DEBUG_UV)
+                .setBorderColor(Color.WHITE)
                 .apply()
-                .build();
+            .constraints()
+                .setBorderWidth(borderWidth)
+                .apply()
+            .build();
 
-        element = space.createElement()
+        space.createElement()
             .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
             .styling()
-                .setBackgroundColor(fragmentShader)
+                .setBackgroundColor(FragmentShader.DEBUG_UV)
                 .setBorderColor(Color.WHITE)
-                //.addPostProcess(new PostProcessShader(new ShaderProgram(VertexShader.DEFAULT.code(),PostProcessShader.GAUSSIAN_BLUR)))
+                .apply()
+            .constraints()
+                .setBorderWidth(borderWidth)
                 .apply()
             .build();
 
 
+        space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
+                .styling()
+                    .setBackgroundColor(FragmentShader.DEBUG_UV)
+                    .setBorderColor(Color.WHITE)
+                    .apply()
+                .constraints()
+                    .setBorderWidth(borderWidth)
+                    .apply()
+                .build();
+
+        space.createElement().setMesh(MeshTable.EQUILATERAL_TRIANGLE.getMesh())
+                .styling()
+                    .setBackgroundColor(FragmentShader.DEBUG_UV)
+                    .setBorderColor(Color.WHITE)
+                    .apply()
+                .constraints()
+                    .setBorderWidth(borderWidth)
+                    .apply()
+                .build();
     }
     private double acc = 0;
     @Override

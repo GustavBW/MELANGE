@@ -19,6 +19,16 @@ public enum MeshTable {
             0, 1, 1, 1, 1, 0, 0, 0
         }, new short[] {0, 1, 2, 2, 3, 0} //Tris
     ),
+    RHOMBUS(
+        new float[] { // x, y, z
+            1f, .5f, 0,
+            0, -1f, 0,
+            1f, 0f, 0,
+            0, 1, 0
+        }, new float[]{ //u, v
+            0, 1, 1, 1, 1, 0, 0, 0
+        }, new short[] {0, 3, 1, 1, 3, 2} //Tris
+    ),
     EQUILATERAL_TRIANGLE(
         new float[]{
             -0.5f, 0f, 0f, // Bottom left
@@ -30,11 +40,7 @@ public enum MeshTable {
             0.5f, 1f, // Top
         }, new short[]{0, 1, 2}
     ),
-    RHOMBUS(
-        createCircleVertices(4), // Radius 1, 32 vertices
-        createCircleUVs(4),
-        createCircleIndices(4)
-    ),
+
     CIRCLE_8(
         createCircleVertices(8), // Radius 1, 32 vertices
         createCircleUVs(8),

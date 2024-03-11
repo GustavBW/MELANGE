@@ -2,9 +2,9 @@ package gbw.melange.common.builders;
 
 import gbw.melange.common.elementary.Anchor;
 import gbw.melange.common.elementary.ElementAnchoring;
-import gbw.melange.common.elementary.types.ISpacerElement;
+import gbw.melange.common.elementary.types.IConstrainedElement;
 
-public interface ISpaceBuilder extends IBuilder<ISpacerElement>{
+public interface ISpaceBuilder extends IBuilder<IConstrainedElement>{
     /**
      * @param percentSPX SPX = screen space x-axis / width.
      */

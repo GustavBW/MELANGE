@@ -17,7 +17,6 @@ public class ManagedShaderPipeline {
     private final Queue<ShaderProgramWrapper> unCompiled = new ConcurrentLinkedQueue<>();
 
     public static void add(ShaderProgramWrapper uncompiled){
-        log.info("Registered: " + uncompiled);
         instance.unCompiled.add(uncompiled);
     }
 

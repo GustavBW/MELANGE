@@ -15,9 +15,7 @@ public class ComputedTransforms implements IComputedTransforms {
     private final Vector3 scale = new Vector3();
     private final Quaternion rotation = new Quaternion();
 
-    //TODO: Framebuffer size has to be adjusted to viewport resolution
-    private final FrameBuffer frameBufferA = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, true);
-    private final FrameBuffer frameBufferB = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, true);
+
 
     public ComputedTransforms(){}
 
@@ -25,13 +23,6 @@ public class ComputedTransforms implements IComputedTransforms {
         matrix.getTranslation(position);
         matrix.getScale(scale);
         matrix.getRotation(rotation);
-    }
-
-    public void setScale(double x, double y, double z){ //TODO: REMOVE THIS
-        matrix.setToScaling((float) x,(float) y,(float) z);
-    }
-    public void setTranslation(double x, double y, double z){ //TODO: REMOVE THIS
-        matrix.setTranslation((float) x, (float) y, (float) z);
     }
 
     @Override
@@ -70,16 +61,6 @@ public class ComputedTransforms implements IComputedTransforms {
     Matrix4 getMatrix(){
         return matrix;
     }
-    FrameBuffer getFrameBufferA(){
-        return frameBufferA;
-    }
-    FrameBuffer getFrameBufferB(){
-        return frameBufferB;
-    }
 
-    //This is package private and not declared in the IComputedTransforms interface, as noone but the AutomaticElementTransformResolver should have access to it
-    void setMatrix(Matrix4 matrix){
-        assert matrix != null;
-        this.matrix = matrix;
-    }
+
 }

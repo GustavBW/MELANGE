@@ -23,32 +23,32 @@ import java.util.List;
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LoggerFactory.getLogger(ElementRenderer.class);
 
-    private final SpriteBatch batch = new SpriteBatch();
 
     public ElementRenderer(){}
 
     @Override
     public void draw(Matrix4 parentMatrix, IElement<?>... elements) {
         for(IElement<?> e : elements){
-            drawElementToBatch(batch, parentMatrix, e);
+            drawElementToBatch(parentMatrix, e);
         }
     }
 
     @Override
     public void draw(Matrix4 parentMatrix, Collection<IElement<?>> elements) {
         for(IElement<?> e : elements){
-            drawElementToBatch(batch, parentMatrix, e);
+            drawElementToBatch(parentMatrix, e);
         }
     }
 
 
-    private void drawElementToBatch(SpriteBatch batch, Matrix4 parentMatrix, IElement<?> element){
+    private void drawElementToBatch(Matrix4 parentMatrix, IElement<?> element){
 
-        Matrix4 elementMatrix = ((ComputedTransforms) element.computed()).getMatrix();
+        ComputedTransforms computed = ((ComputedTransforms) element.computed());
+        Matrix4 elementMatrix = computed.getMatrix();
         Matrix4 appliedMatrix = new Matrix4(parentMatrix).mul(elementMatrix);
 
-        FrameBuffer fboA = ((ComputedTransforms) element.computed()).getFrameBufferA();
-        FrameBuffer fboB = ((ComputedTransforms) element.computed()).getFrameBufferB();
+        FrameBuffer fboA = ((Element<?>) element).getComputedShading().getFrameBufferA();
+        FrameBuffer fboB = ((Element<?>) element).getComputedShading().getFrameBufferB();
 
         //The main pass is rendered to the FBO to enable post-process effects
         mainRenderPass(fboA, element, appliedMatrix);
@@ -57,12 +57,9 @@ public class ElementRenderer implements IElementRenderer {
 
         outputToScreen(finalFBO, element, appliedMatrix);
 
-        IComputedTransforms computed = element.computed();
-
         //TODO: Move this to reactive rule resolution
-        element.computed().update();
-        IComputedTransforms eComputed = element.computed();
-        //log.info(element + ": " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
+        computed.update();
+        //log.info(element + ": " + computed.getPositionX() +", " + computed.getPositionY() + " scale: " + computed.getWidth() + ", " + computed.getHeight());
 
 
         //Content
@@ -73,6 +70,7 @@ public class ElementRenderer implements IElementRenderer {
         // The long way of clearing only some of the screen
         final double[] bounds = element.computed().getAxisAlignedBounds();
         final double appWidth = Gdx.graphics.getWidth(), appHeight = Gdx.graphics.getHeight();
+        /*
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(
                 (int) (bounds[0] * appWidth),
@@ -83,11 +81,11 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
-
+        */
         Gdx.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
         fbo.getColorBufferTexture().bind(69);
 
-        ShaderProgram finalShader = ShaderProgramWrapper.mlg_texture().getProgram();
+        ShaderProgram finalShader = ShaderProgramWrapper.TEXTURE.getProgram();
         finalShader.bind();
         finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
         finalShader.setUniformi("u_texture", 69);
@@ -96,6 +94,8 @@ public class ElementRenderer implements IElementRenderer {
     }
 
     private static FrameBuffer postProcessPass(IElement<?> element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
+        if (element.getStylings().getPostProcesses().isEmpty()) return fboA;
+
         boolean flip = true; // Determine which FBO is the source and which is the destination
 
         for (PostProcessShader shader : element.getStylings().getPostProcesses()) {

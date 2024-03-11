@@ -3,7 +3,7 @@ package gbw.melange.elements.rules;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementUserInteractionRuleBuilder;
-import gbw.melange.events.interactions.UserInteractionTypes;
+import gbw.melange.common.events.interactions.UserInteractionTypes;
 
 public class ElementUserInteractionRuleBuilder implements IElementUserInteractionRuleBuilder {
 

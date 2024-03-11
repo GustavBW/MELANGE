@@ -48,7 +48,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     @Override
     public IElement build() {
         if(onInit != null){
-            IVolatileElement element = new OnInitElement<>(
+            IVolatileElement element = new VolatileElement<>(
                     mesh,
                     onInit,
                     referenceStyling,
@@ -62,7 +62,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
                     referenceStyling,
                     referenceConstraints
             );
-            parentSpace.addVolatileElement(element);
+            parentSpace.addPureElement(element);
             return element;
         }
     }

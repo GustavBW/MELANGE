@@ -1,6 +1,7 @@
 package gbw.melange.welcomeapp;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import gbw.melange.common.MeshTable;
 import gbw.melange.common.annotations.View;
@@ -10,6 +11,8 @@ import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.elements.ComputedTransforms;
 import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.VertexShader;
+import gbw.melange.shading.postprocessing.PostProcessShader;
 import gbw.melange.shading.templating.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
 import org.slf4j.Logger;
@@ -37,9 +40,9 @@ public class HomeScreen implements IHomeScreen, OnRender {
         element = space.createElement()
             .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
             .styling()
-                .setBackgroundColor(FragmentShader.DEBUG_UV)
+                .setBackgroundColor(fragmentShader)
                 .setBorderColor(Color.WHITE)
-                //.addPostProcess(new PostProcessShader(new ShaderProgram(FragmentShader.DEBUG_UV.code(), VertexShader.DEFAULT.code())))
+                //.addPostProcess(new PostProcessShader(new ShaderProgram(VertexShader.DEFAULT.code(),PostProcessShader.GAUSSIAN_BLUR)))
                 .apply()
             .build();
 
@@ -52,6 +55,6 @@ public class HomeScreen implements IHomeScreen, OnRender {
     public void onRender(double deltaT) {
         acc += deltaT;
         ((ComputedTransforms) element.computed())
-                .setTranslation(MathUtils.sin((float) acc), MathUtils.cos((float) acc), 0);
+                .setTranslation(.75 * MathUtils.sin((float) acc),.75 *  MathUtils.cos((float) acc), 0);
     }
 }

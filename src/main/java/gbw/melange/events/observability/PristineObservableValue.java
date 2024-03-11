@@ -12,15 +12,16 @@ public class PristineObservableValue<T> extends ObservableValue<T, IPristineBiCo
     private final IPristineFilterChain<T, Integer> filters = FilterChain.pristine();
 
     protected PristineObservableValue(T initialValue){
-        super.value = initialValue;
+        super(initialValue);
     }
 
     @Override
     public void set(T newer){
-        if(!super.equalityFunction.test(value, newer)){
-            filters.run(value, newer);
+        final T current = super.get();
+        if(!super.equalityFunction.test(current, newer)){
+            filters.run(current, newer);
         }
-        this.value = newer;
+        super.setRaw(newer);
     }
 
     @Override

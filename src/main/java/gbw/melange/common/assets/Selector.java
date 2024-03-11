@@ -21,7 +21,7 @@ public class Selector {
         //"." is prj root
         File[] unfiltered = new File("/assets" + FALL_BACK_DIR + ERR_IMAGE_DIR).listFiles();
         assert unfiltered != null;
-        List<File> filtered = acceptOnly(unfiltered, Set.of("png", "jpeg", "gif"));
+        List<File> filtered = acceptOnly(unfiltered, Set.of("png", "jpeg", "jpg", "gif"));
         if(filtered.size() == 1){
             return Gdx.files.internal(isolateAsPathFromInternal(filtered.get(0)));
         }
@@ -30,7 +30,7 @@ public class Selector {
     }
 
     private static List<File> acceptOnly(File[] files, Set<String> fileExtensions){
-        List<File> out = new ArrayList<>();
+        final List<File> out = new ArrayList<>();
         for(File file : files){
             if(fileExtensions.contains(isolateExtension(file))){
                 out.add(file);

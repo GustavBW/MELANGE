@@ -27,4 +27,5 @@ public record VertexShader(String localName, String code) {
         }
         """
     );
+
 }

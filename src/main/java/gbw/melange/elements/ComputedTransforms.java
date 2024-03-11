@@ -1,7 +1,6 @@
 package gbw.melange.elements;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -17,8 +16,8 @@ public class ComputedTransforms implements IComputedTransforms {
     private final Quaternion rotation = new Quaternion();
 
     //TODO: Framebuffer size has to be adjusted to viewport resolution
-    private final FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, false);
-    private final TextureRegion textureRegion = new TextureRegion();
+    private final FrameBuffer frameBufferA = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, true);
+    private final FrameBuffer frameBufferB = new FrameBuffer(Pixmap.Format.RGBA8888, 256, 256, true);
 
     public ComputedTransforms(){}
 
@@ -65,10 +64,10 @@ public class ComputedTransforms implements IComputedTransforms {
     Matrix4 getMatrix(){
         return matrix;
     }
-    FrameBuffer getFrameBuffer(){
-        return frameBuffer;
+    FrameBuffer getFrameBufferA(){
+        return frameBufferA;
     }
-    TextureRegion getTextureRegion(){
-        return textureRegion;
+    FrameBuffer getFrameBufferB(){
+        return frameBufferB;
     }
 }

@@ -57,7 +57,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         log.info("Discovery pass time: " + (System.currentTimeMillis() - discoveryTimeA) + "ms");
     }
 
-    public ApplicationContext getContext(){
+    private ApplicationContext getContext(){
         return discoveryAgent.getContext();
     }
     private final ISpaceManager spaceManager = new SpaceManager();

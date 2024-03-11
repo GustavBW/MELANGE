@@ -7,6 +7,7 @@ import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.CoreRootMarker;
+import gbw.melange.core.elementary.ISpaceRegistry;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +35,9 @@ public class DiscoveryAgent<T> {
         //System
         log.info("______________________SYSTEM_______________________");
         instance.setUpReflections();
+        instance.registerSpaceRegistry();
         instance.registerSpaceProviders();
-        instance.scanCoreForGoodMeasure();
+        instance.registerCoreSpringServices();
         //User
         log.info("______________________USER_______________________");
         instance.registerUserMainClass();
@@ -46,7 +48,19 @@ public class DiscoveryAgent<T> {
 
         return instance;
     }
-    public void instatiateAndPrepare() throws ViewConfigurationIssue {
+    private void registerSpaceRegistry() throws ClassConfigurationIssue {
+        Set<Class<? extends ISpaceRegistry>> spaceRegistries = systemRootReflections.getSubTypesOf(ISpaceRegistry.class);
+        log.info("Found registries: " + spaceRegistries.stream().map(Class::toString).toList());
+        for (Class<? extends ISpaceRegistry> registry : spaceRegistries){
+            String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(registry);
+            if(constructorErrMsg != null){
+                throw new ClassConfigurationIssue(registry + ": " + constructorErrMsg);
+            }
+
+            programContext.registerBean(registry);
+        }
+    }
+    public void instantiateAndPrepare() throws ViewConfigurationIssue {
         refresh();
     }
     public List<OnRender> getOnRenderList(){
@@ -59,7 +73,7 @@ public class DiscoveryAgent<T> {
         return userViewInformation;
     }
 
-    private void scanCoreForGoodMeasure() {
+    private void registerCoreSpringServices() {
         programContext.scan(CoreRootMarker.class.getPackageName());
     }
     private void registerSpaceProviders() throws ClassConfigurationIssue {

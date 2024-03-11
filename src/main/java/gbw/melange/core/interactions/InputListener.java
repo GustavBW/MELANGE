@@ -1,8 +1,10 @@
 package gbw.melange.core.interactions;
 
 import com.badlogic.gdx.InputProcessor;
+import org.springframework.stereotype.Service;
 
-public class InputListener implements InputProcessor {
+@Service
+public class InputListener implements IInputListener {
     @Override
     public boolean keyDown(int i) {
         return false;

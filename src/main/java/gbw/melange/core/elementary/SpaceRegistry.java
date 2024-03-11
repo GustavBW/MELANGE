@@ -2,18 +2,15 @@ package gbw.melange.core.elementary;
 
 import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.ISpace;
-import gbw.melange.common.elementary.space.ISpaceRegistry;
 import gbw.melange.common.elementary.space.SpaceLayerEntry;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class SpaceRegistry implements ISpaceRegistry {
-    private Map<Class<?>, List<SpaceLayerEntry>> registry = new HashMap<>();
+    private final Map<Class<?>, List<SpaceLayerEntry>> registry = new HashMap<>();
 
     @Override
     public void register(ISpace space, Object object) {

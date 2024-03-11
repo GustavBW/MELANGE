@@ -84,6 +84,19 @@ public class FragmentShader {
         }
         """
     );
+    public static final FragmentShader TEXTURE = new FragmentShader("MELANGE_TEXTURE_FRAGMENT",
+    """
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        
+        varying vec2 v_texCoords;
+        uniform sampler2D u_texture;
+        
+        void main() {
+            gl_FragColor = texture2D(u_texture, v_texCoords);
+        }
+    """);
 
     @Override
     public boolean equals(Object obj) {

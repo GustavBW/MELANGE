@@ -2,6 +2,7 @@ package gbw.melange.elements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LoggerFactory.getLogger(ElementRenderer.class);
@@ -27,20 +29,16 @@ public class ElementRenderer implements IElementRenderer {
 
     @Override
     public void draw(Matrix4 parentMatrix, IElement... elements) {
-        batch.begin();
         for(IElement e : elements){
             drawElementToBatch(batch, parentMatrix, e);
         }
-        batch.end();
     }
 
     @Override
     public void draw(Matrix4 parentMatrix, Collection<IElement> elements) {
-        batch.begin();
         for(IElement e : elements){
             drawElementToBatch(batch, parentMatrix, e);
         }
-        batch.end();
     }
 
 
@@ -49,50 +47,86 @@ public class ElementRenderer implements IElementRenderer {
         Matrix4 elementMatrix = ((ComputedTransforms) element.computed()).getMatrix();
         Matrix4 appliedMatrix = new Matrix4(parentMatrix).mul(elementMatrix);
 
-        FrameBuffer elementFBO = ((ComputedTransforms) element.computed()).getFrameBuffer();
-        elementFBO.begin();
+        FrameBuffer fboA = ((ComputedTransforms) element.computed()).getFrameBufferA();
+        FrameBuffer fboB = ((ComputedTransforms) element.computed()).getFrameBufferB();
 
-        //Clear to black
-        Gdx.gl.glClearColor(0,0,0,0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //The main pass is rendered to the FBO to enable post-process effects
-        mainRenderPass(element, appliedMatrix);
+        mainRenderPass(fboA, element, appliedMatrix);
 
-        elementFBO.end();
+        FrameBuffer finalFBO = postProcessPass(element, fboA, fboB, appliedMatrix);
 
-        TextureRegion region = ((ComputedTransforms) element.computed()).getTextureRegion();
-        region.setTexture(elementFBO.getColorBufferTexture());
-        //postProcessPass(region, element, elementFBO, appliedMatrix);
+        outputToScreen(finalFBO, element, appliedMatrix);
 
         IComputedTransforms computed = element.computed();
-        region.setRegion(0, 0, elementFBO.getWidth(), elementFBO.getHeight());
-        batch.draw(region, (float) computed.getPositionX(), (float) computed.getPositionY(), (float) computed.getWidth(), (float) computed.getHeight());
 
         //TODO: Move this to reactive rule resolution
         element.computed().update();
         IComputedTransforms eComputed = element.computed();
-        //log.info("Element translation: " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
+        log.info(element + ": " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
 
 
         //Content
         //...
     }
 
-    private static void postProcessPass(TextureRegion region, IElement element, FrameBuffer elementFBO, Matrix4 appliedMatrix) {
-        region.flip(false, true);
+    private static void outputToScreen(FrameBuffer fbo, IElement element, Matrix4 appliedMatrix){
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
+        Gdx.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
+        fbo.getColorBufferTexture().bind(69);
 
-        for(PostProcessShader postShader : element.getStylings().getPostProcesses()){
-            region.setTexture(elementFBO.getColorBufferTexture());
+        ShaderProgram finalShader = ShaderProgramWrapper.mlg_texture().getProgram();
+        finalShader.bind();
+        finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
+        finalShader.setUniformi("u_texture", 69);
 
-            postShader.program().bind();
-            postShader.program().setUniformMatrix("u_projTrans", appliedMatrix);
-            region.getTexture().bind();
-            element.getMesh().render(postShader.program(), GLDrawStyle.TRIANGLES.value);
+        element.getMesh().render(finalShader, GL20.GL_TRIANGLES);
+    }
+
+    private static FrameBuffer postProcessPass(IElement element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
+        boolean flip = true; // Determine which FBO is the source and which is the destination
+
+        for (PostProcessShader shader : element.getStylings().getPostProcesses()) {
+            if (flip) {
+                fboB.begin(); // Write to B
+            } else {
+                fboA.begin(); // Write to A
+            }
+
+            // Clear the FBO before rendering to it
+            Gdx.gl.glClearColor(0, 0, 0, 0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+            // Bind the shader
+            ShaderProgram shaderProgram = shader.program();
+            shaderProgram.bind();
+            shaderProgram.setUniformMatrix("u_projTrans", appliedMatrix);
+
+            // Bind the texture from the other FBO
+            Texture inputTexture = flip ? fboA.getColorBufferTexture() : fboB.getColorBufferTexture();
+            inputTexture.bind(0);
+            shaderProgram.setUniformi("u_texture", 0); // Assuming the shader samples from "u_texture"
+
+            // Render using the full-screen quad mesh (or appropriate geometry)
+            element.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);
+
+            if (flip) {
+                fboB.end(); // Done writing to B
+            } else {
+                fboA.end(); // Done writing to A
+            }
+
+            flip = !flip; // Swap roles for the next pass
         }
+        // The final result is in the FBO that is not the source
+        return flip ? fboA : fboB;
     }
 
 
-    private static void mainRenderPass(IElement element, Matrix4 appliedMatrix) {
+    private static void mainRenderPass(FrameBuffer fbo, IElement element, Matrix4 appliedMatrix) {
+        fbo.begin();
+        //Clear to transparent
+        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //Border - Rendered first so that the same mesh can be reused, as the fragment of the background is drawn on top
         ShaderProgram borderShader = element.getStylings().getBorderShader().getProgram();
         borderShader.bind();
@@ -105,7 +139,8 @@ public class ElementRenderer implements IElementRenderer {
         ShaderProgram backgroundShader = element.getStylings().getBackgroundShader().getProgram();
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
-
         element.getMesh().render(backgroundShader, element.getStylings().getBackgroundDrawStyle().value);
+
+        fbo.end();
     }
 }

@@ -12,6 +12,14 @@ public class ShaderProgramWrapper {
 
     private static ShaderProgramWrapper DEFAULT = null;
     private static ShaderProgramWrapper NONE = null;
+    private static ShaderProgramWrapper TEXTURE = null;
+
+    public static ShaderProgramWrapper mlg_texture(){
+        if(TEXTURE == null){
+            TEXTURE = new ShaderProgramWrapper("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
+        }
+        return TEXTURE;
+    }
 
     public static ShaderProgramWrapper mlg_default(){
         //Managed instance pattern used assure that the isCompiled check happens when LWJGL has initialized.

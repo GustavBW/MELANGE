@@ -5,12 +5,30 @@ import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.types.IPureElement;
+import gbw.melange.common.events.observability.IPrestineBlockingObservable;
+import gbw.melange.events.observability.ObservableValue;
 
 /**
  * A "PureElement" is static for all intends and purposes. No special handling is required during boot for this element to work correctly.
  */
-public class PureElement extends Element implements IPureElement {
+public class PureElement<T> extends Element<T> implements IPureElement<T> {
+
+    private final IPrestineBlockingObservable<T> content;
+
     PureElement(Mesh mesh,IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
+        this(null, mesh, styling, constraints);
+    }
+    PureElement(T content, Mesh mesh,IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
         super(mesh, styling, constraints);
+        this.content = ObservableValue.blockingPristine(content);
+    }
+
+    @Override
+    public T getContent(){
+        return content.get();
+    }
+    @Override
+    public void setContent(T content){
+        this.content.set(content);
     }
 }

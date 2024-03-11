@@ -10,7 +10,7 @@ import gbw.melange.common.events.observability.*;
  */
 public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> implements IObservableValue<T, R, Integer> {
     protected EqualityFunction<T> equalityFunction = (EqualityFunction<T>) EqualityFunction.DEFAULT;
-    protected T value;
+    private T value;
 
     public static <T> IPristineObservableValue<T> pristine(T initialValue, EqualityFunction<T> equalityFunction){
         IPristineObservableValue<T> instance = new PristineObservableValue<>(initialValue);
@@ -23,10 +23,34 @@ public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> im
         instance.changeEqualityFunction(equalityFunction);
         return instance;
     }
+    public static <T> IFallibleBlockingObservable<T> blockingFallible(T initialValue) {
+        return blockingFallible(initialValue, (EqualityFunction<T>) EqualityFunction.DEFAULT);
+    }
+    public static <T> IFallibleBlockingObservable<T> blockingFallible(T initialValue, EqualityFunction<T> equalityFunction){
+        IFallibleBlockingObservable<T> instance = new FallibleBlockingObservable<>(initialValue);
+        instance.changeEqualityFunction(equalityFunction);
+        return instance;
+    }
+    public static <T> IPrestineBlockingObservable<T> blockingPristine(T initialValue){
+        return blockingPristine(initialValue, (EqualityFunction<T>) EqualityFunction.DEFAULT);
+    }
+    public static <T> IPrestineBlockingObservable<T> blockingPristine(T initialValue, EqualityFunction<T> equalityFunction){
+        IPrestineBlockingObservable<T> instance = new PristineBlockingObservable<>(initialValue);
+        instance.changeEqualityFunction(equalityFunction);
+        return instance;
+    }
+
+    protected ObservableValue(T initialValue){
+        this.value = initialValue;
+    }
 
     @Override
     public T get(){
         return value;
+    }
+
+    protected void setRaw(T newer){
+        value = newer;
     }
 
     @Override

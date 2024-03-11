@@ -14,7 +14,7 @@ import gbw.melange.elements.styling.ElementStyleDefinition;
 
 import java.util.UUID;
 
-public abstract class Element implements IElement {
+public abstract class Element<T> implements IElement<T> {
 
     private IElementConstraints constraints;
     //An element is initially considered volatile until its constraints have resolved.

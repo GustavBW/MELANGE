@@ -13,19 +13,20 @@ public class FallibleObservableValue<T> extends ObservableValue<T, IFallibleBiCo
     private final IFallibleFilterChain<T, Integer> filters = FilterChain.fallible();
 
     protected FallibleObservableValue(T initialValue){
-        super.value = initialValue;
+        super(initialValue);
     }
 
     @Override
     public void set(T newer) throws Exception {
-        if(!super.equalityFunction.test(super.value, newer)){
-            filters.run(super.value, newer);
+        final T current = super.get();
+        if(!super.equalityFunction.test(current, newer)){
+            filters.run(current, newer);
         }
-        super.value = newer;
+        super.setRaw(newer);
     }
     @Override
     public Collection<Exception> setAllowExceptions(T newer) {
-        return filters.runAllowExceptions(super.value, newer);
+        return filters.runAllowExceptions(super.get(), newer);
     }
     @Override
     public IFilterChain<IFallibleBiConsumer<T>, Integer> onChange() {

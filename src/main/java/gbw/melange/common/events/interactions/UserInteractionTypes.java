@@ -1,4 +1,4 @@
-package gbw.melange.events.interactions;
+package gbw.melange.common.events.interactions;
 
 public enum UserInteractionTypes {
     MOUSE_DOWN,

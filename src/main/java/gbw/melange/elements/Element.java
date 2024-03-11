@@ -26,11 +26,9 @@ public abstract class Element implements IElement {
      * All vertex parameters (x, y, z) are always within a -1 to 1 space.
      */
     private Mesh mesh;
-    private IElement attachedTo;
 
-    Element(Mesh mesh, IElement attachedTo, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints){
+    Element(Mesh mesh, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints){
         this.constraints = new ElementConstraints(constraints);
-        this.attachedTo = attachedTo;
         this.styling = new ElementStyleDefinition(styling);
         this.mesh = mesh;
     }

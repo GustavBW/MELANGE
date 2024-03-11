@@ -4,6 +4,7 @@ import gbw.melange.common.elementary.Anchor;
 import gbw.melange.common.elementary.ElementAnchoring;
 import gbw.melange.common.elementary.IElementConstraints;
 import gbw.melange.common.elementary.IReferenceConstraintDefinition;
+import gbw.melange.common.elementary.types.IElement;
 
 public class ReferenceConstraintDefinition implements IReferenceConstraintDefinition {
     public static final ReferenceConstraintDefinition DEFAULT = new ReferenceConstraintDefinition();
@@ -12,6 +13,7 @@ public class ReferenceConstraintDefinition implements IReferenceConstraintDefini
     public SizingPolicy sizingPolicy = SizingPolicy.FILL_PARENT;
     public double borderWidth = 1;
     public double padding = 1;
+    public IElement elementAttachedTo;
     public ReferenceConstraintDefinition(){}
 
 
@@ -21,6 +23,7 @@ public class ReferenceConstraintDefinition implements IReferenceConstraintDefini
         this.sizingPolicy = reference.getSizingPolicy();
         this.borderWidth = reference.getBorderWidth();
         this.padding = reference.getPadding();
+        this.elementAttachedTo = reference.getAttachedTo();
     }
 
     @Override
@@ -71,5 +74,15 @@ public class ReferenceConstraintDefinition implements IReferenceConstraintDefini
     @Override
     public void padding(double value) {
         this.padding = value;
+    }
+
+    @Override
+    public IElement elementAttachedTo() {
+        return elementAttachedTo;
+    }
+
+    @Override
+    public void elementAttachedTo(IElement value) {
+        this.elementAttachedTo = value;
     }
 }

@@ -62,7 +62,7 @@ public class ElementRenderer implements IElementRenderer {
         //TODO: Move this to reactive rule resolution
         element.computed().update();
         IComputedTransforms eComputed = element.computed();
-        log.info(element + ": " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
+        //log.info(element + ": " + eComputed.getPositionX() +", " + eComputed.getPositionY() + " scale: " + eComputed.getWidth() + ", " + eComputed.getHeight());
 
 
         //Content
@@ -70,7 +70,20 @@ public class ElementRenderer implements IElementRenderer {
     }
 
     private static void outputToScreen(FrameBuffer fbo, IElement element, Matrix4 appliedMatrix){
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
+        // The long way of clearing only some of the screen
+        final double[] bounds = element.computed().getAxisAlignedBounds();
+        final double appWidth = Gdx.graphics.getWidth(), appHeight = Gdx.graphics.getHeight();
+        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glScissor(
+                (int) (bounds[0] * appWidth),
+                (int) (bounds[1] * appHeight),
+                (int) (bounds[2] * appWidth),
+                (int) (bounds[3] * appHeight)
+        );
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+
         Gdx.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
         fbo.getColorBufferTexture().bind(69);
 
@@ -79,7 +92,7 @@ public class ElementRenderer implements IElementRenderer {
         finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
         finalShader.setUniformi("u_texture", 69);
 
-        element.getMesh().render(finalShader, GL20.GL_TRIANGLES);
+        element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.value);
     }
 
     private static FrameBuffer postProcessPass(IElement element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
@@ -107,7 +120,7 @@ public class ElementRenderer implements IElementRenderer {
             shaderProgram.setUniformi("u_texture", 0); // Assuming the shader samples from "u_texture"
 
             // Render using the full-screen quad mesh (or appropriate geometry)
-            element.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);
+            element.getMesh().render(shaderProgram, GLDrawStyle.TRIANGLES.value);
 
             if (flip) {
                 fboB.end(); // Done writing to B

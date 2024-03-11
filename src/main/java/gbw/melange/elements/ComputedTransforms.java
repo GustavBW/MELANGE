@@ -54,6 +54,12 @@ public class ComputedTransforms implements IComputedTransforms {
         return position.y;
     }
 
+
+    @Override
+    public double[] getAxisAlignedBounds(){
+        return new double[]{position.x, position.y, scale.x, scale.y};
+    }
+
     @Override
     public Quaternion getRotation() {
         return rotation;

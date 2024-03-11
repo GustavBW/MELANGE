@@ -90,7 +90,7 @@ public class ScreenSpace implements IScreenSpace {
                 el -> {
                     loadingQueue.remove(el);
                     renderQueue.add(el);
-                    System.out.println(el + " moved to render queue");
+                    log.info(el + " moved to render queue");
                 });
     }
 

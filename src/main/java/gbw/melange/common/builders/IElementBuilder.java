@@ -23,7 +23,6 @@ public interface IElementBuilder<T> extends IBuilder<IElement> {
     IElementBuilder<T> constraintsFrom(IReferenceConstraintDefinition refConDef);
 
 
-    IElementBuilder<T> attachTo(IElement element);
     IElementBuilder<T> setMesh(Mesh mesh);
     IElementBuilder<T> onInit(OnInit<T> onInit);
 

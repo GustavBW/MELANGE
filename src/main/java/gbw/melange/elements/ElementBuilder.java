@@ -22,9 +22,6 @@ import org.springframework.lang.NonNull;
  * @param <T> the type of result from the given OnInit, if any.
  */
 public class ElementBuilder<T> implements IElementBuilder<T> {
-
-    //Allowed to be null:
-    private IElement elementAttachedTo;
     private final ISpace parentSpace;
     private OnInit<T> onInit;
 
@@ -54,7 +51,6 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
             IVolatileElement element = new OnInitElement<>(
                     mesh,
                     onInit,
-                    elementAttachedTo,
                     referenceStyling,
                     referenceConstraints
             );
@@ -63,7 +59,6 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
         } else {
             IPureElement element = new PureElement(
                     mesh,
-                    elementAttachedTo,
                     referenceStyling,
                     referenceConstraints
             );
@@ -94,11 +89,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
         this.referenceConstraints = refConDef;
         return this;
     }
-    @Override
-    public IElementBuilder<T> attachTo(IElement element) {
-        this.elementAttachedTo = element;
-        return this;
-    }
+
     @Override
     public IElementBuilder<T> setMesh(Mesh mesh) {
         this.mesh = mesh.copy(true);

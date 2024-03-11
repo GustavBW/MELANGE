@@ -4,6 +4,7 @@ import gbw.melange.common.elementary.Anchor;
 import gbw.melange.common.elementary.ElementAnchoring;
 import gbw.melange.common.elementary.IElementConstraints;
 import gbw.melange.common.elementary.IReferenceConstraintDefinition;
+import gbw.melange.common.elementary.types.IElement;
 
 /**
  * Physical relations between a given Element and another.
@@ -24,6 +25,7 @@ public class ElementConstraints implements IElementConstraints {
     private Anchor selfAnchor = ElementAnchoring.TOP_LEFT.anchor;
     //Contained change
     private SizingPolicy sizingPolicy = SizingPolicy.FILL_PARENT;
+    private IElement attachedTo;
 
     private double borderWidth = 1;
     private double padding = 1;
@@ -34,6 +36,7 @@ public class ElementConstraints implements IElementConstraints {
         if(def.sizingPolicy() != null) this.sizingPolicy = def.sizingPolicy();
         this.borderWidth = def.borderWidth();
         this.padding = def.padding();
+        this.attachedTo = def.elementAttachedTo();
     }
 
     @Override
@@ -59,5 +62,10 @@ public class ElementConstraints implements IElementConstraints {
     @Override
     public double getPadding() {
         return padding;
+    }
+
+    @Override
+    public IElement getAttachedTo() {
+        return attachedTo;
     }
 }

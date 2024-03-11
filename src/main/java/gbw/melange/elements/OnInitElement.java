@@ -11,8 +11,8 @@ public class OnInitElement<T> extends Element implements IVolatileElement {
 
     private final OnInit<T> onInit;
 
-    OnInitElement(Mesh mesh, OnInit<T> onInit, IElement attachedTo, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
-        super(mesh, attachedTo, styling, constraints);
+    OnInitElement(Mesh mesh, OnInit<T> onInit, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
+        super(mesh, styling, constraints);
         this.onInit = onInit;
     }
 }

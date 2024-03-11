@@ -6,6 +6,7 @@ import gbw.melange.common.builders.IElementConstraintBuilder;
 import gbw.melange.common.elementary.Anchor;
 import gbw.melange.common.elementary.ElementAnchoring;
 import gbw.melange.common.elementary.IReferenceConstraintDefinition;
+import gbw.melange.common.elementary.types.IElement;
 
 public class ElementConstraintBuilder<T> implements IElementConstraintBuilder<T> {
 
@@ -20,6 +21,11 @@ public class ElementConstraintBuilder<T> implements IElementConstraintBuilder<T>
     public IElementBuilder<T> apply() {
         parentBuilder.constraintsFrom(referenceConstraints);
         return parentBuilder;
+    }
+    @Override
+    public IElementConstraintBuilder<T> attachTo(IElement element) {
+        referenceConstraints.elementAttachedTo(element);
+        return this;
     }
     @Override
     public IElementConstraintBuilder<T> setSelfAnchor(ElementAnchoring anchor) {

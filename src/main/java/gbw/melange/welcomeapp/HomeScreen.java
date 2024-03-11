@@ -24,16 +24,27 @@ public class HomeScreen implements IHomeScreen, OnRender {
     private final IElement element;
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider) {
-        FragmentShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient")
-            .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
-            .setRotation(45)
-            .build();
-
         IScreenSpace space = provider.getScreenSpace(this);
+        FragmentShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient")
+                .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
+                .setRotation(45)
+                .build();
 
         space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
                 .styling()
                 .setBackgroundColor(FragmentShader.DEBUG_UV)
+                .apply()
+                .build();
+
+        space.createElement().setMesh(MeshTable.EQUILATERAL_TRIANGLE.getMesh())
+                .styling()
+                .setBackgroundColor(FragmentShader.DEBUG_UV)
+                .apply()
+                .build();
+
+        space.createElement().setMesh(MeshTable.SQUARE.getMesh())
+                .styling()
+                .setBackgroundColor(fragmentShader)
                 .apply()
                 .build();
 
@@ -46,15 +57,10 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .apply()
             .build();
 
-        space.createSpace().build();
 
-        ((ComputedTransforms) element.computed()).setScale(.9f, .9f, .9f);
     }
     private double acc = 0;
     @Override
     public void onRender(double deltaT) {
-        acc += deltaT;
-        ((ComputedTransforms) element.computed())
-                .setTranslation(.75 * MathUtils.sin((float) acc),.75 *  MathUtils.cos((float) acc), 0);
     }
 }

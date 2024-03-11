@@ -1,6 +1,5 @@
 package gbw.melange.core.elementary;
 
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.builders.IElementBuilder;
@@ -10,14 +9,12 @@ import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.types.IPureElement;
 import gbw.melange.common.elementary.types.ISpacerElement;
-import gbw.melange.common.elementary.types.IVolatileElement;
+import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.hooks.OnInit;
-import gbw.melange.core.MelangeApplication;
 import gbw.melange.core.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.elements.ElementBuilder;
 import gbw.melange.elements.ElementRenderer;
 import gbw.melange.elements.SpaceBuilder;
-import gbw.melange.shading.postprocessing.PostProcessShader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +29,9 @@ public class ScreenSpace implements IScreenSpace {
     private final Matrix4 matrix = new Matrix4();
     private final IElementRenderer renderer = new ElementRenderer();
     private final List<ISpacerElement> spacers = new ArrayList<>();
-    private final List<IElement> renderQueue = new CopyOnWriteArrayList<>();
-    private final List<IElement> loadingQueue = new CopyOnWriteArrayList<>();
-    private final List<IElement> errorQueue = new ArrayList<>();
+    private final List<IElement<?>> renderQueue = new CopyOnWriteArrayList<>();
+    private final List<IElement<?>> loadingQueue = new CopyOnWriteArrayList<>();
+    private final List<IElement<?>> errorQueue = new CopyOnWriteArrayList<>();
 
     @Override
     public IElementBuilder<?> createElement() {
@@ -77,24 +74,31 @@ public class ScreenSpace implements IScreenSpace {
     }
 
     @Override
-    public void addPureElement(IPureElement element) {
+    public <T> void addPureElement(IPureElement<T> element) {
         renderQueue.add(element);
     }
 
     @Override
-    public void addVolatileElement(IElement element) {
+    public <T> void addLoadingElement(ILoadingElement<T> element) {
         loadingQueue.add(element);
-        ParallelMonitoredExecutionEnvironment.handle(
+        ParallelMonitoredExecutionEnvironment.offloadVolatileElement(
                 element,
-                this::dostShadersBeCompiled,
-                el -> {
-                    loadingQueue.remove(el);
-                    renderQueue.add(el);
-                    log.info(el + " moved to render queue");
-                });
+                () -> moveFromLoadingToRender(element),
+                () -> moveFromLoadingToError(element)
+        );
+    }
+    private void moveFromLoadingToRender(IElement<?> element){
+        loadingQueue.remove(element);
+        renderQueue.add(element);
+        log.info(element + " moved to render queue");
+    }
+    private void moveFromLoadingToError(IElement<?> element){
+        loadingQueue.remove(element);
+        errorQueue.add(element);
+        log.info(element + " moved to error queue");
     }
 
-    private boolean dostShadersBeCompiled(IElement element){
+    private <T> boolean dostShadersBeCompiled(IElement<T> element){
         return true; //TODO: Shader handling has been moved to wrapper instantiation.
     }
 

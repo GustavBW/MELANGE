@@ -1,12 +1,16 @@
 package gbw.melange.shading;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import gbw.melange.common.errors.ShaderCompilationIssue;
 import gbw.melange.core.MelangeApplication;
 import gbw.melange.shading.FragmentShader;
 import gbw.melange.shading.VertexShader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Move all Shader initialization to dedicated Shader pipeline
+ */
 public class ShaderProgramWrapper {
     private static final Logger log = LoggerFactory.getLogger(ShaderProgramWrapper.class);
 
@@ -34,25 +38,40 @@ public class ShaderProgramWrapper {
         }
         return NONE;
     }
+    static { //TODO: Find out why Java is like this.
+        mlg_texture();
+        mlg_none();
+        mlg_default();
+    }
 
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
-    private final ShaderProgram program;
+    private ShaderProgram program;
     private final String localName;
     public ShaderProgramWrapper(String localName, VertexShader vertexShader, FragmentShader fragmentShader) {
         this.vertexShader = vertexShader;
         this.fragmentShader = fragmentShader;
-        this.program = new ShaderProgram(vertexShader.code(), fragmentShader.code());
         this.localName = localName;
+        ManagedShaderPipeline.add(this);
+    }
+
+    public void compile() throws ShaderCompilationIssue {
+        this.program = new ShaderProgram(vertexShader.code(), fragmentShader.code());
         if(!program.isCompiled()){ //According to a certain source, compilation is synchronous on instantiation.
-            log.warn(this + " failed to compile");
-            log.info(program.getLog());
-            log.info("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+            throw new ShaderCompilationIssue(
+            this + " failed to compile =================================\n" +
+                program.getLog() + "\n" +
+                "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
+            );
         }
     }
 
     public ShaderProgram getProgram(){
         return program;
+    }
+
+    public String shortName(){
+        return localName;
     }
 
     @Override

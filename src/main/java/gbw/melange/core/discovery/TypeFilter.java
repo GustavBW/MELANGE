@@ -9,7 +9,7 @@ public class TypeFilter {
     /**
      * Filters out all classes representing interfaces, abstract classes and annotations.
      */
-    public static <T> Set<Class<? extends T>> onlyBeanables(Set<Class<? extends T>> classes){
+    public static <T> Set<Class<? extends T>> retainInstantiable(Set<Class<? extends T>> classes){
         return classes.stream()
                 .filter(clazz -> !clazz.isInterface()) // Exclude interfaces
                 .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers())) // Exclude abstract classes

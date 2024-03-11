@@ -1,7 +1,6 @@
 package gbw.melange.core.discovery;
 
 import gbw.melange.common.annotations.View;
-import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
@@ -17,20 +16,19 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.*;
 
 /**
- * Scans user packages and gathers as much data as possible
+ * Scans user packages and gathers as much data as possible.
+ * The KGB of Melange
  */
 public class DiscoveryAgent<T> {
 
     private static final Logger log = LoggerFactory.getLogger(DiscoveryAgent.class);
     private final Class<T> userMainClass;
-    private Package supposedRootPackageOfUser;
     private Reflections userRootReflections, systemRootReflections;
     private final AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();
+    private final Map<Class<?>, View> userViewInformation = new HashMap<>();
     //Hooks
     private final List<OnRender> onRenderHookImpls = new ArrayList<>();
-
-    private final List<OnInit> onInitHookImpls = new ArrayList<>();
-
+    private final List<OnInit<?>> onInitHookImpls = new ArrayList<>();
     public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
         //System
@@ -48,15 +46,26 @@ public class DiscoveryAgent<T> {
 
         return instance;
     }
+    public void instatiateAndPrepare() throws ViewConfigurationIssue {
+        refresh();
+    }
+    public List<OnRender> getOnRenderList(){
+        return onRenderHookImpls;
+    }
+    public List<OnInit<?>> getOnInitHookImpls(){
+        return onInitHookImpls;
+    }
+    public Map<Class<?>, View> getUserViewInformation(){
+        return userViewInformation;
+    }
 
     private void scanCoreForGoodMeasure() {
         programContext.scan(CoreRootMarker.class.getPackageName());
     }
-
     private void registerSpaceProviders() throws ClassConfigurationIssue {
         //Damn, var is actually useful for avoiding "oh no our type erasure forces you to use raw types - we're still going to make a yellow line anyways" - issues
         var providers = systemRootReflections.getSubTypesOf(ISpaceProvider.class);
-        providers = TypeFilter.onlyBeanables(providers);
+        providers = TypeFilter.retainInstantiable(providers);
         log.info("Found space providers: " + providers.stream().map(Class::toString).toList());
         for (var provider : providers) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(provider);
@@ -102,43 +111,32 @@ public class DiscoveryAgent<T> {
         programContext.registerBean(userMainClass);
     }
     private void setUpReflections(){
-        this.supposedRootPackageOfUser = userMainClass.getPackage();
+        Package supposedRootPackageOfUser = userMainClass.getPackage();
         this.userRootReflections = new Reflections(supposedRootPackageOfUser.getName());
         this.systemRootReflections = new Reflections(CoreRootMarker.class.getPackage().getName());
     }
     private void registerUserViews() throws ClassConfigurationIssue {
         Set<Class<?>> views = userRootReflections.getTypesAnnotatedWith(View.class);
+        views = TypeFilter.retainInstantiable(views);
 
-        views = TypeFilter.onlyBeanables(views);
         log.info("Found views: " + views.stream().map(Class::toString).toList());
-        final Map<Class<?>, Integer> userViewOrdering = new HashMap<>();
         for (Class<?> viewType : views) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(viewType);
             if(constructorErrMsg != null){
                 throw new ClassConfigurationIssue(viewType + ": " + constructorErrMsg);
             }
 
-            View viewAnnotationOfView = viewType.getAnnotation(View.class);
-            int layerOfView = viewAnnotationOfView.layer();
-            userViewOrdering.put(viewType, layerOfView);
-
+            userViewInformation.put(viewType, viewType.getAnnotation(View.class));
             programContext.registerBean(viewType);
         }
     }
 
-    public void instatiateAndPrepare() throws ViewConfigurationIssue {
-        refresh();
-    }
-    public List<OnRender> getOnRenderList(){
-        return onRenderHookImpls;
-    }
-    public List<OnInit> getOnInitHookImpls(){
-        return onInitHookImpls;
-    }
+
     private void refresh() {
         programContext.refresh();
         onRenderHookImpls.addAll(programContext.getBeansOfType(OnRender.class).values());
-        onInitHookImpls.addAll(programContext.getBeansOfType(OnInit.class).values());
+        //Java's Type Erasure really coming in handy here
+        onInitHookImpls.addAll((Collection<OnInit<?>>) (Collection<?>) programContext.getBeansOfType(OnInit.class).values());
     }
 
 

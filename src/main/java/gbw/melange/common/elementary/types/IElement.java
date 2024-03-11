@@ -9,7 +9,7 @@ import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 
-public interface IElement<T> extends Disposable {
+public interface IElement<T> extends Disposable, Comparable<IElement<?>> {
 
     IElement NULL = null; //TODO: Find a way to involve a neat null-object pattern here.
 

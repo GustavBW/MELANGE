@@ -13,7 +13,7 @@ import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 
 import java.util.UUID;
-
+//TODO: Move to abstract reference definition pipeline?
 public abstract class Element<T> implements IElement<T> {
 
     private IElementConstraints constraints;
@@ -45,6 +45,9 @@ public abstract class Element<T> implements IElement<T> {
     @Override
     public ElementState getState() {
         return state;
+    }
+    protected void setState(ElementState state){
+        this.state = state;
     }
 
     @Override
@@ -79,5 +82,13 @@ public abstract class Element<T> implements IElement<T> {
     }
     static int nextIdInSequence(){
         return elementIdTracker + 1;
+    }
+
+    @Override
+    public int compareTo(IElement<?> element){
+        if(element == null) return 1;
+        if(element == this) return 0;
+        if(element.getConstraints().getAttachedTo() == this) return -1;
+        return 1;
     }
 }

@@ -1,25 +1,19 @@
 package gbw.melange.welcomeapp;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import gbw.melange.common.MeshTable;
 import gbw.melange.common.annotations.View;
-import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.common.navigation.ISpaceNavigator;
-import gbw.melange.elements.ComputedTransforms;
 import gbw.melange.shading.FragmentShader;
-import gbw.melange.shading.VertexShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
 import gbw.melange.shading.templating.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-@View( layer = View.HOME_SCREEN )
+@View(layer = View.HOME_SCREEN_LAYER, focusPolicy = View.FocusPolicy.RETAIN_LATEST)
 public class HomeScreen implements IHomeScreen, OnRender {
     private static final Logger log = LoggerFactory.getLogger(HomeScreen.class);
     @Autowired

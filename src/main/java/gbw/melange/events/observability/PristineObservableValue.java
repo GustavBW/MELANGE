@@ -17,6 +17,7 @@ public class PristineObservableValue<T> extends ObservableValue<T, IPristineBiCo
 
     @Override
     public void set(T newer){
+        if(newer == null) return;
         final T current = super.get();
         if(!super.equalityFunction.test(current, newer)){
             filters.run(current, newer);

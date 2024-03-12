@@ -25,6 +25,9 @@ public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineB
 
     @Override
     public void set(T newer){
+        if(newer == null){
+            return;
+        }
         synchronized (lock) {
             final T current = get();
             if(!super.equalityFunction.test(current, newer)){

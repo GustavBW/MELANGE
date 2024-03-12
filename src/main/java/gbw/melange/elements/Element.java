@@ -13,7 +13,7 @@ import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 
 import java.util.UUID;
-//TODO: Move to abstract reference definition pipeline?
+//TODO: Move to abstract reference definition pipeline for delayed instantiation?
 public abstract class Element<T> implements IElement<T> {
 
     private IElementConstraints constraints;

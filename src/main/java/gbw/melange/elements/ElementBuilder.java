@@ -23,7 +23,7 @@ import org.springframework.lang.NonNull;
  */
 public class ElementBuilder<T> implements IElementBuilder<T> {
     private final ISpace parentSpace;
-    private OnInit<T> onInit;
+    private IContentProvider<T> contentProvider;
 
     //Not allowed to be null, but is null to detect changes.
     //There might be some about of unnecessary copying going on here, but before Rules are established its hard to know how careful to be in terms of deep copies / shallow copies
@@ -40,35 +40,36 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
         this.parentSpace = parentSpace;
         this.content = content;
     }
-    public ElementBuilder(@NonNull ISpace parentSpace, OnInit<T> contentProvider){
+    public ElementBuilder(@NonNull ISpace parentSpace, IContentProvider<T> contentProvider){
         this.parentSpace = parentSpace;
-        this.onInit = contentProvider;
+        this.contentProvider = contentProvider;
     }
 
     @Override
-    public IElement build() {
-        if(onInit != null){
-            ILoadingElement element = new LoadingElement<>(
+    public IElement<T> build() {
+        if(contentProvider != null){
+            ILoadingElement<T> element = new LoadingElement<>(
                     mesh,
-                    onInit,
+                    contentProvider,
                     referenceStyling,
                     referenceConstraints
             );
             parentSpace.addLoadingElement(element);
             return element;
         } else {
-            IPureElement element = new PureElement(
+            IPureElement<T> element = new PureElement<>(
                     mesh,
                     referenceStyling,
                     referenceConstraints
             );
+            element.setContent(content);
             parentSpace.addPureElement(element);
             return element;
         }
     }
 
     @Override
-    public IElementBuilder<T> stylingsFrom(IElement element) {
+    public IElementBuilder<T> stylingsFrom(IElement<?> element) {
         this.referenceStyling = new ReferenceStyleDefinition(element.getStylings());
         return this;
     }
@@ -80,7 +81,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     }
 
     @Override
-    public IElementBuilder<T> constraintsFrom(IElement element) {
+    public IElementBuilder<T> constraintsFrom(IElement<?> element) {
         this.referenceConstraints = new ReferenceConstraintDefinition(element.getConstraints());
         return this;
     }
@@ -96,8 +97,8 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
         return this;
     }
     @Override
-    public IElementBuilder<T> onInit(OnInit<T> onInit) {
-        this.onInit = onInit;
+    public IElementBuilder<T> contentProvider(IContentProvider<T> provider) {
+        this.contentProvider = provider;
         return this;
     }
 

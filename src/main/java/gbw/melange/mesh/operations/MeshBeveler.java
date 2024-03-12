@@ -1,23 +1,22 @@
-package gbw.melange.elements.styling;
+package gbw.melange.mesh.operations;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
-import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.common.elementary.styling.IBevelOperation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BorderBeveler implements IBevelOperation {
+public class MeshBeveler implements IBevelOperation {
 
-    public static final BorderBeveler DEFAULT = new BorderBeveler(BevelConfig.DEFAULT);
-    public static final BorderBeveler NOOP = new BorderBeveler(BevelConfig.NONE);
+    public static final MeshBeveler DEFAULT = new MeshBeveler(BevelConfig.DEFAULT);
+    public static final MeshBeveler NOOP = new MeshBeveler(BevelConfig.NONE);
     private int vertNum;
     private double angleThreshDeg;
     private double absRelDist;
 
-    public BorderBeveler(BevelConfig config){
+    public MeshBeveler(BevelConfig config){
         vertNum = config.subdivs();
         angleThreshDeg = config.angleThreshold();
         absRelDist = config.absoluteRelativeDistance();

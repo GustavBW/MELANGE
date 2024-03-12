@@ -7,7 +7,6 @@ import gbw.melange.common.builders.ISpaceBuilder;
 import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.types.*;
-import gbw.melange.common.hooks.OnInit;
 import gbw.melange.core.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.elements.ElementBuilder;
 import gbw.melange.elements.ElementRenderer;
@@ -27,12 +26,10 @@ public class ScreenSpace implements IScreenSpace {
     private final Matrix4 matrix = new Matrix4();
     private final IElementRenderer renderer = new ElementRenderer();
     private final IAETR constraintResolver = new AutomaticElementTransformResolver();
-    private final List<ISpacerElement> spacers = new ArrayList<>();
     private final List<IElement<?>> renderQueue = new CopyOnWriteArrayList<>();
     private final List<IElement<?>> loadingQueue = new CopyOnWriteArrayList<>();
     private final List<IElement<?>> errorQueue = new CopyOnWriteArrayList<>();
-
-
+    private final List<IConstrainedElement> additionOrder = new ArrayList<>();
 
     @Override
     public void render() {
@@ -43,11 +40,7 @@ public class ScreenSpace implements IScreenSpace {
 
     @Override
     public void resolveConstraints() {
-        constraintResolver.load(
-                Stream.of(spacers, renderQueue, errorQueue)
-                        .flatMap(Collection::stream)
-                        .toList()
-        );
+        constraintResolver.load(additionOrder);
         constraintResolver.resolve();
     }
 
@@ -58,10 +51,7 @@ public class ScreenSpace implements IScreenSpace {
 
     @Override
     public void dispose() {
-        Stream.of(renderQueue, loadingQueue, errorQueue, spacers)
-                .flatMap(List::stream)
-                .forEach(Disposable::dispose);
-
+        additionOrder.forEach(Disposable::dispose);
     }
     @Override
     public IElementBuilder<?> createElement() {
@@ -72,7 +62,7 @@ public class ScreenSpace implements IScreenSpace {
         return new ElementBuilder<>(this, content);
     }
     @Override
-    public <T> IElementBuilder<T> createElement(OnInit<T> contentProvider) {
+    public <T> IElementBuilder<T> createElement(IContentProvider<T> contentProvider) {
         return new ElementBuilder<>(this, contentProvider);
     }
     @Override
@@ -81,16 +71,18 @@ public class ScreenSpace implements IScreenSpace {
     }
     @Override
     public void addSpace(ISpacerElement spacer) {
-        spacers.add(spacer);
+        additionOrder.add(spacer);
     }
     @Override
     public <T> void addPureElement(IPureElement<T> element) {
+        additionOrder.add(element);
         renderQueue.add(element);
     }
     @Override
     public <T> void addLoadingElement(ILoadingElement<T> element) {
+        additionOrder.add(element);
         loadingQueue.add(element);
-        ParallelMonitoredExecutionEnvironment.offloadVolatileElement(
+        ParallelMonitoredExecutionEnvironment.offloadLoadingElement(
                 element,
                 () -> moveFromLoadingToRender(element),
                 () -> moveFromLoadingToError(element)

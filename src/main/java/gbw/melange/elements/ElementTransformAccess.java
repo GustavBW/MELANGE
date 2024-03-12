@@ -1,6 +1,7 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.math.Vector3;
+import gbw.melange.common.elementary.types.IConstrainedElement;
 import gbw.melange.common.elementary.types.IElement;
 
 /**
@@ -8,15 +9,10 @@ import gbw.melange.common.elementary.types.IElement;
  * TODO: REMOVE THIS
  */
 public class ElementTransformAccess {
-
-    public void setScale(IElement<?> element, double x, double y, double z){
+    public void setScale(IConstrainedElement element, double x, double y, double z){
         ((ComputedTransforms) element.computed()).getMatrix().setToScaling((float) x,(float) y,(float) z);
     }
-
-    public void setTranslation(IElement<?> element, double x, double y, double z){
+    public void setTranslation(IConstrainedElement element, double x, double y, double z){
         ((ComputedTransforms) element.computed()).getMatrix().setTranslation((float) x, (float) y, (float) z);
     }
-
-
-
 }

@@ -5,7 +5,8 @@ import java.util.Collection;
 public interface IFallibleObservableValue<T> extends IObservableValue<T, IFallibleBiConsumer<T>, Integer> {
     /**
      * Sets the value of the observable. <br/>
-     * If the value does not pass the equality function, the filter chain is invoked and run.
+     * If the value does not pass the equality function, the filter chain is invoked and run.</br>
+     * Null is always ignored
      */
     void set(T newer) throws Exception;
 

@@ -29,12 +29,15 @@ public class SpaceRegistry implements ISpaceRegistry {
 
     private void register0(ISpace space, Class<?> clazz) {
         View viewAnnotation = clazz.getAnnotation(View.class);
-        SpaceLayerEntry entry;
+        int layer;
+        View.FocusPolicy focusPolicy;
         if(viewAnnotation == null){
-            entry = new SpaceLayerEntry(space, View.DEFAULT);
+            layer = View.DEFAULT_LAYER;
+            focusPolicy = View.DEFAULT_FOCUS_POLICY;
         }else{
-            entry = new SpaceLayerEntry(space, viewAnnotation.layer());
+            layer = viewAnnotation.layer();
+            focusPolicy = viewAnnotation.focusPolicy();
         }
-        registry.computeIfAbsent(clazz, k -> new ArrayList<>()).add(entry);
+        registry.computeIfAbsent(clazz, k -> new ArrayList<>()).add(new SpaceLayerEntry(space, layer, focusPolicy));
     }
 }

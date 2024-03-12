@@ -18,6 +18,7 @@ public class FallibleObservableValue<T> extends ObservableValue<T, IFallibleBiCo
 
     @Override
     public void set(T newer) throws Exception {
+        if(newer == null) return;
         final T current = super.get();
         if(!super.equalityFunction.test(current, newer)){
             filters.run(current, newer);

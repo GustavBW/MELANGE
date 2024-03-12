@@ -53,15 +53,15 @@ public class ParallelMonitoredExecutionEnvironment {
                 }
             ));
     }
-    public static <T> void offloadVolatileElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
-        executor.submit(() -> instance.handleVolatileElement(element, moveToStable, moveToError));
+    public static <T> void offloadLoadingElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
+        executor.submit(() -> instance.handleLoadingElement(element, moveToStable, moveToError));
     }
-    private <T> void handleVolatileElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
+    private <T> void handleLoadingElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
         try{
-            element.onInit();
+            element.invokeProvider();
             moveToStable.run();
         }catch(Exception handled){
-            log.warn("LoadingElement "+element+" onInit failed! " + handled.getMessage());
+            log.warn("LoadingElement "+element+" content provider failed! " + handled.getMessage());
             moveToError.run();
         }
     }

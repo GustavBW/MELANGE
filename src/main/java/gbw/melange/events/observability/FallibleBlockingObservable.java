@@ -26,6 +26,7 @@ public class FallibleBlockingObservable<T> extends ObservableValue<T, IFallibleB
     }
     @Override
     public void set(T newer) throws Exception {
+        if(newer == null) return;
         synchronized (lock) {
             final T current = get();
             if(!super.equalityFunction.test(current, newer)){

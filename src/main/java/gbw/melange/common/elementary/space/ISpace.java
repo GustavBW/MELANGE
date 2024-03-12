@@ -2,9 +2,9 @@ package gbw.melange.common.elementary.space;
 
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.builders.ISpaceBuilder;
+import gbw.melange.common.elementary.IContentProvider;
 import gbw.melange.common.elementary.types.*;
 import gbw.melange.common.builders.IElementBuilder;
-import gbw.melange.common.hooks.OnInit;
 
 /**
  * A given ISpace may represent an area within which all assigned element's constraints must be resolved. <br/>
@@ -27,7 +27,7 @@ public interface ISpace extends Disposable {
     /**
      * Create a new element belonging to this Space. It is not added and drawn immediately, but rather added to a separate loading queue, and a placeholder is drawn instead until the provider resolves.
      */
-    <T> IElementBuilder<T> createElement(OnInit<T> contentProvider);
+    <T> IElementBuilder<T> createElement(IContentProvider<T> contentProvider);
 
     /**
      * Creates a new {@link gbw.melange.common.elementary.types.ISpacerElement} that represents empty space.
@@ -43,7 +43,7 @@ public interface ISpace extends Disposable {
      */
     <T> void addPureElement(IPureElement<T> element);
     /**
-     * Manual version of {@link ISpace#createElement(OnInit)}
+     * Manual version of {@link ISpace#createElement(IContentProvider)}
      */
     <T> void addLoadingElement(ILoadingElement<T> element);
 

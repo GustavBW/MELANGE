@@ -5,18 +5,17 @@ import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.events.observability.IFallibleBlockingObservable;
-import gbw.melange.common.hooks.OnInit;
 import gbw.melange.events.observability.ObservableValue;
 
 public class LoadingElement<T> extends Element<T> implements ILoadingElement<T> {
 
-    private final OnInit<T> onInit;
+    private final IContentProvider<T> provider;
 
     private final IFallibleBlockingObservable<T> content = ObservableValue.blockingFallible(null);
 
-    LoadingElement(Mesh mesh, OnInit<T> onInit, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
+    LoadingElement(Mesh mesh, IContentProvider<T> provider, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
         super(mesh, styling, constraints);
-        this.onInit = onInit;
+        this.provider = provider;
         super.setState(ElementState.LOADING);
     }
 
@@ -31,16 +30,15 @@ public class LoadingElement<T> extends Element<T> implements ILoadingElement<T> 
     }
 
     @Override
-    public T onInit() throws Exception {
+    public void invokeProvider() throws Exception {
         final T result;
         try{
-            result = onInit.onInit();
+            result = provider.fetch();
             super.setState(ElementState.STABLE);
         }catch (Exception propagated){
             super.setState(ElementState.ERROR);
             throw propagated;
         }
         setContent(result);
-        return result;
     }
 }

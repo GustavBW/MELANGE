@@ -9,7 +9,7 @@ import gbw.melange.common.events.observability.*;
  * TODO: Refactor to ServiceLoader use when modularized
  */
 public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> implements IObservableValue<T, R, Integer> {
-    protected EqualityFunction<T> equalityFunction = (EqualityFunction<T>) EqualityFunction.DEFAULT;
+    protected EqualityFunction<T> equalityFunction = (any1, any2) -> false;
     private T value;
 
     public static <T> IPristineObservableValue<T> pristine(T initialValue, EqualityFunction<T> equalityFunction){

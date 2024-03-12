@@ -9,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Move all Shader initialization to dedicated Shader pipeline
+ * //TODO: Move all Shader initialization to dedicated Shader pipeline
+ * //TODO: Allow the wrapper to hold texture references and add a ".prep()" step to allow a wrapped shader to bind own resources
  */
 public class ShaderProgramWrapper {
     private static final Logger log = LoggerFactory.getLogger(ShaderProgramWrapper.class);

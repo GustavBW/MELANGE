@@ -25,7 +25,7 @@ public class ElementConstraints implements IElementConstraints {
     private IElement attachedTo;
 
     private double borderWidth = 1;
-    private double padding = 1;
+    private double padding = 0;
 
     public ElementConstraints(IReferenceConstraintDefinition def){
         if(def.selfAnchor() != null) this.selfAnchor = def.selfAnchor();

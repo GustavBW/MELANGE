@@ -5,8 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
@@ -62,6 +63,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private ApplicationContext getContext(){
         return discoveryAgent.getContext();
     }
+    private Camera testCam;
+    private Viewport viewport;
     private ISpaceNavigator spaceNavigator;
     @Override
     public void create(){
@@ -99,6 +102,9 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
 
+        testCam = new PerspectiveCamera();
+        viewport = new FitViewport(800, 480, testCam);
+
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         log.info("Total startup time: " + (totalBootTime) + "ms");
         log.info("MELANGE Framework startup time: " + (totalBootTime - lwjglInitTime) + "ms");
@@ -116,6 +122,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     @Override
     public void render(){
         frame++;
+        testCam.update();
         //Handle backlog
         while(runOnMainThread.peek() != null){
             runOnMainThread.poll().run();
@@ -137,7 +144,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     }
 
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     public void pause() {

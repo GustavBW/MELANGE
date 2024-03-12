@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+//TODO: Put this into Colors pipeline entrypoint
 public class ManagedShaderPipeline {
 
     private static final Logger log = LoggerFactory.getLogger(ManagedShaderPipeline.class);

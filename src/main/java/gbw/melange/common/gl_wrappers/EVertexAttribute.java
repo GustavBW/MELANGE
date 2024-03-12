@@ -1,9 +1,6 @@
-package gbw.melange.mesh;
+package gbw.melange.common.gl_wrappers;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
-
-import java.util.Comparator;
 
 public enum EVertexAttribute {
     POSITION( 3, "a_position", 1),

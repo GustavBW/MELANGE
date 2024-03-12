@@ -1,5 +1,7 @@
 package gbw.melange.core.elementary;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.IComputedTransforms;
 import gbw.melange.common.elementary.types.IConstrainedElement;
@@ -7,6 +9,13 @@ import gbw.melange.elements.ElementTransformAccess;
 
 import java.util.*;
 
+/**
+ * Algorithm overview: <br/>
+ * - Establishes a many-rooted tree structure on {@link AutomaticElementTransformResolver#load(List)} <br/>
+ * - Then, depth first traverses all subtrees equally distributing them into a square grid <br/>
+ * - For each grid, constraints.attachingAnchor is consulted to determine the most fitting cell for the element <br/>
+ * - The last most element to be given a cell is given the remaining. <br/>
+ */
 public class AutomaticElementTransformResolver implements IAETR {
 
     public static class ElementSubTree {
@@ -18,31 +27,70 @@ public class AutomaticElementTransformResolver implements IAETR {
     }
 
     private final List<ElementSubTree> roots = new ArrayList<>();
-    private double avgRootElementInitialSize = 1;
 
     public void resolve() {
-        ElementTransformAccess transformAccess = new ElementTransformAccess();
-        avgRootElementInitialSize = 1.0 / roots.size();
+        if(roots.isEmpty()) return;
 
-        for (int i = 0; i < roots.size(); i++) {
-            double rootScale = 1.0 / roots.size();
-            resolveSubTree(transformAccess, roots.get(i), i * rootScale, i * rootScale, i * rootScale, i * rootScale);
+        ElementTransformAccess transformAccess = new ElementTransformAccess();
+        int nRoots = roots.size();
+        double nRootSq = Math.sqrt(nRoots);
+        int nRows = (int) Math.ceil(nRootSq);
+        int nCols = nRows;
+
+        double rootWidth = 1.0 / nRootSq;
+        double rootHeight = 1.0 / nRootSq;
+
+        for (int i = 0; i < nRoots; i++) {
+
+            int row = i / nCols;
+            int col = i % nCols;
+
+            double xOffset = (col * rootWidth * 2);
+            double yOffset = (row * rootHeight * 2);
+
+            resolveSubTree(transformAccess, roots.get(i), rootWidth, rootHeight, xOffset, yOffset);
         }
     }
 
-    private void resolveSubTree(ElementTransformAccess transformAccess, ElementSubTree subTree, double scaleX, double scaleY, double xOffset, double yOffset) {
-        transformAccess.setTranslation(subTree.root, xOffset, yOffset, 0);
-        transformAccess.setScale(subTree.root, scaleX, scaleY, 1);
-
+    private void resolveSubTree(ElementTransformAccess transformAccess, ElementSubTree subTree, double parentWidth, double parentHeight, double parentOffsetX, double parentOffsetY) {
+        IConstrainedElement parent = subTree.root;
         List<ElementSubTree> children = subTree.children;
-        if(children == null || children.isEmpty()){
+
+        System.out.println("Resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
+
+        // Apply translation and scale to the current root of the subtree
+        transformAccess.setTranslation(parent, parentOffsetX, parentOffsetY, 0);
+        transformAccess.setScale(parent, parentWidth, parentHeight, 1);
+
+        if (children == null || children.isEmpty()) {
             return;
         }
-        double childScaleX = scaleX / children.size();
-        double childScaleY = scaleY / children.size();
 
-        for(int i = 0; i < children.size(); i++){
-            resolveSubTree(transformAccess, children.get(i), childScaleX, childScaleY, i * childScaleX, i * childScaleY);
+        //Adjust according to padding for children
+        double padding = parent.getConstraints().getPadding();
+        parentOffsetX += padding;
+        parentOffsetY += padding;
+        parentWidth -= padding * 2;
+        parentHeight -= padding * 2;
+
+        double sqrtChildren = Math.sqrt(children.size());
+        int nRows = (int) Math.ceil(sqrtChildren);
+        int nCols = (int) Math.ceil(sqrtChildren); // For a square grid, but this can be adjusted
+
+        // The scale for each child is based on the division of space into rows and columns
+        double childScaleX = parentWidth / nCols;
+        double childScaleY = parentHeight / nRows;
+
+        for (int i = 0; i < children.size(); i++) {
+            int row = i / nCols; // Determine current row
+            int col = i % nCols; // Determine current column
+
+            // Calculate offsets for children based on their row and column in the grid
+            double childOffsetX = parentOffsetX + col * childScaleX;
+            double childOffsetY = parentOffsetY + row * childScaleY;
+
+            // Recursively adjust the subtree for each child
+            resolveSubTree(transformAccess, children.get(i), childScaleX, childScaleY, childOffsetX, childOffsetY);
         }
     }
 
@@ -63,6 +111,9 @@ public class AutomaticElementTransformResolver implements IAETR {
         resolveSubTree(transformAccess, findSubTreeBFS(element), rootScaleX, rootScaleY, rootOffsetX, rootOffsetY);
     }
 
+    //To avoid GC during runtime
+    private final Queue<ElementSubTree> searchQueue = new LinkedList<>();
+
     /**
      * Uses BFS to search for the ElementSubTree containing the given element as its root.
      *
@@ -70,13 +121,11 @@ public class AutomaticElementTransformResolver implements IAETR {
      * @return The ElementSubTree that contains the targetElement as its root, or null if not found.
      */
     public ElementSubTree findSubTreeBFS(IConstrainedElement targetElement) {
-        Queue<ElementSubTree> queue = new LinkedList<>();
+        searchQueue.clear();
+        searchQueue.addAll(roots);
 
-        // Add all roots to the queue to start the search
-        queue.addAll(roots);
-
-        while (!queue.isEmpty()) {
-            ElementSubTree currentSubTree = queue.poll();
+        while (!searchQueue.isEmpty()) {
+            ElementSubTree currentSubTree = searchQueue.poll();
 
             // Check if the current element is the target
             if (currentSubTree.root.equals(targetElement)) {
@@ -84,7 +133,7 @@ public class AutomaticElementTransformResolver implements IAETR {
             }
 
             // If not, add all children of the current element to the queue
-            queue.addAll(currentSubTree.children);
+            searchQueue.addAll(currentSubTree.children);
         }
 
         return null; // Target element not found
@@ -119,6 +168,5 @@ public class AutomaticElementTransformResolver implements IAETR {
                 roots.add(currentNode);
             }
         }
-        avgRootElementInitialSize = 1.0 / roots.size();
     }
 }

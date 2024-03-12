@@ -9,7 +9,7 @@ public class ReferenceConstraintDefinition implements IReferenceConstraintDefini
     public Anchor selfAnchor = ElementAnchoring.TOP_LEFT.anchor;
     public SizingPolicy sizingPolicy = SizingPolicy.FILL_PARENT;
     public double borderWidth = 1;
-    public double padding = 1;
+    public double padding = 0;
     public IElement elementAttachedTo;
     public ReferenceConstraintDefinition(){}
 

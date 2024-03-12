@@ -31,6 +31,11 @@ public class ScreenSpace implements IScreenSpace {
     private final List<IElement<?>> errorQueue = new CopyOnWriteArrayList<>();
     private final List<IConstrainedElement> additionOrder = new ArrayList<>();
 
+
+    @Override
+    public void render(Matrix4 testCamMatrix) {
+        renderer.draw(testCamMatrix, renderQueue);
+    }
     @Override
     public void render() {
         //Draw stuff

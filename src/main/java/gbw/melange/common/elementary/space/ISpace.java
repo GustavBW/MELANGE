@@ -1,5 +1,6 @@
 package gbw.melange.common.elementary.space;
 
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.builders.ISpaceBuilder;
 import gbw.melange.common.elementary.IContentProvider;
@@ -13,6 +14,7 @@ import gbw.melange.common.builders.IElementBuilder;
 public interface ISpace extends Disposable {
 
     void render();
+    void render(Matrix4 testCamMatrix);
     void resolveConstraints();
     void resolveConstraints(IConstrainedElement cascadeRoot);
 

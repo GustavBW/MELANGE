@@ -1,7 +1,7 @@
 package gbw.melange.common.builders;
 
-import gbw.melange.common.elementary.Anchor;
-import gbw.melange.common.elementary.ElementAnchoring;
+import gbw.melange.common.elementary.contraints.Anchor;
+import gbw.melange.common.elementary.contraints.ElementAnchoring;
 import gbw.melange.common.elementary.types.IConstrainedElement;
 
 public interface ISpaceBuilder extends IBuilder<IConstrainedElement>{

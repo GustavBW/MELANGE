@@ -2,6 +2,7 @@ package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.elementary.*;
+import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.events.observability.IFallibleBlockingObservable;

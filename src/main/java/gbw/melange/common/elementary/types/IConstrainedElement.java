@@ -2,9 +2,8 @@ package gbw.melange.common.elementary.types;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.common.elementary.IComputedTransforms;
-import gbw.melange.common.elementary.IElementConstraints;
-import gbw.melange.common.elementary.SizingPolicy;
+import gbw.melange.common.elementary.contraints.IComputedTransforms;
+import gbw.melange.common.elementary.contraints.IElementConstraints;
 
 /**
  * Represents any Element with constraints.

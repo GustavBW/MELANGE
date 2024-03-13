@@ -1,13 +1,10 @@
 package gbw.melange.elements;
 
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import gbw.melange.common.elementary.IComputedTransforms;
+import gbw.melange.common.elementary.contraints.IComputedTransforms;
 
 public class ComputedTransforms implements IComputedTransforms {
     private Matrix4 matrix = new Matrix4();

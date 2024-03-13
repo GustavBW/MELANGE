@@ -1,8 +1,8 @@
 package gbw.melange.elements;
 
 import gbw.melange.common.builders.ISpaceBuilder;
-import gbw.melange.common.elementary.Anchor;
-import gbw.melange.common.elementary.ElementAnchoring;
+import gbw.melange.common.elementary.contraints.Anchor;
+import gbw.melange.common.elementary.contraints.ElementAnchoring;
 import gbw.melange.common.elementary.types.IConstrainedElement;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.elementary.types.ISpacerElement;
@@ -40,13 +40,13 @@ public class SpaceBuilder implements ISpaceBuilder {
 
     @Override
     public ISpaceBuilder setSelfAnchor(ElementAnchoring anchor) {
-        refConDef.selfAnchor = anchor.anchor;
+        refConDef.contentAnchor = anchor.anchor;
         return this;
     }
 
     @Override
     public ISpaceBuilder setSelfAnchor(Anchor anchor) {
-        refConDef.selfAnchor = anchor;
+        refConDef.contentAnchor = anchor;
         return this;
     }
 

@@ -8,10 +8,13 @@ import java.util.*;
 
 /**
  * Algorithm overview: <br/>
- * - Establishes a many-rooted tree structure on {@link AutomaticElementTransformResolver#load(List)} <br/>
+ * - Establishes a many-rooted tree structure on {@link gbw.melange.core.elementary.AutomaticElementTransformResolver#load(List)} <br/>
  * - Then, depth first traverses all subtrees equally distributing them into a square grid <br/>
  * - For each grid, constraints.attachingAnchor is consulted to determine the most fitting cell for the element <br/>
  * - The last most element to be given a cell is given the remaining. <br/>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class AutomaticElementTransformResolver implements IAETR {
 
@@ -25,6 +28,9 @@ public class AutomaticElementTransformResolver implements IAETR {
 
     private final List<ElementSubTree> roots = new ArrayList<>();
 
+    /**
+     * <p>resolve.</p>
+     */
     public void resolve() {
         if(roots.isEmpty()) return;
 
@@ -92,6 +98,8 @@ public class AutomaticElementTransformResolver implements IAETR {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Resolve only this element and elements attached to it
      */
     public void resolveFrom(IConstrainedElement element){
@@ -137,6 +145,7 @@ public class AutomaticElementTransformResolver implements IAETR {
     }
 
 
+    /** {@inheritDoc} */
     public void load(List<? extends IConstrainedElement> elements){
         if(elements.isEmpty()) return;
 

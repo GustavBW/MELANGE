@@ -16,9 +16,16 @@ import gbw.melange.welcomeapp.processors.IHomeScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+/**
+ * <p>HomeScreen class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 @View(layer = View.HOME_SCREEN_LAYER, focusPolicy = View.FocusPolicy.RETAIN_LATEST)
-public class HomeScreen implements IHomeScreen, OnRender {
+public class HomeScreen implements IHomeScreen {
     private static final Logger log = LoggerFactory.getLogger(HomeScreen.class);
+
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {
         IScreenSpace space = provider.getScreenSpace(this);
@@ -69,9 +76,5 @@ public class HomeScreen implements IHomeScreen, OnRender {
                     .setBorderWidth(borderWidth)
                     .apply()
                 .build();
-    }
-    private double acc = 0;
-    @Override
-    public void onRender(double deltaT) {
     }
 }

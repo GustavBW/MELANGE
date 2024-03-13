@@ -13,6 +13,12 @@ import gbw.melange.shading.postprocessing.PostProcessShader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>ElementStyleDefinition class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
     private IWrappedShader backgroundShader = WrappedShader.DEFAULT;
@@ -23,6 +29,11 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     private BevelConfig bevelConfig = BevelConfig.DEFAULT;
     private final List<PostProcessShader> postProcesses = new ArrayList<>();
 
+    /**
+     * <p>Constructor for ElementStyleDefinition.</p>
+     *
+     * @param def a {@link gbw.melange.common.elementary.styling.IReferenceStyleDefinition} object
+     */
     public ElementStyleDefinition(IReferenceStyleDefinition def){
         if(def.backgroundShader() != null) this.backgroundShader = def.backgroundShader();
         if(def.borderShader() != null) this.borderShader = def.borderShader();
@@ -32,36 +43,43 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
         if(def.postProcesses() != null) this.postProcesses.addAll(def.postProcesses());
     }
 
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader getBackgroundShader() {
         return backgroundShader;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader getBorderShader() {
         return borderShader;
     }
 
+    /** {@inheritDoc} */
     @Override
     public GLDrawStyle getBackgroundDrawStyle() {
         return backgroundDrawStyle;
     }
 
+    /** {@inheritDoc} */
     @Override
     public GLDrawStyle getBorderDrawStyle() {
         return borderDrawStyle;
     }
 
+    /** {@inheritDoc} */
     @Override
     public BevelConfig getBorderBevel() {
         return bevelConfig;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<PostProcessShader> getPostProcesses() {
         return postProcesses;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void dispose(){
         if(backgroundShader != null){

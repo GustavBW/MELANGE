@@ -14,6 +14,9 @@ import java.util.function.Predicate;
 
 /**
  * OnInit hook implementations can cause Exceptions and may take a lot of time to execute if they blockingly fetch external data.
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class ParallelMonitoredExecutionEnvironment {
 
@@ -33,6 +36,11 @@ public class ParallelMonitoredExecutionEnvironment {
         instance = new ParallelMonitoredExecutionEnvironment(appInstance);
     }
 
+    /**
+     * <p>handleThis.</p>
+     *
+     * @param onInits a {@link java.util.List} object
+     */
     public static void handleThis(List<OnInit<?>> onInits){
         //VolatileElements are handled separately, and if reflections pick any of these up, its a mistake.
         List<OnInit<?>> filtered = new ArrayList<>();
@@ -53,6 +61,14 @@ public class ParallelMonitoredExecutionEnvironment {
                 }
             ));
     }
+    /**
+     * <p>offloadLoadingElement.</p>
+     *
+     * @param element a {@link gbw.melange.common.elementary.types.ILoadingElement} object
+     * @param moveToStable a {@link java.lang.Runnable} object
+     * @param moveToError a {@link java.lang.Runnable} object
+     * @param <T> a T class
+     */
     public static <T> void offloadLoadingElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
         executor.submit(() -> instance.handleLoadingElement(element, moveToStable, moveToError));
     }
@@ -67,6 +83,11 @@ public class ParallelMonitoredExecutionEnvironment {
     }
     /**
      * Awaits the predicate in 100ms sleep intervals, then submits whenCompletedDo to be run on the main thread.
+     *
+     * @param object a T object
+     * @param completeWhenTrue a {@link java.util.function.Predicate} object
+     * @param whenCompleteDo a {@link java.util.function.Consumer} object
+     * @param <T> a T class
      */
     public static <T> void offloadAny(T object, Predicate<T> completeWhenTrue, Consumer<T> whenCompleteDo){
         executor.submit(() -> instance.handle0(object, completeWhenTrue, whenCompleteDo));

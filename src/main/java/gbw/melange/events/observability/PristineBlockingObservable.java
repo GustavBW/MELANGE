@@ -2,11 +2,16 @@ package gbw.melange.events.observability;
 
 import gbw.melange.common.events.observability.IPrestineBlockingObservable;
 import gbw.melange.common.events.observability.IPristineBiConsumer;
-import gbw.melange.common.events.observability.IPristineObservableValue;
 import gbw.melange.common.events.observability.filters.IFilterChain;
 import gbw.melange.common.events.observability.filters.IPristineFilterChain;
 import gbw.melange.events.observability.filters.FilterChain;
 
+/**
+ * <p>PristineBlockingObservable class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineBiConsumer<T>>
         implements IPrestineBlockingObservable<T> {
 
@@ -16,6 +21,7 @@ public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineB
     PristineBlockingObservable(T initialValue){
         super(initialValue);
     }
+    /** {@inheritDoc} */
     @Override
     public T get(){
         synchronized (lock){
@@ -23,6 +29,7 @@ public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineB
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void set(T newer){
         if(newer == null){
@@ -37,6 +44,7 @@ public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineB
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public IFilterChain<IPristineBiConsumer<T>, Integer> onChange() {
         return filters;

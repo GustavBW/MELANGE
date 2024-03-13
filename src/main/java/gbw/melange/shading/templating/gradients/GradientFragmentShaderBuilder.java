@@ -6,6 +6,12 @@ import gbw.melange.shading.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>GradientFragmentShaderBuilder class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class GradientFragmentShaderBuilder implements IGradientBuilder {
 
     private double rotationDeg = 0;
@@ -15,32 +21,59 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
     private final String localName;
     private final IShaderPipeline pipeline;
 
+    /**
+     * <p>Constructor for GradientFragmentShaderBuilder.</p>
+     *
+     * @param localName a {@link java.lang.String} object
+     */
     public GradientFragmentShaderBuilder(String localName){
         this(localName, null);
     }
+    /**
+     * <p>Constructor for GradientFragmentShaderBuilder.</p>
+     *
+     * @param localName a {@link java.lang.String} object
+     * @param rotationDeg a double
+     */
     public GradientFragmentShaderBuilder(String localName, double rotationDeg){
         this(localName, rotationDeg, null);
     }
+    /**
+     * <p>Constructor for GradientFragmentShaderBuilder.</p>
+     *
+     * @param localName a {@link java.lang.String} object
+     * @param pipeline a {@link gbw.melange.shading.IShaderPipeline} object
+     */
     public GradientFragmentShaderBuilder(String localName, IShaderPipeline pipeline){
         this(localName,0, pipeline);
     }
+    /**
+     * <p>Constructor for GradientFragmentShaderBuilder.</p>
+     *
+     * @param localName a {@link java.lang.String} object
+     * @param rotationDeg a double
+     * @param pipeline a {@link gbw.melange.shading.IShaderPipeline} object
+     */
     public GradientFragmentShaderBuilder(String localName, double rotationDeg, IShaderPipeline pipeline){
         this.rotationDeg = rotationDeg;
         this.localName = localName;
         this.pipeline = pipeline;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder setRotation(double degrees){
         this.rotationDeg = degrees;
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder setInterpolationType(InterpolationType type){
         this.interpolationType = type;
         return this;
     }
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader build() {
         StringBuilder codeBuilder = new StringBuilder();
@@ -137,6 +170,7 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
         shader.append("\tgl_FragColor = color;\n")
                 .append("}\n");
     }
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder addStops(Color color, double relativePosition){
         colors.add(color);
@@ -144,6 +178,7 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder addStops(Color c0, double pos0, Color c1, double pos1) {
         colors.addAll(List.of(c0, c1));
@@ -151,6 +186,7 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder addStops(Color c0, double pos0, Color c1, double pos1, Color c2, double pos2) {
         colors.addAll(List.of(c0, c1, c2));
@@ -158,6 +194,7 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder addStops(Color c0, double pos0, Color c1, double pos1, Color c2, double pos2, Color c3, double pos3) {
         colors.addAll(List.of(c0, c1, c2, c3));

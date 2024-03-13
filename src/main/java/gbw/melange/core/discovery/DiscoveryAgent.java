@@ -19,7 +19,10 @@ import java.util.*;
 
 /**
  * Scans user packages and gathers as much data as possible.
- * The KGB of Melange
+ * The FBI of Melange
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class DiscoveryAgent<T> {
 
@@ -31,6 +34,14 @@ public class DiscoveryAgent<T> {
     //Hooks
     private final List<OnRender> onRenderHookImpls = new ArrayList<>();
     private final List<OnInit<?>> onInitHookImpls = new ArrayList<>();
+    /**
+     * <p>locateButDontInstantiate.</p>
+     *
+     * @param mainClassType a {@link java.lang.Class} object
+     * @param <T> a T class
+     * @return a {@link gbw.melange.core.discovery.DiscoveryAgent} object
+     * @throws gbw.melange.common.errors.ClassConfigurationIssue if any.
+     */
     public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
         DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
         //System
@@ -61,15 +72,35 @@ public class DiscoveryAgent<T> {
             programContext.registerBean(registry);
         }
     }
+    /**
+     * <p>instantiateAndPrepare.</p>
+     *
+     * @throws gbw.melange.common.errors.ViewConfigurationIssue if any.
+     */
     public void instantiateAndPrepare() throws ViewConfigurationIssue {
         refresh();
     }
+    /**
+     * <p>getOnRenderList.</p>
+     *
+     * @return a {@link java.util.List} object
+     */
     public List<OnRender> getOnRenderList(){
         return onRenderHookImpls;
     }
+    /**
+     * <p>Getter for the field <code>onInitHookImpls</code>.</p>
+     *
+     * @return a {@link java.util.List} object
+     */
     public List<OnInit<?>> getOnInitHookImpls(){
         return onInitHookImpls;
     }
+    /**
+     * <p>Getter for the field <code>userViewInformation</code>.</p>
+     *
+     * @return a {@link java.util.Map} object
+     */
     public Map<Class<?>, View> getUserViewInformation(){
         return userViewInformation;
     }
@@ -163,6 +194,11 @@ public class DiscoveryAgent<T> {
     }
 
 
+    /**
+     * <p>getContext.</p>
+     *
+     * @return a {@link org.springframework.context.ApplicationContext} object
+     */
     public ApplicationContext getContext() {
         return programContext;
     }

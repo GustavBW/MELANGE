@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract Mesh representation for easier processing
+ * Abstract Mesh representation for easier processing, before eventually congregating everything to a standard {@link com.badlogic.gdx.graphics.Mesh}
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class AbstractMesh {
 
@@ -31,10 +34,16 @@ public class AbstractMesh {
      * Ordered by field usage
      */
     public static final EVertexAttribute[] DEFAULT_ATTRIBUTE_ORDERING = new EVertexAttribute[]{EVertexAttribute.POSITION, EVertexAttribute.COLOR_UNPACKED, EVertexAttribute.COLOR_PACKED, EVertexAttribute.NORMAL, EVertexAttribute.TEX_COORDS, EVertexAttribute.BONE_WEIGHT, EVertexAttribute.TANGENT, EVertexAttribute.BI_NORMAL};
-    private static record Face(Vector3 v1, Vector3 v2, Vector3 v3){}
+    private record Face(Vector3 v1, Vector3 v2, Vector3 v3){}
     private final List<Vector3> verts = new ArrayList<>();
     private final List<Face> faces = new ArrayList<>();
 
+    /**
+     * <p>Constructor for AbstractMesh.</p>
+     *
+     * @param xyz an array of {@link float} objects
+     * @param faces an array of {@link int} objects
+     */
     public AbstractMesh(float[] xyz, int[] faces){
         if(xyz.length % 3 != 0){
             throw new RuntimeException("An abstract mesh is always 3D. The Z parameter might be 0, but must still be declared");
@@ -53,10 +62,21 @@ public class AbstractMesh {
         }
     }
 
+    /**
+     * <p>toMesh.</p>
+     *
+     * @return a {@link com.badlogic.gdx.graphics.Mesh} object
+     */
     public Mesh toMesh(){
         return null;
     }
 
+    /**
+     * <p>toMesh.</p>
+     *
+     * @param vertexAttributeOrdering a {@link java.util.List} object
+     * @return a {@link com.badlogic.gdx.graphics.Mesh} object
+     */
     public Mesh toMesh(List<EVertexAttribute> vertexAttributeOrdering){
         return null;
     }

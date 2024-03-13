@@ -18,12 +18,22 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
+/**
+ * <p>ElementRenderer class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LoggerFactory.getLogger(ElementRenderer.class);
 
 
+    /**
+     * <p>Constructor for ElementRenderer.</p>
+     */
     public ElementRenderer(){}
 
+    /** {@inheritDoc} */
     @Override
     public void draw(Matrix4 parentMatrix, IElement<?>... elements) {
         for(IElement<?> e : elements){
@@ -31,6 +41,7 @@ public class ElementRenderer implements IElementRenderer {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void draw(Matrix4 parentMatrix, Collection<IElement<?>> elements) {
         for(IElement<?> e : elements){

@@ -18,6 +18,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
+/**
+ * <p>ColorService class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 @Service
 public class ColorService implements Colors, IShaderPipeline{
 
@@ -28,6 +34,7 @@ public class ColorService implements Colors, IShaderPipeline{
     );
     private static int nextId = 0;
 
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader constant(Color color) {
         float r = color.r, g = color.g, b = color.b, a = color.a;
@@ -36,11 +43,13 @@ public class ColorService implements Colors, IShaderPipeline{
         return wrapped;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader image(FileHandle src) throws IOException {
         return image(new Texture(src));
     }
 
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader image(Texture src) {
         Consumer<ShaderProgram> bindTexture = sp -> {
@@ -52,17 +61,20 @@ public class ColorService implements Colors, IShaderPipeline{
         return wrapped;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder linearGradient() {
         return new GradientFragmentShaderBuilder("GRADIENT_"+(nextId++), this);
     }
 
+    /** {@inheritDoc} */
     @Override
     public IGradientBuilder radialGradient() {
         //TODO: Implement a radial gradient builder
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IWrappedShader fromFragment(FragmentShader fragmentShader) {
         IWrappedShader wrapped = new WrappedShader("CUSTOM_FRAGMENT_"+(nextId++), VertexShader.DEFAULT, fragmentShader);
@@ -70,6 +82,7 @@ public class ColorService implements Colors, IShaderPipeline{
         return wrapped;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void compileAll() throws ShaderCompilationIssue {
         List<String> recentlyCompiled = new ArrayList<>(unCompiled.size());
@@ -81,6 +94,7 @@ public class ColorService implements Colors, IShaderPipeline{
         log.info("Compile step complete without issues for: " + recentlyCompiled);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void registerForCompilation(IWrappedShader shader) {
         //The program is null

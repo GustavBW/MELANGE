@@ -11,12 +11,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * <p>Selector class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class Selector {
 
+    /** Constant <code>FALL_BACK_DIR="/fallback"</code> */
     public static final String FALL_BACK_DIR = "/fallback";
+    /** Constant <code>ERR_IMAGE_DIR="/errors"</code> */
     public static final String ERR_IMAGE_DIR = "/errors";
+    /** Constant <code>INTERNAL_ASSET_DIR="/assets"</code> */
     public static final String INTERNAL_ASSET_DIR = "/assets";
 
+    /**
+     * <p>randomErrFallBack.</p>
+     *
+     * @return a {@link com.badlogic.gdx.files.FileHandle} object
+     * @throws java.io.IOException if any.
+     */
     public static FileHandle randomErrFallBack() throws IOException {
         //"." is prj root
         File[] unfiltered = new File("/assets" + FALL_BACK_DIR + ERR_IMAGE_DIR).listFiles();

@@ -5,14 +5,26 @@ import gbw.melange.common.elementary.space.ISpaceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * <p>ScreenSpaceProvider class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 @Service
 public class ScreenSpaceProvider implements ISpaceProvider<IScreenSpace> {
 
     private final ISpaceRegistry registry;
     @Autowired
+    /**
+     * <p>Constructor for ScreenSpaceProvider.</p>
+     *
+     * @param registry a {@link gbw.melange.core.elementary.ISpaceRegistry} object
+     */
     public ScreenSpaceProvider(ISpaceRegistry registry){
         this.registry = registry;
     }
+    /** {@inheritDoc} */
     @Override
     public IScreenSpace getScreenSpace(Object forWhom) {
         if(forWhom == null){

@@ -7,6 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p>View class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Component //NB: This annotation is only marked with Component so Spring stops complaining. Discovery of Views is manual using Reflections

@@ -1,6 +1,12 @@
 package gbw.melange.elements.events;
 
 
+/**
+ * <p>ElementEventType class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public enum ElementEventType {
     /**
      * The moment that caused this event may affect other elements meaning further investigation and propegating updates is needed.<br/>

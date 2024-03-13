@@ -2,6 +2,9 @@ package gbw.melange.common.structures;
 
 /**
  * Constant size linked list that can be pushed to any number of times, and simply looses the last value.
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class RollOverLinkedList<T> {
     private static class Link<T> {
@@ -11,6 +14,11 @@ public class RollOverLinkedList<T> {
     }
     private Link<T> head;
     private Link<T> tail;
+    /**
+     * <p>Constructor for RollOverLinkedList.</p>
+     *
+     * @param size a int
+     */
     public RollOverLinkedList(int size){
         head = new Link<>();
         Link<T> latest = head;
@@ -25,6 +33,12 @@ public class RollOverLinkedList<T> {
         }
     }
 
+    /**
+     * <p>push.</p>
+     *
+     * @param value a T object
+     * @return a boolean
+     */
     public boolean push(T value){
         boolean valueLost = tail.value != null;
 

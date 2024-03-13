@@ -10,6 +10,9 @@ import gbw.melange.events.observability.ObservableValue;
 
 /**
  * A "PureElement" is static for all intends and purposes. No special handling is required during boot for this element to work correctly.
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class PureElement<T> extends Element<T> implements IPureElement<T> {
 
@@ -24,10 +27,12 @@ public class PureElement<T> extends Element<T> implements IPureElement<T> {
         super.setState(ElementState.STABLE);
     }
 
+    /** {@inheritDoc} */
     @Override
     public T getContent(){
         return content.get();
     }
+    /** {@inheritDoc} */
     @Override
     public void setContent(T content){
         this.content.set(content);

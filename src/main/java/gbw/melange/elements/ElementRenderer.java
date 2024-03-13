@@ -2,23 +2,21 @@ package gbw.melange.elements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
-import gbw.melange.common.elementary.IComputedTransforms;
+import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
-import gbw.melange.shading.ShaderProgramWrapper;
+import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.List;
 
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LoggerFactory.getLogger(ElementRenderer.class);
@@ -85,9 +83,10 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
         fbo.getColorBufferTexture().bind(69);
 
-        ShaderProgram finalShader = ShaderProgramWrapper.TEXTURE.getProgram();
+        ShaderProgram finalShader = WrappedShader.TEXTURE.getProgram();
         finalShader.bind();
         finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
+        fbo.getColorBufferTexture().bind(69);
         finalShader.setUniformi("u_texture", 69);
 
         element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.value);
@@ -136,23 +135,28 @@ public class ElementRenderer implements IElementRenderer {
 
 
     private static void mainRenderPass(FrameBuffer fbo, IElement<?> element, Matrix4 appliedMatrix) {
+        IElementStyleDefinition style = element.getStylings();
+        Mesh mesh = element.getMesh();
+
         fbo.begin();
         //Clear to transparent
         Gdx.gl.glClearColor(0,0,0,0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //Border - Rendered first so that the same mesh can be reused, as the fragment of the background is drawn on top
-        ShaderProgram borderShader = element.getStylings().getBorderShader().getProgram();
+        ShaderProgram borderShader = style.getBorderShader().getProgram();
+        style.getBorderShader().bindResources();
         borderShader.bind();
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
-        element.getMesh().render(borderShader, element.getStylings().getBorderDrawStyle().value);
+        mesh.render(borderShader, style.getBorderDrawStyle().value);
         //TODO: Reset borderWidth so that draw style can be properly misused for creative purposes
 
         //Background
-        ShaderProgram backgroundShader = element.getStylings().getBackgroundShader().getProgram();
+        ShaderProgram backgroundShader = style.getBackgroundShader().getProgram();
+        style.getBackgroundShader().bindResources();
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
-        element.getMesh().render(backgroundShader, element.getStylings().getBackgroundDrawStyle().value);
+        mesh.render(backgroundShader, style.getBackgroundDrawStyle().value);
 
         fbo.end();
     }

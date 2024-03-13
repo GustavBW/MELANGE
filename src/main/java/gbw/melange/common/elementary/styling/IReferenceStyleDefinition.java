@@ -1,17 +1,16 @@
 package gbw.melange.common.elementary.styling;
 
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.gl_wrappers.GLDrawStyle;
-import gbw.melange.shading.ShaderProgramWrapper;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 import java.util.List;
 
 public interface IReferenceStyleDefinition {
-    ShaderProgramWrapper backgroundShader();
-    void backgroundShader(ShaderProgramWrapper program);
-    ShaderProgramWrapper borderShader();
-    void borderShader(ShaderProgramWrapper program);
+    IWrappedShader backgroundShader();
+    void backgroundShader(IWrappedShader program);
+    IWrappedShader borderShader();
+    void borderShader(IWrappedShader program);
     GLDrawStyle backgroundDrawStyle();
     void backgroundDrawStyle(GLDrawStyle style);
     GLDrawStyle borderDrawStyle();

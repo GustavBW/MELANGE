@@ -1,13 +1,12 @@
 package gbw.melange.shading.templating.gradients;
 
 import com.badlogic.gdx.graphics.Color;
-import gbw.melange.common.builders.IBuilder;
-import gbw.melange.shading.FragmentShader;
-import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
 
-public interface IGradientBuilder extends IBuilder<IWrappedShader> {
+public interface IGradientBuilder {
     IGradientBuilder setInterpolationType(InterpolationType type);
+
+    IWrappedShader build();
 
     /**
      * Set the rotation of the gradient. The pivot point is in the middle of the element's mesh.

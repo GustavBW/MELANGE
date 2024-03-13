@@ -2,6 +2,9 @@ package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.elementary.*;
+import gbw.melange.common.elementary.contraints.IComputedTransforms;
+import gbw.melange.common.elementary.contraints.IElementConstraints;
+import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
@@ -12,7 +15,6 @@ import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
 
-import java.util.UUID;
 //TODO: Move to abstract reference definition pipeline for delayed instantiation?
 public abstract class Element<T> implements IElement<T> {
 

@@ -1,4 +1,4 @@
-package gbw.melange.common.elementary;
+package gbw.melange.common.elementary.contraints;
 
 /**
  * In relation to the extends and mesh of the element this element is attached to.

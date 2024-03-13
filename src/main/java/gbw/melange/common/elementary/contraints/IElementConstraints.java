@@ -1,4 +1,4 @@
-package gbw.melange.common.elementary;
+package gbw.melange.common.elementary.contraints;
 
 import gbw.melange.common.elementary.types.IElement;
 
@@ -6,7 +6,7 @@ import gbw.melange.common.elementary.types.IElement;
 public interface IElementConstraints {
 
     Anchor getAttachingAnchor();
-    Anchor getSelfAnchor();
+    Anchor getContentAnchor();
     SizingPolicy getSizingPolicy();
     double getBorderWidth();
     double getPadding();

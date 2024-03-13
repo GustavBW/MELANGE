@@ -2,6 +2,7 @@ package gbw.melange.common.builders;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.elementary.*;
+import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 

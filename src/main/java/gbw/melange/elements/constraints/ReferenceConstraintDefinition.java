@@ -1,22 +1,22 @@
 package gbw.melange.elements.constraints;
 
-import gbw.melange.common.elementary.*;
+import gbw.melange.common.elementary.contraints.*;
 import gbw.melange.common.elementary.types.IElement;
 
 public class ReferenceConstraintDefinition implements IReferenceConstraintDefinition {
     public static final ReferenceConstraintDefinition DEFAULT = new ReferenceConstraintDefinition();
     public Anchor attachingAnchor = ElementAnchoring.TOP_LEFT.anchor;
-    public Anchor selfAnchor = ElementAnchoring.TOP_LEFT.anchor;
+    public Anchor contentAnchor = ElementAnchoring.TOP_LEFT.anchor;
     public SizingPolicy sizingPolicy = SizingPolicy.FILL_PARENT;
     public double borderWidth = 1;
     public double padding = 0;
-    public IElement elementAttachedTo;
+    public IElement<?> elementAttachedTo;
     public ReferenceConstraintDefinition(){}
 
 
     public ReferenceConstraintDefinition(IElementConstraints reference){
         this.attachingAnchor = new Anchor(reference.getAttachingAnchor());
-        this.selfAnchor = new Anchor(reference.getAttachingAnchor());
+        this.contentAnchor = new Anchor(reference.getAttachingAnchor());
         this.sizingPolicy = reference.getSizingPolicy();
         this.borderWidth = reference.getBorderWidth();
         this.padding = reference.getPadding();
@@ -34,13 +34,13 @@ public class ReferenceConstraintDefinition implements IReferenceConstraintDefini
     }
 
     @Override
-    public Anchor selfAnchor() {
-        return selfAnchor;
+    public Anchor contentAnchor() {
+        return contentAnchor;
     }
 
     @Override
-    public void selfAnchor(Anchor value) {
-        this.selfAnchor = value;
+    public void contentAnchor(Anchor value) {
+        this.contentAnchor = value;
     }
 
     @Override
@@ -74,12 +74,12 @@ public class ReferenceConstraintDefinition implements IReferenceConstraintDefini
     }
 
     @Override
-    public IElement elementAttachedTo() {
+    public IElement<?> elementAttachedTo() {
         return elementAttachedTo;
     }
 
     @Override
-    public void elementAttachedTo(IElement value) {
+    public void elementAttachedTo(IElement<?> value) {
         this.elementAttachedTo = value;
     }
 }

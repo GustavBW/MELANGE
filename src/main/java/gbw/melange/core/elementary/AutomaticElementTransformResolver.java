@@ -1,9 +1,6 @@
 package gbw.melange.core.elementary;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-import gbw.melange.common.elementary.IComputedTransforms;
+import gbw.melange.common.elementary.contraints.IComputedTransforms;
 import gbw.melange.common.elementary.types.IConstrainedElement;
 import gbw.melange.elements.ElementTransformAccess;
 

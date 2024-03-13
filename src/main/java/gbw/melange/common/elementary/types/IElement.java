@@ -1,10 +1,7 @@
 package gbw.melange.common.elementary.types;
 
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.elementary.ElementState;
-import gbw.melange.common.elementary.IComputedTransforms;
-import gbw.melange.common.elementary.IElementConstraints;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.rules.IElementRuleSet;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;

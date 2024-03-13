@@ -1,11 +1,10 @@
 package gbw.melange.elements.constraints;
 
-import gbw.melange.common.builders.IBuilder;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementConstraintBuilder;
-import gbw.melange.common.elementary.Anchor;
-import gbw.melange.common.elementary.ElementAnchoring;
-import gbw.melange.common.elementary.IReferenceConstraintDefinition;
+import gbw.melange.common.elementary.contraints.Anchor;
+import gbw.melange.common.elementary.contraints.ElementAnchoring;
+import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.types.IElement;
 
 public class ElementConstraintBuilder<T> implements IElementConstraintBuilder<T> {
@@ -28,13 +27,13 @@ public class ElementConstraintBuilder<T> implements IElementConstraintBuilder<T>
         return this;
     }
     @Override
-    public IElementConstraintBuilder<T> setSelfAnchor(ElementAnchoring anchor) {
-        return setSelfAnchor(anchor.anchor);
+    public IElementConstraintBuilder<T> setContentAnchor(ElementAnchoring anchor) {
+        return setContentAnchor(anchor.anchor);
     }
 
     @Override
-    public IElementConstraintBuilder<T> setSelfAnchor(Anchor anchor) {
-        referenceConstraints.selfAnchor(anchor);
+    public IElementConstraintBuilder<T> setContentAnchor(Anchor anchor) {
+        referenceConstraints.contentAnchor(anchor);
         return this;
     }
 

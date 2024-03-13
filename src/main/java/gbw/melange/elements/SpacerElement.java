@@ -2,8 +2,9 @@ package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.MeshTable;
-import gbw.melange.common.elementary.*;
-import gbw.melange.common.elementary.types.IConstrainedElement;
+import gbw.melange.common.elementary.contraints.IComputedTransforms;
+import gbw.melange.common.elementary.contraints.IElementConstraints;
+import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.types.ISpacerElement;
 import gbw.melange.elements.constraints.ElementConstraints;
 

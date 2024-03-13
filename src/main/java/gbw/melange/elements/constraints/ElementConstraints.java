@@ -1,6 +1,6 @@
 package gbw.melange.elements.constraints;
 
-import gbw.melange.common.elementary.*;
+import gbw.melange.common.elementary.contraints.*;
 import gbw.melange.common.elementary.types.IElement;
 
 /**
@@ -19,7 +19,7 @@ public class ElementConstraints implements IElementConstraints {
      * Cascading <br/>
      * Where on this element, other elements attach
      */
-    private Anchor selfAnchor = ElementAnchoring.TOP_LEFT.anchor;
+    private Anchor contentAnchor = ElementAnchoring.TOP_LEFT.anchor;
     //Contained change
     private SizingPolicy sizingPolicy = SizingPolicy.FILL_PARENT;
     private IElement attachedTo;
@@ -28,7 +28,7 @@ public class ElementConstraints implements IElementConstraints {
     private double padding = 0;
 
     public ElementConstraints(IReferenceConstraintDefinition def){
-        if(def.selfAnchor() != null) this.selfAnchor = def.selfAnchor();
+        if(def.contentAnchor() != null) this.contentAnchor = def.contentAnchor();
         if(def.attachingAnchor() != null) this.attachingAnchor = def.attachingAnchor();
         if(def.sizingPolicy() != null) this.sizingPolicy = def.sizingPolicy();
         this.borderWidth = def.borderWidth();
@@ -42,8 +42,8 @@ public class ElementConstraints implements IElementConstraints {
     }
 
     @Override
-    public Anchor getSelfAnchor() {
-        return selfAnchor;
+    public Anchor getContentAnchor() {
+        return contentAnchor;
     }
 
     @Override

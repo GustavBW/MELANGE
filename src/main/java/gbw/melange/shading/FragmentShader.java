@@ -6,23 +6,48 @@ import java.util.Objects;
 
 /**
  * String alias for now
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public class FragmentShader {
     private final String code;
     private final String localName;
 
+    /**
+     * <p>Constructor for FragmentShader.</p>
+     *
+     * @param localName a {@link java.lang.String} object
+     * @param code a {@link java.lang.String} object
+     */
     public FragmentShader(String localName, String code) {
         this.code = code;
         this.localName = localName;
     }
 
+    /**
+     * <p>code.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String code() {
         return code;
     }
+    /**
+     * <p>name.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String name(){
         return localName;
     }
 
+    /**
+     * <p>constant.</p>
+     *
+     * @param color a {@link com.badlogic.gdx.graphics.Color} object
+     * @return a {@link gbw.melange.shading.FragmentShader} object
+     */
     public static FragmentShader constant(Color color){
         // Convert the RGBA color components to GLSL float literals
         float r = color.r, g = color.g, b = color.b, a = color.a;
@@ -37,6 +62,7 @@ public class FragmentShader {
         return new FragmentShader("CONSTANT_RGBA_FRAGMENT("+r+","+g+","+b+","+a+")",code);
     }
 
+    /** Constant <code>DEFAULT</code> */
     public static final FragmentShader DEFAULT = new FragmentShader("MELANGE_DEFAULT_FRAGMENT",
     """
         #ifdef GL_ES
@@ -57,6 +83,7 @@ public class FragmentShader {
             gl_FragColor = gradientColor;
         }
     """);
+    /** Constant <code>DEBUG_UV</code> */
     public static final FragmentShader DEBUG_UV = new FragmentShader("MELANGE_DEBUG_UV_FRAGMENT",
         """
         #ifdef GL_ES
@@ -71,6 +98,7 @@ public class FragmentShader {
         }
     """);
 
+    /** Constant <code>TRANSPARENT</code> */
     public static final FragmentShader TRANSPARENT = new FragmentShader("MELANGE_TRANSPARENT_FRAGMENT",
     """
         #ifdef GL_ES
@@ -84,6 +112,7 @@ public class FragmentShader {
         }
         """
     );
+    /** Constant <code>TEXTURE</code> */
     public static final FragmentShader TEXTURE = new FragmentShader("MELANGE_TEXTURE_FRAGMENT",
     """
         #ifdef GL_ES
@@ -98,6 +127,7 @@ public class FragmentShader {
         }
     """);
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -106,11 +136,13 @@ public class FragmentShader {
         return Objects.equals(this.code, that.code);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return Objects.hash(code);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "FragmentShader[" +

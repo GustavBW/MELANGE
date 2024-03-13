@@ -8,36 +8,53 @@ import gbw.melange.common.elementary.styling.IBevelOperation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>MeshBeveler class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class MeshBeveler implements IBevelOperation {
 
+    /** Constant <code>DEFAULT</code> */
     public static final MeshBeveler DEFAULT = new MeshBeveler(BevelConfig.DEFAULT);
+    /** Constant <code>NOOP</code> */
     public static final MeshBeveler NOOP = new MeshBeveler(BevelConfig.NONE);
     private int vertNum;
     private double angleThreshDeg;
     private double absRelDist;
 
+    /**
+     * <p>Constructor for MeshBeveler.</p>
+     *
+     * @param config a {@link gbw.melange.common.elementary.styling.BevelConfig} object
+     */
     public MeshBeveler(BevelConfig config){
         vertNum = config.subdivs();
         angleThreshDeg = config.angleThreshold();
         absRelDist = config.absoluteRelativeDistance();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setVertices(int num) {
         this.vertNum = num;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setAngleThreshold(double angleDeg) {
         this.angleThreshDeg = angleDeg;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setWidth(double absoluteRelativeDistance) {
         this.absRelDist = absoluteRelativeDistance;
     }
 
     private record Vertex(double x, double y, double z, double u, double v, double r, double g, double b, double a){}
+    /** {@inheritDoc} */
     @Override
     public Mesh apply(Mesh originalMesh) {
         // Early exit if configuration does not require action

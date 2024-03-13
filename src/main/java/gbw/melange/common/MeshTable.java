@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 /**
  * All vertex parameters (x, y, z) are always within a -1 to 1 space.
  * This effectively centers all meshes for rotation and positional purposes.
+ *
+ * @author GustavBW
+ * @version $Id: $Id
  */
 public enum MeshTable {
     SQUARE(
@@ -85,6 +88,11 @@ public enum MeshTable {
     }
 
 
+    /**
+     * <p>Getter for the field <code>mesh</code>.</p>
+     *
+     * @return a {@link com.badlogic.gdx.graphics.Mesh} object
+     */
     public Mesh getMesh() {
         // Return a reference to the mesh
         // Note: Consider deep-copying here if modifications to the returned mesh could affect its standard definition

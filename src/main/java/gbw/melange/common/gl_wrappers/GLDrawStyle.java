@@ -2,6 +2,12 @@ package gbw.melange.common.gl_wrappers;
 
 import org.lwjgl.opengl.GL20;
 
+/**
+ * <p>GLDrawStyle class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public enum GLDrawStyle {
     INVALID(-1),
     TRIANGLES(GL20.GL_TRIANGLES),
@@ -18,6 +24,12 @@ public enum GLDrawStyle {
         this.value = gl20Value;
     }
 
+    /**
+     * <p>fromGL20.</p>
+     *
+     * @param gl20Value a int
+     * @return a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     */
     public static GLDrawStyle fromGL20(int gl20Value) {
         for (GLDrawStyle style : values()) {
             if (style.value == gl20Value) {

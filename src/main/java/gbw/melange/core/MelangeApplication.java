@@ -6,8 +6,10 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.*;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
@@ -24,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
+import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
@@ -33,10 +36,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         config.setForegroundFPS(60);
         config.setTitle("Melange");
         config.setDecorated(true);
-        config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4); //Samples == AA passes
+        config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 8); //Samples == AA passes
         // Attempt to make the window transparent
         config.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
         config.setTransparentFramebuffer(true);
+        config.setWindowedMode(1000,1000);
         return run(mainClass, config);
     }
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig) throws Exception {
@@ -103,7 +107,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
 
         testCam = new PerspectiveCamera();
-        viewport = new FitViewport(800, 480, testCam);
+        viewport = new FitViewport(1, 1);
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         log.info("Total startup time: " + (totalBootTime) + "ms");
@@ -130,7 +134,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         //Render spaces
         for(ISpace space : spaceNavigator.getOrderedList()){
-            space.render();
+            space.render(testCam.view);
         }
         int glErrCausedBySpaces = Gdx.gl.glGetError();
         if(glErrCausedBySpaces != GL20.GL_NO_ERROR){
@@ -147,10 +151,12 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         viewport.update(width, height);
     }
 
+    @Override
     public void pause() {
 
     }
 
+    @Override
     public void resume() {
 
     }

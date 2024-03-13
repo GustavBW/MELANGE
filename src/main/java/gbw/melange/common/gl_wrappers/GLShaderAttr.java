@@ -1,5 +1,11 @@
 package gbw.melange.common.gl_wrappers;
 
+/**
+ * <p>GLShaderAttr class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public enum GLShaderAttr {
     POSITION("a_position"),
     MATRIX("u_projTrans"),
@@ -18,6 +24,11 @@ public enum GLShaderAttr {
         this.name = name;
     }
 
+    /**
+     * <p>Getter for the field <code>name</code>.</p>
+     *
+     * @return a {@link java.lang.String} object
+     */
     public String getName() {
         return name;
     }

@@ -11,9 +11,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>SpaceNavigator class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 @Service
 public class SpaceNavigator implements ISpaceNavigator {
     private final List<ISpace> ordered = new ArrayList<>();
+    /**
+     * <p>loadFromRegistry.</p>
+     *
+     * @param registry a {@link gbw.melange.core.elementary.ISpaceRegistry} object
+     */
     public void loadFromRegistry(ISpaceRegistry registry) {
         // Clear the existing ordered list to reload it from the registry
         ordered.clear();
@@ -33,16 +44,19 @@ public class SpaceNavigator implements ISpaceNavigator {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void goToLayer(int layer) {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void goToSpace(ISpace space) {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<ISpace> getOrderedList() {
         return ordered;

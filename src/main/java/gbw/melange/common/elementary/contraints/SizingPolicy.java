@@ -1,5 +1,11 @@
 package gbw.melange.common.elementary.contraints;
 
+/**
+ * <p>SizingPolicy class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public enum SizingPolicy {
     /**
      * Take up all available space in the element this is attached to

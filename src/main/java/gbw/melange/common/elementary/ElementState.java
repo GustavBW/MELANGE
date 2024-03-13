@@ -1,5 +1,11 @@
 package gbw.melange.common.elementary;
 
+/**
+ * <p>ElementState class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public enum ElementState {
     /**
      * The content of this element is not quite ready, or the element itself isn't. Render a placeholder instead.

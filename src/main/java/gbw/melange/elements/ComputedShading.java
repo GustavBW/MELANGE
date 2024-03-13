@@ -3,6 +3,12 @@ package gbw.melange.elements;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
+/**
+ * <p>ComputedShading class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class ComputedShading {
 
     //TODO: Framebuffer size has to be adjusted to viewport resolution

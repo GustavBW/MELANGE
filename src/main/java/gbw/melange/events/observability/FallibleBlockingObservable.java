@@ -10,6 +10,12 @@ import gbw.melange.events.observability.filters.FilterChain;
 
 import java.util.Collection;
 
+/**
+ * <p>FallibleBlockingObservable class.</p>
+ *
+ * @author GustavBW
+ * @version $Id: $Id
+ */
 public class FallibleBlockingObservable<T> extends ObservableValue<T, IFallibleBiConsumer<T>>
         implements IFallibleBlockingObservable<T> {
     private final IFallibleFilterChain<T, Integer> filters = FilterChain.fallible();
@@ -18,12 +24,14 @@ public class FallibleBlockingObservable<T> extends ObservableValue<T, IFallibleB
     FallibleBlockingObservable(T initialValue){
         super(initialValue);
     }
+    /** {@inheritDoc} */
     @Override
     public T get(){
         synchronized (lock){
             return super.get();
         }
     }
+    /** {@inheritDoc} */
     @Override
     public void set(T newer) throws Exception {
         if(newer == null) return;
@@ -35,6 +43,7 @@ public class FallibleBlockingObservable<T> extends ObservableValue<T, IFallibleB
             super.setRaw(newer);
         }
     }
+    /** {@inheritDoc} */
     @Override
     public Collection<Exception> setAllowExceptions(T newer) {
         synchronized (lock) {
@@ -42,6 +51,7 @@ public class FallibleBlockingObservable<T> extends ObservableValue<T, IFallibleB
             return filters.runAllowExceptions(current, newer);
         }
     }
+    /** {@inheritDoc} */
     @Override
     public IFilterChain<IFallibleBiConsumer<T>, Integer> onChange() {
         return filters;

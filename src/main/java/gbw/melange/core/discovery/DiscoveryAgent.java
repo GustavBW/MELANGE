@@ -8,6 +8,7 @@ import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.CoreRootMarker;
 import gbw.melange.core.elementary.ISpaceRegistry;
+import gbw.melange.shading.ShadingRootMarker;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,7 @@ public class DiscoveryAgent<T> {
 
     private void registerCoreSpringServices() {
         programContext.scan(CoreRootMarker.class.getPackageName());
+        programContext.scan(ShadingRootMarker.class.getPackageName());
     }
     private void registerSpaceProviders() throws ClassConfigurationIssue {
         //Damn, var is actually useful for avoiding "oh no our type erasure forces you to use raw types - we're still going to make a yellow line anyways" - issues

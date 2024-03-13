@@ -3,8 +3,10 @@ package gbw.melange.shading.templating.gradients;
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.common.builders.IBuilder;
 import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.IShaderPipeline;
+import gbw.melange.shading.IWrappedShader;
 
-public interface IGradientBuilder extends IBuilder<FragmentShader> {
+public interface IGradientBuilder extends IBuilder<IWrappedShader> {
     IGradientBuilder setInterpolationType(InterpolationType type);
 
     /**

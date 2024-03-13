@@ -7,7 +7,10 @@ import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.common.navigation.ISpaceNavigator;
+import gbw.melange.shading.Colors;
 import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.IShaderPipeline;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.templating.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
 import org.slf4j.Logger;
@@ -17,9 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class HomeScreen implements IHomeScreen, OnRender {
     private static final Logger log = LoggerFactory.getLogger(HomeScreen.class);
     @Autowired
-    public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator) {
+    public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {
         IScreenSpace space = provider.getScreenSpace(this);
-        FragmentShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient")
+        IWrappedShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient", pipeline)
                 .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
                 .setRotation(45)
                 .build();
@@ -27,8 +30,8 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         space.createElement().setMesh(MeshTable.SQUARE.getMesh())
             .styling()
-                .setBackgroundColor(FragmentShader.DEBUG_UV)
-                .setBorderColor(Color.WHITE)
+                .setBackgroundColor(colors.fromFragment(FragmentShader.DEBUG_UV))
+                .setBorderColor(colors.constant(Color.WHITE))
                 .apply()
             .constraints()
                 .setBorderWidth(borderWidth)
@@ -38,8 +41,8 @@ public class HomeScreen implements IHomeScreen, OnRender {
         space.createElement()
             .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
             .styling()
-                .setBackgroundColor(FragmentShader.DEBUG_UV)
-                .setBorderColor(Color.WHITE)
+                .setBackgroundColor(fragmentShader)
+                .setBorderColor(colors.constant(Color.WHITE))
                 .apply()
             .constraints()
                 .setBorderWidth(borderWidth)
@@ -49,8 +52,8 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
                 .styling()
-                    .setBackgroundColor(FragmentShader.DEBUG_UV)
-                    .setBorderColor(Color.WHITE)
+                    .setBackgroundColor(colors.fromFragment(FragmentShader.DEBUG_UV))
+                    .setBorderColor(colors.constant(Color.WHITE))
                     .apply()
                 .constraints()
                     .setBorderWidth(borderWidth)
@@ -59,8 +62,8 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         space.createElement().setMesh(MeshTable.EQUILATERAL_TRIANGLE.getMesh())
                 .styling()
-                    .setBackgroundColor(FragmentShader.DEBUG_UV)
-                    .setBorderColor(Color.WHITE)
+                    .setBackgroundColor(fragmentShader)
+                    .setBorderColor(colors.constant(Color.WHITE))
                     .apply()
                 .constraints()
                     .setBorderWidth(borderWidth)

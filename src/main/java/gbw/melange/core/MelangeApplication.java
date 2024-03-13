@@ -11,15 +11,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
-import gbw.melange.common.errors.ShaderCompilationIssue;
+import gbw.melange.shading.IShaderPipeline;
+import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
 import gbw.melange.core.interactions.IInputListener;
-import gbw.melange.core.interactions.InputListener;
 import gbw.melange.common.navigation.ISpaceNavigator;
 import gbw.melange.core.elementary.SpaceNavigator;
-import gbw.melange.shading.ManagedShaderPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -66,6 +65,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private Camera testCam;
     private Viewport viewport;
     private ISpaceNavigator spaceNavigator;
+
     @Override
     public void create(){
         final long lwjglInitTime = (System.currentTimeMillis() - lwjglInitTimeA);
@@ -74,19 +74,19 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         ParallelMonitoredExecutionEnvironment.setInstance(this);
         ISpaceRegistry spaceRegistry;
         InputProcessor inputListener;
+        IShaderPipeline shaderPipeline;
         try {
             discoveryAgent.instantiateAndPrepare();
-            //The space manager is the navigator, why isn't that fetched from here instead of the registry? Anyway, the registry
-            //should be available to users, while the manager should.
             spaceRegistry = getContext().getBean(ISpaceRegistry.class);
             spaceNavigator = getContext().getBean(ISpaceNavigator.class);
-            ((SpaceNavigator) spaceNavigator).loadFromRegistry(spaceRegistry); //NB: Direct implementation reference!
+            shaderPipeline = getContext().getBean(IShaderPipeline.class);
+            ((SpaceNavigator) spaceNavigator).loadFromRegistry(spaceRegistry); //TODO: Swap to visibility control when modularized
 
             inputListener = getContext().getBean(IInputListener.class);
             Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
-            ManagedShaderPipeline.run();
+            shaderPipeline.compileAll();
             log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
 
         } catch (ViewConfigurationIssue | ShaderCompilationIssue e) {

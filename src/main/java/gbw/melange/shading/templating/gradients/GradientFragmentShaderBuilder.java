@@ -1,28 +1,33 @@
 package gbw.melange.shading.templating.gradients;
 
 import com.badlogic.gdx.graphics.Color;
-import gbw.melange.common.builders.IBuilder;
-import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class GradientFragmentShaderBuilder implements IGradientBuilder {
 
     private double rotationDeg = 0;
     private InterpolationType interpolationType = InterpolationType.HERMIT;
-    private List<Color> colors = new ArrayList<>();
-    private List<Double> positions = new ArrayList<>();
-    private String localName;
+    private final List<Color> colors = new ArrayList<>();
+    private final List<Double> positions = new ArrayList<>();
+    private final String localName;
+    private final IShaderPipeline pipeline;
 
     public GradientFragmentShaderBuilder(String localName){
-        this(localName,0);
+        this(localName, null);
     }
-
     public GradientFragmentShaderBuilder(String localName, double rotationDeg){
+        this(localName, rotationDeg, null);
+    }
+    public GradientFragmentShaderBuilder(String localName, IShaderPipeline pipeline){
+        this(localName,0, pipeline);
+    }
+    public GradientFragmentShaderBuilder(String localName, double rotationDeg, IShaderPipeline pipeline){
         this.rotationDeg = rotationDeg;
         this.localName = localName;
+        this.pipeline = pipeline;
     }
 
     @Override
@@ -37,7 +42,7 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
         return this;
     }
     @Override
-    public FragmentShader build() {
+    public IWrappedShader build() {
         StringBuilder codeBuilder = new StringBuilder();
 
         // Initialize shader and define varying v_texCoords
@@ -77,7 +82,12 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
 
         appendGlSetColorStatement(codeBuilder);
 
-        return new FragmentShader(localName, codeBuilder.toString());
+        FragmentShader fragment = new FragmentShader(localName, codeBuilder.toString());
+        IWrappedShader wrapped = new WrappedShader(localName, VertexShader.DEFAULT, fragment);
+        if(pipeline != null){
+            pipeline.registerForCompilation(wrapped);
+        }
+        return wrapped;
     }
 
     private void appendStops(StringBuilder shader) {

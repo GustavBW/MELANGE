@@ -1,4 +1,4 @@
-package gbw.melange.shading.templating.gradients;
+package gbw.melange.shading.procedural.gradients;
 
 /**
  * <p>InterpolationType class.</p>

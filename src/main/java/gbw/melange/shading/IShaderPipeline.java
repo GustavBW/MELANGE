@@ -2,6 +2,8 @@ package gbw.melange.shading;
 
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 
+import java.io.IOException;
+
 /**
  * <p>IShaderPipeline interface.</p>
  *
@@ -10,16 +12,23 @@ import gbw.melange.shading.errors.ShaderCompilationIssue;
  */
 public interface IShaderPipeline {
     /**
-     * <p>compileAll.</p>
-     *
+     * Compiles all registered programs.
+     * Also stores all static shaders on disk as textures and replace the actual program with one sampling that.
      * @throws gbw.melange.shading.errors.ShaderCompilationIssue if any.
      */
-    void compileAll() throws ShaderCompilationIssue;
+    void compileAndCache() throws ShaderCompilationIssue, IOException;
+
     /**
      * <p>registerForCompilation.</p>
      *
      * @param shader a {@link gbw.melange.shading.IWrappedShader} object
      */
     void registerForCompilation(IWrappedShader shader);
+
+    /**
+     * Whether subsequent compile steps should attempt to statically cache shaders as textures to be drawn instead.
+     * This should increase render performance drastically.
+     */
+    void useCaching(boolean yesNo);
 
 }

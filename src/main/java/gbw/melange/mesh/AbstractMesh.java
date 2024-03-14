@@ -33,7 +33,7 @@ public class AbstractMesh {
     /**
      * Ordered by field usage
      */
-    public static final EVertexAttribute[] DEFAULT_ATTRIBUTE_ORDERING = new EVertexAttribute[]{EVertexAttribute.POSITION, EVertexAttribute.COLOR_UNPACKED, EVertexAttribute.COLOR_PACKED, EVertexAttribute.NORMAL, EVertexAttribute.TEX_COORDS, EVertexAttribute.BONE_WEIGHT, EVertexAttribute.TANGENT, EVertexAttribute.BI_NORMAL};
+    public static final EVertexAttribute[] DEFAULT_ATTRIBUTE_ORDERING = EVertexAttribute.values();
     private record Face(Vector3 v1, Vector3 v2, Vector3 v3){}
     private final List<Vector3> verts = new ArrayList<>();
     private final List<Face> faces = new ArrayList<>();
@@ -45,6 +45,7 @@ public class AbstractMesh {
      * @param faces an array of {@link int} objects
      */
     public AbstractMesh(float[] xyz, int[] faces){
+
         if(xyz.length % 3 != 0){
             throw new RuntimeException("An abstract mesh is always 3D. The Z parameter might be 0, but must still be declared");
         }

@@ -37,7 +37,7 @@ public class ElementRenderer implements IElementRenderer {
     @Override
     public void draw(Matrix4 parentMatrix, IElement<?>... elements) {
         for(IElement<?> e : elements){
-            drawElementToBatch(parentMatrix, e);
+            draw0(parentMatrix, e);
         }
     }
 
@@ -45,12 +45,12 @@ public class ElementRenderer implements IElementRenderer {
     @Override
     public void draw(Matrix4 parentMatrix, Collection<IElement<?>> elements) {
         for(IElement<?> e : elements){
-            drawElementToBatch(parentMatrix, e);
+            draw0(parentMatrix, e);
         }
     }
 
 
-    private void drawElementToBatch(Matrix4 parentMatrix, IElement<?> element){
+    private void draw0(Matrix4 parentMatrix, IElement<?> element){
 
         ComputedTransforms computed = ((ComputedTransforms) element.computed());
         Matrix4 elementMatrix = computed.getMatrix();

@@ -3,10 +3,11 @@ package gbw.melange.shading;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.shading.templating.gradients.IGradientBuilder;
+import gbw.melange.shading.procedural.gradients.IGradientBuilder;
 
 /**
- * Spring-distributed entry point for shader pipeline
+ * Spring-distributed entry point for the melange colors api.
+ * Allows for quick and easy configuration of procedural shaders.
  *
  * @author GustavBW
  * @version $Id: $Id
@@ -39,13 +40,13 @@ public interface Colors {
     /**
      * <p>linearGradient.</p>
      *
-     * @return a {@link gbw.melange.shading.templating.gradients.IGradientBuilder} object
+     * @return a {@link gbw.melange.shading.procedural.gradients.IGradientBuilder} object
      */
     IGradientBuilder linearGradient();
     /**
      * <p>radialGradient.</p>
      *
-     * @return a {@link gbw.melange.shading.templating.gradients.IGradientBuilder} object
+     * @return a {@link gbw.melange.shading.procedural.gradients.IGradientBuilder} object
      */
     IGradientBuilder radialGradient();
 

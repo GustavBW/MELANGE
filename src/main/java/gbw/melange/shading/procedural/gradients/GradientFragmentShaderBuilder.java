@@ -1,4 +1,4 @@
-package gbw.melange.shading.templating.gradients;
+package gbw.melange.shading.procedural.gradients;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.*;

@@ -20,7 +20,7 @@ import java.util.Set;
 public class Selector {
 
     /** Constant <code>FALL_BACK_DIR="/fallback"</code> */
-    public static final String FALL_BACK_DIR = "/fallback";
+    public static final String FALL_BACK_DIR = "/system/fallback";
     /** Constant <code>ERR_IMAGE_DIR="/errors"</code> */
     public static final String ERR_IMAGE_DIR = "/errors";
     /** Constant <code>INTERNAL_ASSET_DIR="/assets"</code> */

@@ -43,10 +43,7 @@ public class FragmentShader {
     }
 
     /**
-     * <p>constant.</p>
-     *
-     * @param color a {@link com.badlogic.gdx.graphics.Color} object
-     * @return a {@link gbw.melange.shading.FragmentShader} object
+     * Generate a glsl fragment shader showing a given constant color
      */
     public static FragmentShader constant(Color color){
         // Convert the RGBA color components to GLSL float literals
@@ -99,19 +96,8 @@ public class FragmentShader {
     """);
 
     /** Constant <code>TRANSPARENT</code> */
-    public static final FragmentShader TRANSPARENT = new FragmentShader("MELANGE_TRANSPARENT_FRAGMENT",
-    """
-        #ifdef GL_ES
-        precision mediump float;
-        #endif
-                
-        const vec4 color = vec4(0,0,0,0);
-            
-        void main() {
-            gl_FragColor = color;
-        }
-        """
-    );
+    public static final FragmentShader TRANSPARENT = FragmentShader.constant(new Color(0,0,0,0));
+
     /** Constant <code>TEXTURE</code> */
     public static final FragmentShader TEXTURE = new FragmentShader("MELANGE_TEXTURE_FRAGMENT",
     """

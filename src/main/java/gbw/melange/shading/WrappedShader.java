@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.function.Consumer;
 
 /**
+ * A self contained ShaderProgram, allowing for explicit compilation and error detection.
+ *
  * @author GustavBW
  * @version $Id: $Id
  */
@@ -20,37 +22,35 @@ public class WrappedShader implements IWrappedShader {
     public static WrappedShader NONE = new WrappedShader("MELANGE_NONE_SHADER", VertexShader.NONE, FragmentShader.TRANSPARENT);
     /** Constant <code>TEXTURE</code> */
     public static WrappedShader TEXTURE = new WrappedShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
-
+    private static final Consumer<ShaderProgram> NOOP_CONSUMER = unused -> {};
+    private static int nextInstanceId = 0;
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
+    private final String localName; //Debugging
+    private final boolean isStatic;
+    private Consumer<ShaderProgram> bindResources = NOOP_CONSUMER;
     private ShaderProgram program;
-    private final String localName;
+    private final int instanceId;
     private boolean failedCompilation = false;
-    private Consumer<ShaderProgram> bindResources = unused -> {};
-    private static final Consumer<ShaderProgram> NOOP_CONSUMER = unused -> {};
     /**
-     * <p>Constructor for WrappedShader.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     * @param vertexShader a {@link gbw.melange.shading.VertexShader} object
-     * @param fragmentShader a {@link gbw.melange.shading.FragmentShader} object
+     * If this texture is rendered to disk for memory purposes, what resolution should it be stored as.
      */
+    private int desiredResolution = 500;
+
     public WrappedShader(String localName, VertexShader vertexShader, FragmentShader fragmentShader) {
         this(localName, vertexShader, fragmentShader, NOOP_CONSUMER);
     }
-    /**
-     * <p>Constructor for WrappedShader.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     * @param vertex a {@link gbw.melange.shading.VertexShader} object
-     * @param fragment a {@link gbw.melange.shading.FragmentShader} object
-     * @param bindResources a {@link java.util.function.Consumer} object
-     */
+
     public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, Consumer<ShaderProgram> bindResources){
+        this(localName, vertex, fragment, bindResources, true);
+    }
+    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, Consumer<ShaderProgram> bindResources, boolean isStatic){
         this.vertexShader = vertex;
         this.fragmentShader = fragment;
         this.localName = localName;
         this.bindResources = bindResources;
+        this.isStatic = isStatic;
+        this.instanceId = nextInstanceId++;
     }
 
     /** {@inheritDoc} */
@@ -58,12 +58,8 @@ public class WrappedShader implements IWrappedShader {
     public void bindResources() {
         bindResources.accept(program);
     }
-
-    /**
-     * <p>compile.</p>
-     *
-     * @throws gbw.melange.shading.errors.ShaderCompilationIssue if any.
-     */
+    /** {@inheritDoc} */
+    @Override
     public void compile() throws ShaderCompilationIssue {
         this.program = new ShaderProgram(vertexShader.code(), fragmentShader.code());
         failedCompilation = !program.isCompiled();
@@ -75,40 +71,61 @@ public class WrappedShader implements IWrappedShader {
             );
         }
     }
+    @Override
+    public IWrappedShader copy(){
+        return new WrappedShader(localName, vertexShader, fragmentShader, bindResources, isStatic);
+    }
+    @Override
+    public IWrappedShader copyAs(String newLocalName){
+        return new WrappedShader(newLocalName, vertexShader, fragmentShader, bindResources, isStatic);
+    }
 
-    /**
-     * <p>Getter for the field <code>program</code>.</p>
-     *
-     * @return a {@link com.badlogic.gdx.graphics.glutils.ShaderProgram} object
-     */
+    /** {@inheritDoc} */
     public ShaderProgram getProgram(){
         return program;
     }
-
-    /**
-     * <p>shortName.</p>
-     *
-     * @return a {@link java.lang.String} object
-     */
+    /** {@inheritDoc} */
     public String shortName(){
         return localName;
     }
-
     /** {@inheritDoc} */
     @Override
     public boolean isReady() {
         return !failedCompilation && program != null;
     }
-
+    /** {@inheritDoc} */
+    @Override
+    public void setResolution(int res) {
+        this.desiredResolution = res;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public int getResolution() {
+        return desiredResolution;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public boolean isStatic(){
+        return isStatic;
+    }
     /** {@inheritDoc} */
     @Override
     public String toString(){
         return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader.localName() + "\", fragment shader: \"" + fragmentShader.name() +"\"";
     }
-
     /** {@inheritDoc} */
     @Override
     public void dispose() {
         program.dispose();
+    }
+
+    void replaceProgram(ShaderProgram program){
+        this.program = program;
+    }
+    void changeBindings(Consumer<ShaderProgram> bindings){
+        this.bindResources = bindings;
+    }
+    int getInstanceId(){
+        return instanceId;
     }
 }

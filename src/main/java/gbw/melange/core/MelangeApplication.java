@@ -7,8 +7,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.collision.Ray;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
@@ -26,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
-import java.awt.*;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
@@ -66,7 +64,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private ApplicationContext getContext(){
         return discoveryAgent.getContext();
     }
-    private Camera testCam;
+    private PerspectiveCamera testCam;
     private Viewport viewport;
     private ISpaceNavigator spaceNavigator;
 
@@ -90,10 +88,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
-            shaderPipeline.compileAll();
+            shaderPipeline.compileAndCache();
             log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
 
-        } catch (ViewConfigurationIssue | ShaderCompilationIssue e) {
+        } catch (ViewConfigurationIssue | ShaderCompilationIssue | IOException e) {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);
         }
@@ -107,7 +105,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
 
         testCam = new PerspectiveCamera();
-        viewport = new FitViewport(1, 1);
+        viewport = new FitViewport(1, 1, testCam);
+        testCam.update();
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         log.info("Total startup time: " + (totalBootTime) + "ms");
@@ -126,7 +125,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     @Override
     public void render(){
         frame++;
-        testCam.update();
         //Handle backlog
         while(runOnMainThread.peek() != null){
             runOnMainThread.poll().run();

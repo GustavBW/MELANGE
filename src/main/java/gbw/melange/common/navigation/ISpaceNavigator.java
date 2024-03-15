@@ -12,12 +12,7 @@ import java.util.List;
  * @version $Id: $Id
  */
 public interface ISpaceNavigator {
-    /**
-     * <p>goToLayer.</p>
-     *
-     * @param layer a int
-     */
-    void goToLayer(int layer);
+
     /**
      * <p>goToSpace.</p>
      *
@@ -25,9 +20,12 @@ public interface ISpaceNavigator {
      */
     void goToSpace(ISpace space);
     /**
-     * <p>getOrderedList.</p>
+     * Get all spaces in the reverse order they appear on screen.
+     * I.e. the foremost space will be the last entry.
      *
      * @return a {@link java.util.List} object
      */
     List<ISpace> getOrderedList();
+
+    List<ISpace> getVisibleSpaces();
 }

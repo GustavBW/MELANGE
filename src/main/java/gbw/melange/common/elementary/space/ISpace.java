@@ -2,6 +2,7 @@ package gbw.melange.common.elementary.space;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.common.annotations.View;
 import gbw.melange.common.builders.ISpaceBuilder;
 import gbw.melange.common.elementary.IContentProvider;
 import gbw.melange.common.elementary.types.*;
@@ -17,15 +18,21 @@ import gbw.melange.common.builders.IElementBuilder;
 public interface ISpace extends Disposable {
 
     /**
-     * <p>render.</p>
+     * If hidden, reveal this space.
+     * This method overrides {@link View#focusPolicy()}.
      */
+    void show();
+    /**
+     * If visible, show this space.
+     * This method overrides {@link View#focusPolicy()}.
+     */
+    void hide();
+
     void render();
     /**
-     * <p>render.</p>
-     *
-     * @param testCamMatrix a {@link com.badlogic.gdx.math.Matrix4} object
+     * Apply supplied matrix to space and all its elements.
      */
-    void render(Matrix4 testCamMatrix);
+    void render(Matrix4 parentMatrix);
     /**
      * <p>resolveConstraints.</p>
      */

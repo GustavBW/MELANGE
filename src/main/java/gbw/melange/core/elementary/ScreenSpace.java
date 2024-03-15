@@ -36,13 +36,25 @@ public class ScreenSpace implements IScreenSpace {
     private final List<IElement<?>> loadingQueue = new CopyOnWriteArrayList<>();
     private final List<IElement<?>> errorQueue = new CopyOnWriteArrayList<>();
     private final List<IConstrainedElement> additionOrder = new ArrayList<>();
-
+    private boolean visible = false;
 
     /** {@inheritDoc} */
     @Override
-    public void render(Matrix4 testCamMatrix) {
-        renderer.draw(testCamMatrix, renderQueue);
+    public void render(Matrix4 parentMatrix) {
+        renderer.draw(parentMatrix, renderQueue);
     }
+
+    @Override
+    public void show() {
+        //TODO: Add viewport size and scale check
+        this.visible = true;
+    }
+
+    @Override
+    public void hide() {
+        this.visible = false;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void render() {

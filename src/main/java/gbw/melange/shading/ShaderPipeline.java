@@ -65,6 +65,7 @@ public class ShaderPipeline implements IShaderPipeline {
             Texture toBind;
             try {
                 toBind = DiskShaderCacheUtil.cacheOrUpdateExisting(shader);
+                //TODO: GL err check right here
             } catch (Exception e){
                 log.warn("Caching failed for " + shader.shortName() + ", skipping.");
                 log.warn(e.toString());

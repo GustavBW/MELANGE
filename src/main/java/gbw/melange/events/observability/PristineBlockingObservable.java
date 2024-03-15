@@ -37,7 +37,7 @@ public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineB
         }
         synchronized (lock) {
             final T current = get();
-            if(!super.equalityFunction.test(current, newer)){
+            if(current == null || !super.equalityFunction.test(current, newer)){
                 filters.run(current, newer);
             }
             super.setRaw(newer);

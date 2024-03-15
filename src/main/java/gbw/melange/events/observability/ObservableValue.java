@@ -11,7 +11,15 @@ import gbw.melange.common.events.observability.*;
  * @version $Id: $Id
  */
 public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> implements IObservableValue<T, R, Integer> {
-    protected EqualityFunction<T> equalityFunction = (any1, any2) -> false;
+
+    protected static class DefaultNoEquality<T> implements EqualityFunction<T> {
+        @Override
+        public boolean test(Object o, Object newer) {
+            return false;
+        }
+    }
+
+    protected EqualityFunction<T> equalityFunction = new DefaultNoEquality<>();
     private T value;
 
     /**

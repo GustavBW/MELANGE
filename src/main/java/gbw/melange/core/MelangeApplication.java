@@ -11,15 +11,14 @@ import com.badlogic.gdx.utils.viewport.*;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
-import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.ShaderPipeline;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
 import gbw.melange.core.interactions.IInputListener;
-import gbw.melange.common.navigation.ISpaceNavigator;
 import gbw.melange.core.elementary.SpaceNavigator;
+import org.lwjgl.opengl.GL43C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -31,20 +30,23 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class MelangeApplication<T> extends ApplicationAdapter {
     private static final Logger log = LoggerFactory.getLogger(MelangeApplication.class);
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass) throws Exception {
-        final Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setForegroundFPS(60);
-        config.setTitle("Melange");
-        config.setDecorated(true);
-        config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 8); //Samples == AA passes
-        // Attempt to make the window transparent
-        config.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
-        config.setTransparentFramebuffer(true);
-        config.setWindowedMode(1000,1000);
-        return run(mainClass, config);
+        return run(mainClass, new MelangeConfig());
     }
-    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig) throws Exception {
+    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, MelangeConfig config) throws Exception {
+        final Lwjgl3ApplicationConfiguration lwjglConfig = new Lwjgl3ApplicationConfiguration();
+        lwjglConfig.setForegroundFPS(60);
+        lwjglConfig.setTitle("MelangeApp");
+        lwjglConfig.setDecorated(true);
+        lwjglConfig.setBackBufferConfig(8, 8, 8, 8, 16, 0, 8); //Samples == AA passes
+        // Attempt to make the window transparent
+        lwjglConfig.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
+        lwjglConfig.setTransparentFramebuffer(true);
+        lwjglConfig.setWindowedMode(1000,1000);
+        return run(mainClass, lwjglConfig, config);
+    }
+    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig, MelangeConfig melangeConfig) throws Exception {
         bootTimeA = System.currentTimeMillis();
-        MelangeApplication<T> app = new MelangeApplication<>(mainClass);
+        MelangeApplication<T> app = new MelangeApplication<>(mainClass, melangeConfig);
 
         lwjglInitTimeA = System.currentTimeMillis();
         new Lwjgl3Application(app, lwjglConfig); //TODO: THIS GUY NEVER RETURNS. Time for threads
@@ -54,9 +56,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private static long lwjglInitTimeA;
     private DiscoveryAgent<T> discoveryAgent;
     private static long bootTimeA;
-    public MelangeApplication(Class<T> userMainClass) throws ClassConfigurationIssue {
+    private final MelangeConfig config;
+    public MelangeApplication(Class<T> userMainClass, MelangeConfig config) throws ClassConfigurationIssue {
         log.info("Welcome to the spice, MELANGE.");
-
+        this.config = config;
         long discoveryTimeA = System.currentTimeMillis();
         discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass);
         log.info("Discovery pass time: " + (System.currentTimeMillis() - discoveryTimeA) + "ms");
@@ -92,7 +95,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
-            shaderPipeline.useCaching(true);
+            shaderPipeline.useCaching(config.cachingEnabled);
             shaderPipeline.compileAndCache();
             log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
 
@@ -108,6 +111,9 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
+        if(config.cachingEnabled){
+            Gdx.gl.glEnable(GL43C.GL_DEBUG_OUTPUT);
+        }
 
         testCam = new PerspectiveCamera();
         viewport = new FitViewport(1, 1, testCam);

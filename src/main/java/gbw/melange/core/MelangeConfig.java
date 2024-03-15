@@ -1,11 +1,12 @@
-package gbw.melange.common;
+package gbw.melange.core;
 
+//TODO: Move to Common
 public class MelangeConfig {
 
+    boolean cachingEnabled = true;
+    float logLevel = 2;
+    boolean glDebugEnabled = false;
 
-
-    private boolean cachingEnabled = false;
-    private float logLevel = 0;
 
     /**
      * Cache shaders on disk and sample as textures to increase performance.
@@ -34,6 +35,11 @@ public class MelangeConfig {
     public MelangeConfig setLogLevel(float value){
         //TODO: Implement this
         this.logLevel = value;
+        return this;
+    }
+
+    public MelangeConfig enableGLDebug(boolean yesNo){
+        this.glDebugEnabled = yesNo;
         return this;
     }
 

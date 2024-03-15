@@ -1,6 +1,7 @@
 package gbw.melange.welcomeapp;
 
 import gbw.melange.core.MelangeApplication;
+import gbw.melange.core.MelangeConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,10 @@ public class WelcomeExample {
      * @throws java.lang.Exception if any.
      */
     public static void main(String[] args) throws Exception {
-        MelangeApplication.run(WelcomeExample.class);
+        MelangeConfig config = new MelangeConfig()
+            .enableGLDebug(true)
+            .setLogLevel(0);
+        MelangeApplication.run(WelcomeExample.class, config);
     }
 
 }

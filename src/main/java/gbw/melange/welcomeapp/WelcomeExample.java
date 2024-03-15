@@ -25,7 +25,9 @@ public class WelcomeExample {
     public static void main(String[] args) throws Exception {
         MelangeConfig config = new MelangeConfig()
             .enableGLDebug(true)
-            .setLogLevel(0);
+            .setLogLevel(0)
+            .clearGeneratedContentOnExit(false);
+
         MelangeApplication.run(WelcomeExample.class, config);
     }
 

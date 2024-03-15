@@ -1,15 +1,11 @@
 package gbw.melange.elements.styling;
 
-import com.badlogic.gdx.graphics.Color;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
-import gbw.melange.shading.FragmentShader;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.WrappedShader;
-import gbw.melange.shading.VertexShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 /**

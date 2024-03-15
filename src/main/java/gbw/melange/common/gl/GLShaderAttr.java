@@ -1,4 +1,4 @@
-package gbw.melange.common.gl_wrappers;
+package gbw.melange.common.gl;
 
 /**
  * <p>GLShaderAttr class.</p>

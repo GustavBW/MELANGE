@@ -1,4 +1,4 @@
-package gbw.melange.common.gl_wrappers;
+package gbw.melange.common.gl;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
 
@@ -81,7 +81,7 @@ public enum EVertexAttribute {
      * <p>compare.</p>
      *
      * @param vAttr a {@link com.badlogic.gdx.graphics.VertexAttribute} object
-     * @param evAttr a {@link gbw.melange.common.gl_wrappers.EVertexAttribute} object
+     * @param evAttr a {@link gbw.melange.common.gl.EVertexAttribute} object
      * @return a boolean
      */
     public static boolean compare(VertexAttribute vAttr, EVertexAttribute evAttr){

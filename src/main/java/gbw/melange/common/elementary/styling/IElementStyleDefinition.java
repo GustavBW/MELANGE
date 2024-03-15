@@ -1,7 +1,7 @@
 package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
@@ -31,13 +31,13 @@ public interface IElementStyleDefinition extends Disposable {
     /**
      * <p>getBackgroundDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
     GLDrawStyle getBackgroundDrawStyle(); //TODO: Swap to Enum
     /**
      * <p>getBorderDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
     GLDrawStyle getBorderDrawStyle();//TODO: Swap to Enum
 

@@ -59,7 +59,7 @@ public class AutomaticElementTransformResolver implements IAETR {
         IConstrainedElement parent = subTree.root;
         List<ElementSubTree> children = subTree.children;
 
-        System.out.println("Resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
+        //System.out.println("Resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
 
         // Apply translation and scale to the current root of the subtree
         transformAccess.setTranslation(parent, parentOffsetX, parentOffsetY, 0);

@@ -4,6 +4,9 @@
 /events/target
 /ptg/target
 
+## Melange Specific
+/assets/system/generated/*
+
 ## Execution Specific - change this if the configuration is changes as to not push full shaded artefacts
 /compiled-modules
 /libs
@@ -123,3 +126,7 @@ Thumbs.db
 /ios/xcode/native/
 /ios/IOSLauncher.app
 /ios/IOSLauncher.app.dSYM
+system/generated/shaders/CUSTOM_FRAGMENT_0@1826747905.png
+system/generated/shaders/CUSTOM_FRAGMENT_3@948395645.png
+system/generated/shaders/HomeScreenGradient@1365790282.png
+system/generated/shaders/MELANGE_DEFAULT_SHADER@1045985568.png

@@ -22,8 +22,9 @@ public record VertexShader(String localName, String code) {
         #ifdef GL_ES
             precision mediump float;
         #endif
+        const vec4 nothing = vec4(0,0,0,0);
         void main() {
-            gl_Position = 0;
+            gl_Position = nothing;
         }
         """
     );

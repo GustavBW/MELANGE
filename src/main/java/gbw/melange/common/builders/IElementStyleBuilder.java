@@ -1,6 +1,6 @@
 package gbw.melange.common.builders;
 
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
@@ -16,14 +16,14 @@ public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder
     /**
      * <p>setBackgroundDrawStyle.</p>
      *
-     * @param style a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @param style a {@link gbw.melange.common.gl.GLDrawStyle} object
      * @return a {@link gbw.melange.common.builders.IElementStyleBuilder} object
      */
     IElementStyleBuilder<T> setBackgroundDrawStyle(GLDrawStyle style);
     /**
      * <p>setBorderDrawStyle.</p>
      *
-     * @param style a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @param style a {@link gbw.melange.common.gl.GLDrawStyle} object
      * @return a {@link gbw.melange.common.builders.IElementStyleBuilder} object
      */
     IElementStyleBuilder<T> setBorderDrawStyle(GLDrawStyle style);

@@ -72,6 +72,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private PerspectiveCamera testCam;
     private Viewport viewport;
     private SpaceNavigator spaceNavigator;
+    private ShaderPipeline shaderPipeline;
 
     @Override
     public void create(){
@@ -81,7 +82,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         ParallelMonitoredExecutionEnvironment.setInstance(this);
         ISpaceRegistry spaceRegistry;
         InputProcessor inputListener;
-        ShaderPipeline shaderPipeline;
         try {
             discoveryAgent.instantiateAndPrepare();
             ApplicationContext context = discoveryAgent.getContext();
@@ -178,6 +178,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         for(ISpace space : spaceNavigator.getOrderedList()){
             space.dispose();
         }
+        shaderPipeline.dispose();
         ParallelMonitoredExecutionEnvironment.shutdown();
     }
 

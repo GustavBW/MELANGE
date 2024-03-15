@@ -59,7 +59,7 @@ public class ColorService implements Colors {
         wrapped.bindResource((index, program) -> {
             src.bind(index);
             program.setUniformi("u_texture", index);
-        });
+        }, List.of(src));
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

@@ -1,15 +1,12 @@
 package gbw.melange.shading.iocache;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.ScreenUtils;
-import gbw.melange.core.MelangeApplication;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.errors.ShaderCompilationIssue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,19 +14,40 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DiskShaderCacheUtil {
+public class DiskShaderCacheUtil implements Disposable {
     private static final Logger log = LoggerFactory.getLogger(DiskShaderCacheUtil.class);
 
     public static final String SHADER_CACHE_PATH = "./assets/system/generated/shaders";
+    private static final List<Disposable> disposeOnExit = new ArrayList<>();
+    private final Mesh screenQuad;
+
+    public DiskShaderCacheUtil(){
+        screenQuad = new Mesh(
+                true, 4, 6,
+                VertexAttribute.Position(),
+                VertexAttribute.TexCoords(0)
+        );
+        screenQuad.setVertices(new float[] {
+                -1f, -1f, 0, 0, 0,
+                1f, -1f, 0, 1, 0,
+                1f,  1f, 0, 1, 1,
+                -1f,  1f, 0, 0, 1
+        });
+        screenQuad.setIndices(new short[] {0, 1, 2, 2, 3, 0});
+        disposeOnExit.add(screenQuad);
+    }
 
     /**
      * Draw 2D shader to texture stored at {@link DiskShaderCacheUtil#SHADER_CACHE_PATH}
      * ToString is used to generate the filename, so make sure its unique.
+     *
+     * @return Returns the file handle to the image file which was just generated
      */
-    public static Texture cacheOrUpdateExisting(@NotNull IWrappedShader shader) throws Exception {
+    public FileHandle cacheOrUpdateExisting(@NotNull IWrappedShader shader) throws GdxRuntimeException {
 
         init(); //Just a check
 
@@ -37,32 +55,27 @@ public class DiskShaderCacheUtil {
         final String derivedFileName = shader.shortName() + "@" + shader.hashCode();
         File existingCacheFile = new File(SHADER_CACHE_PATH + "/" + derivedFileName);
         FrameBuffer resultingFBO;
-        Texture toReturn;
+        FileHandle toReturn;
 
         if(!existingCacheFile.exists()){
             // Shader hasn't been cached yet, proceed with rendering
             resultingFBO = renderToFBO(shader, shader.getResolution(), shader.getResolution(), false);
 
-            saveFBOtoPNG(resultingFBO, derivedFileName);
-
-            toReturn = resultingFBO.getColorBufferTexture();
+            toReturn = saveFBOtoPNG(resultingFBO, derivedFileName);
 
             resultingFBO.dispose();
         } else {
-            //TODO: FileHandle constructor has a warning about cross compatibility. Switch to com.badlogic.gdx.Files
-             toReturn = new Texture(new FileHandle(existingCacheFile));
+            toReturn = Gdx.files.local(getExactLocationOf(derivedFileName));
+            Texture existing = new Texture(toReturn);
 
-            if(toReturn.getWidth() != shader.getResolution()){
+            if(existing.getWidth() != shader.getResolution() || existing.getHeight() != shader.getResolution()){
                 //Re-render on resolution change
                 resultingFBO = renderToFBO(shader, shader.getResolution(), shader.getResolution(), false);
 
-                saveFBOtoPNG(resultingFBO, derivedFileName);
-
-                toReturn = resultingFBO.getColorBufferTexture();
+                toReturn = saveFBOtoPNG(resultingFBO, derivedFileName);
 
                 resultingFBO.dispose();
             }
-
         }
 
         return toReturn;
@@ -71,34 +84,27 @@ public class DiskShaderCacheUtil {
     /**
      * Sets up folders and structure. Does nothing if called twice and is already checked and called on {@link DiskShaderCacheUtil#cacheOrUpdateExisting(IWrappedShader)}
      */
-    public static void init(){
+    public void init(){
         // Ensure the cache directory exists
         File cacheDir = new File(SHADER_CACHE_PATH);
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
-        }
 
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter("./assets/system/generated/readme.md"))){
-            String generatedReadmeDisclaimer = """
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter("./assets/system/generated/readme.md"))){
+                String generatedReadmeDisclaimer = """
                     # Don't panic. \n
                     ### This directory and its sub-directories are strictly for system use and interfering with it manually is really bad idea. \n
                     Certain services and utilities allow you to interfere safely, so feel free to investigate how you may use these resources.
                     """;
-            bw.write(generatedReadmeDisclaimer);
-        }catch (Exception e) {
-            log.warn("Error occurred during DiskShaderCache.init():");
-            log.warn(e.getMessage());
+                bw.write(generatedReadmeDisclaimer);
+            }catch (Exception e) {
+                log.warn("Error occurred during DiskShaderCache.init():");
+                log.warn(e.getMessage());
+            }
         }
     }
 
-    /**
-     *
-     * @param shader - not disposed
-     * @param resX - width
-     * @param resY - height
-     * @param depth - has depth
-     */
-    public static FrameBuffer renderToFBO(IWrappedShader shader, int resX, int resY, boolean depth) {
+    public FrameBuffer renderToFBO(IWrappedShader shader, int resX, int resY, boolean depth) {
         FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, resX, resY, depth);
         frameBuffer.begin();
 
@@ -111,7 +117,7 @@ public class DiskShaderCacheUtil {
         shader.applyBindings();
         shader.getProgram().bind();
 
-        FULL_SCREEN_QUAD.render(shader.getProgram(), GL30.GL_TRIANGLES);
+        screenQuad.render(shader.getProgram(), GL30.GL_TRIANGLES);
 
         frameBuffer.end();
 
@@ -124,17 +130,22 @@ public class DiskShaderCacheUtil {
      * @param fbo any, not disposed
      * @param fileName without ".png" and preceding path
      */
-    private static void saveFBOtoPNG(FrameBuffer fbo, String fileName) {
+    private FileHandle saveFBOtoPNG(FrameBuffer fbo, String fileName) {
         Pixmap pixmap = getPixmapFromFrameBuffer(fbo);
-        FileHandle handle = Gdx.files.local("./assets/system/generated/shaders" + "/" + fileName + ".png");
+        FileHandle handle = Gdx.files.local(getExactLocationOf(fileName));
         PixmapIO.writePNG(handle, pixmap);
         pixmap.dispose();
+        return handle;
+    }
+
+    private String getExactLocationOf(String fileName){
+        return "./assets/system/generated/shaders" + "/" + fileName + ".png";
     }
 
     /**
      * @param frameBuffer not disposed
      */
-    public static Pixmap getPixmapFromFrameBuffer(FrameBuffer frameBuffer) {
+    public Pixmap getPixmapFromFrameBuffer(FrameBuffer frameBuffer) {
         // Bind the framebuffer
         frameBuffer.bind();
 
@@ -154,21 +165,9 @@ public class DiskShaderCacheUtil {
         return pixmap; // Return the correctly oriented pixmap
     }
 
-    private static final Mesh FULL_SCREEN_QUAD = new Mesh(
-            true, 4, 6,
-            VertexAttribute.Position(),
-            VertexAttribute.TexCoords(0)
-    );
-    static {
-        FULL_SCREEN_QUAD.setVertices(new float[] {
-                -1f, -1f, 0, 0, 0,
-                1f, -1f, 0, 1, 0,
-                1f,  1f, 0, 1, 1,
-                -1f,  1f, 0, 0, 1
-        });
-        FULL_SCREEN_QUAD.setIndices(new short[] {0, 1, 2, 2, 3, 0});
-        //Crude, but should work
-        Runtime.getRuntime().addShutdownHook(new Thread(FULL_SCREEN_QUAD::dispose));
-    }
 
+    @Override
+    public void dispose() {
+        screenQuad.dispose();
+    }
 }

@@ -1,6 +1,7 @@
 package gbw.melange.shading;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class WrappedShader implements IWrappedShader {
     private final String localName; //Debugging
     private final boolean isStatic;
     private List<ShaderResourceBinding> bindings;
+    private final List<Disposable> combinedDisposables = new ArrayList<>();
     private ShaderProgram program;
     private final int instanceId;
     private boolean failedCompilation = false;
@@ -71,11 +73,10 @@ public class WrappedShader implements IWrappedShader {
     }
 
     @Override
-    public void bindResource(ShaderResourceBinding binding){
+    public void bindResource(ShaderResourceBinding binding, List<Disposable> disposables){
         bindings.add(binding);
+        this.combinedDisposables.addAll(disposables);
     }
-
-
 
     /** {@inheritDoc} */
     @Override
@@ -89,6 +90,7 @@ public class WrappedShader implements IWrappedShader {
                 "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
             );
         }
+        combinedDisposables.add(program);
     }
     @Override
     public IWrappedShader copy(){
@@ -135,7 +137,7 @@ public class WrappedShader implements IWrappedShader {
     /** {@inheritDoc} */
     @Override
     public void dispose() {
-        program.dispose();
+        combinedDisposables.forEach(Disposable::dispose);
     }
 
     void replaceProgram(ShaderProgram program){

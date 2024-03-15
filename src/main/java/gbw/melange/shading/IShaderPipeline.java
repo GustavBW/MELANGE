@@ -1,5 +1,6 @@
 package gbw.melange.shading;
 
+import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.io.IOException;
  * @author GustavBW
  * @version $Id: $Id
  */
-public interface IShaderPipeline {
+public interface IShaderPipeline extends Disposable {
     /**
      * Compiles all registered programs.
      * Also stores all static shaders on disk as textures and replace the actual program with one sampling that if caching is enabled.

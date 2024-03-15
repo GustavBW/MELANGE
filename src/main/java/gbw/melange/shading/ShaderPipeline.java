@@ -1,9 +1,11 @@
 package gbw.melange.shading;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ public class ShaderPipeline implements IShaderPipeline {
     );
     private boolean cachingEnabled = false;
     private Queue<Runnable> sendToMain;
+    private final DiskShaderCacheUtil cacheUtil = new DiskShaderCacheUtil();
+
     public void setMainThreadQueue(Queue<Runnable> sendToMain){
         this.sendToMain = sendToMain;
     }
@@ -62,35 +66,35 @@ public class ShaderPipeline implements IShaderPipeline {
         sendToMain.add(() -> cacheOnMain(toBeCached));
     }
 
-    private static void cacheOnMain(List<IWrappedShader> toBeCached) {
+    private void cacheOnMain(List<IWrappedShader> toBeCached) {
         for (IWrappedShader shader : toBeCached){
 
-            Texture toBind;
+            FileHandle locationOfTexture;
             try {
-                toBind = DiskShaderCacheUtil.cacheOrUpdateExisting(shader);
-                //TODO: GL err check right here
-            } catch (Exception e){
+                locationOfTexture = cacheUtil.cacheOrUpdateExisting(shader);
+
+                //I just love silent errors. It makes it so easy to produce brittle software with bad error handling.
+                int glErrFromCaching = Gdx.gl.glGetError();
+                if(glErrFromCaching != GL30.GL_NO_ERROR){
+                    log.warn("OpenGL error after caching " + shader.shortName() + " to texture: " + glErrFromCaching + " skipping.");
+                    continue;
+                }
+            } catch (GdxRuntimeException e){
                 log.warn("Caching failed for " + shader.shortName() + ", skipping.");
                 log.warn(e.toString());
                 continue;
             }
 
-            int glErrFromCaching = Gdx.gl.glGetError();
-            if(glErrFromCaching != GL30.GL_NO_ERROR){
-                log.warn("OpenGL error after caching " + shader.shortName() + " to texture: " + glErrFromCaching);
-            }
-
             ((WrappedShader) shader).replaceProgram(WrappedShader.TEXTURE.getProgram()); //Is compiled at this point
 
-            List<ShaderResourceBinding> newBindings = new ArrayList<>();
-            newBindings.add(
-                    (index, program) -> {
-                        toBind.bind(index);
-                        program.setUniformi("u_texture", index);
-                    }
-            );
+            final Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
-            ((WrappedShader) shader).changeBindings(newBindings);
+            //Clear bindings
+            ((WrappedShader) shader).changeBindings(new ArrayList<>());
+            shader.bindResource((index, program) -> {
+                asLoadedFromDisk.bind(index);
+                program.setUniformi("u_texture",index);
+            }, List.of(asLoadedFromDisk));
         }
 
         log.info("Cache step complete without issue for: " + toBeCached.stream().map(IWrappedShader::shortName).toList());
@@ -108,5 +112,10 @@ public class ShaderPipeline implements IShaderPipeline {
     @Override
     public void useCaching(boolean yesNo) {
         this.cachingEnabled = yesNo;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

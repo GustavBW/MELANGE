@@ -22,6 +22,10 @@ public class ShaderPipeline implements IShaderPipeline {
             List.of(WrappedShader.TEXTURE, WrappedShader.DEFAULT, WrappedShader.NONE)
     );
     private boolean cachingEnabled = false;
+    private Queue<Runnable> sendToMain;
+    public void setMainThreadQueue(Queue<Runnable> sendToMain){
+        this.sendToMain = sendToMain;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -39,11 +43,34 @@ public class ShaderPipeline implements IShaderPipeline {
         }
     }
 
-    private static void cacheAllStatic(List<IWrappedShader> recentlyCompiled) throws ShaderCompilationIssue, IOException {
-        List<IWrappedShader> toBeCached = recentlyCompiled.stream().filter(IWrappedShader::isStatic).toList();
+    private void cacheAllStatic(List<IWrappedShader> recentlyCompiled) throws ShaderCompilationIssue, IOException {
+        if (sendToMain == null) {
+            log.warn("Caching is enabled but no way of ensuring execution on main thread (for GL context purposes) is provided. Aborting caching step");
+            return;
+        }
 
+        List<IWrappedShader> toBeCached = recentlyCompiled.stream()
+                //Only statics
+                .filter(IWrappedShader::isStatic)
+                //Only complex and above
+                .filter(shader -> shader.getClassification().abstractValRep > ShaderClassification.PURE_SAMPLER.abstractValRep)
+                .toList();
+
+        sendToMain.add(() -> cacheOnMain(toBeCached));
+    }
+
+    private static void cacheOnMain(List<IWrappedShader> toBeCached) {
         for (IWrappedShader shader : toBeCached){
-            Texture toBind = DiskShaderCacheUtil.cacheOrUpdateExisting(shader);
+
+            Texture toBind;
+            try {
+                toBind = DiskShaderCacheUtil.cacheOrUpdateExisting(shader);
+            } catch (Exception e){
+                log.warn("Caching failed for " + shader.shortName() + ", skipping.");
+                log.warn(e.toString());
+                continue;
+            }
+
             ((WrappedShader) shader).replaceProgram(WrappedShader.TEXTURE.getProgram()); //Is compiled at this point
 
             List<ShaderResourceBinding> newBindings = new ArrayList<>();

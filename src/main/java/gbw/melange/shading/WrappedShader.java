@@ -66,6 +66,11 @@ public class WrappedShader implements IWrappedShader {
     }
 
     @Override
+    public ShaderClassification getClassification() {
+        return fragmentShader.getClassification();
+    }
+
+    @Override
     public void bindResource(ShaderResourceBinding binding){
         bindings.add(binding);
     }
@@ -138,8 +143,5 @@ public class WrappedShader implements IWrappedShader {
     }
     void changeBindings(List<ShaderResourceBinding> bindings){
         this.bindings = bindings;
-    }
-    int getInstanceId(){
-        return instanceId;
     }
 }

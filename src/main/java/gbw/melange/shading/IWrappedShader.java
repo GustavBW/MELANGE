@@ -24,6 +24,12 @@ public interface IWrappedShader extends Disposable {
     void applyBindings();
 
     /**
+     * The complexity classification for a given shader.
+     * As of now, this but the classification of the FragmentShader.
+     */
+    ShaderClassification getClassification();
+
+    /**
      * Compiles the program and throws an error immediately if the compilation process isn't successful.
      * Before this method is invoked, {@link gbw.melange.shading.IWrappedShader#getProgram()} will return null.
      *

@@ -11,8 +11,10 @@ import java.util.Objects;
  * @version $Id: $Id
  */
 public class FragmentShader {
+
     private final String code;
     private final String localName;
+    private ShaderClassification classification;
 
     /**
      * <p>Constructor for FragmentShader.</p>
@@ -21,25 +23,31 @@ public class FragmentShader {
      * @param code a {@link java.lang.String} object
      */
     public FragmentShader(String localName, String code) {
+        this(localName, code, ShaderClassification.COMPLEX);
+    }
+    public FragmentShader(String localName, String code, ShaderClassification classification){
         this.code = code;
         this.localName = localName;
+        this.classification = classification;
     }
 
     /**
-     * <p>code.</p>
-     *
-     * @return a {@link java.lang.String} object
+     * <p>GLSL code.</p>
      */
     public String code() {
         return code;
     }
     /**
-     * <p>name.</p>
-     *
-     * @return a {@link java.lang.String} object
+     * <p>Debugging name.</p>
      */
     public String name(){
         return localName;
+    }
+    public ShaderClassification getClassification(){
+        return classification;
+    }
+    public void setClassification(ShaderClassification classification){
+        this.classification = classification;
     }
 
     /**
@@ -56,7 +64,7 @@ public class FragmentShader {
                 "\tgl_FragColor = vec4(" + r + ", " + g + ", " + b + ", " + a + ");\n" +
                 "}\n";
 
-        return new FragmentShader("CONSTANT_RGBA_FRAGMENT("+r+","+g+","+b+","+a+")",code);
+        return new FragmentShader("CONSTANT_RGBA_FRAGMENT("+r+","+g+","+b+","+a+")",code, ShaderClassification.SIMPLE);
     }
 
     /** Constant <code>DEFAULT</code> */
@@ -65,7 +73,6 @@ public class FragmentShader {
         #ifdef GL_ES
         precision mediump float;
         #endif
-        
         varying vec4 v_color;
         varying vec2 v_texCoords;
         
@@ -79,7 +86,7 @@ public class FragmentShader {
         
             gl_FragColor = gradientColor;
         }
-    """);
+    """, ShaderClassification.COMPLEX);
     /** Constant <code>DEBUG_UV</code> */
     public static final FragmentShader DEBUG_UV = new FragmentShader("MELANGE_DEBUG_UV_FRAGMENT",
         """
@@ -93,7 +100,7 @@ public class FragmentShader {
         void main() {
             gl_FragColor = vec4(v_texCoords.x, v_texCoords.y, 0, 1);
         }
-    """);
+    """, ShaderClassification.COMPLEX); //Set to complex to make sure it updates as this is debugging
 
     /** Constant <code>TRANSPARENT</code> */
     public static final FragmentShader TRANSPARENT = FragmentShader.constant(new Color(0,0,0,0));
@@ -111,7 +118,7 @@ public class FragmentShader {
         void main() {
             gl_FragColor = texture2D(u_texture, v_texCoords);
         }
-    """);
+    """, ShaderClassification.PURE_SAMPLER);
 
     /** {@inheritDoc} */
     @Override

@@ -21,10 +21,8 @@ public class DiskShaderCacheUtil {
      * Draw 2D shader to texture stored at {@link DiskShaderCacheUtil#SHADER_CACHE_PATH}
      * ToString is used to generate the filename, so make sure its unique.
      */
-    public static Texture cacheOrUpdateExisting(IWrappedShader shader) throws ShaderCompilationIssue, IOException {
-        if(!shader.isReady()){
-            throw new ShaderCompilationIssue("Provided shader " + shader + " is not ready to be cached on disk");
-        }
+    public static Texture cacheOrUpdateExisting(IWrappedShader shader) throws Exception {
+
         init(); //Just a check
 
         //TODO: Hashcode might depend on code content of shader, assure a swapped out shader returns the same name for consistency

@@ -34,24 +34,31 @@ public class ShaderPipeline implements IShaderPipeline {
         }
         log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::shortName).toList());
 
-        if(!cachingEnabled){
-            return;
+        if(cachingEnabled){
+            cacheAllStatic(recentlyCompiled);
         }
+    }
 
+    private static void cacheAllStatic(List<IWrappedShader> recentlyCompiled) throws ShaderCompilationIssue, IOException {
         List<IWrappedShader> toBeCached = recentlyCompiled.stream().filter(IWrappedShader::isStatic).toList();
 
         for (IWrappedShader shader : toBeCached){
             Texture toBind = DiskShaderCacheUtil.cacheOrUpdateExisting(shader);
-            ((WrappedShader) shader).replaceProgram(WrappedShader.TEXTURE.getProgram());
-            ((WrappedShader) shader).changeBindings(program -> {
-                toBind.bind(((WrappedShader) shader).getInstanceId() + 100);
-                program.setUniformi("u_texture", ((WrappedShader) shader).getInstanceId() + 100);
-            });
+            ((WrappedShader) shader).replaceProgram(WrappedShader.TEXTURE.getProgram()); //Is compiled at this point
+
+            List<ShaderResourceBinding> newBindings = new ArrayList<>();
+            newBindings.add(
+                    (index, program) -> {
+                        toBind.bind(index);
+                        program.setUniformi("u_texture", index);
+                    }
+            );
+
+            ((WrappedShader) shader).changeBindings(newBindings);
         }
 
         log.info("Cache step complete without issue for: " + toBeCached.stream().map(IWrappedShader::shortName).toList());
     }
-
 
 
     /** {@inheritDoc} */

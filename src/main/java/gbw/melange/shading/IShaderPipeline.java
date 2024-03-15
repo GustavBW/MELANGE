@@ -13,7 +13,7 @@ import java.io.IOException;
 public interface IShaderPipeline {
     /**
      * Compiles all registered programs.
-     * Also stores all static shaders on disk as textures and replace the actual program with one sampling that.
+     * Also stores all static shaders on disk as textures and replace the actual program with one sampling that if caching is enabled.
      * @throws gbw.melange.shading.errors.ShaderCompilationIssue if any.
      */
     void compileAndCache() throws ShaderCompilationIssue, IOException;

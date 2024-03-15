@@ -88,6 +88,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
+            shaderPipeline.useCaching(true);
             shaderPipeline.compileAndCache();
             log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
 

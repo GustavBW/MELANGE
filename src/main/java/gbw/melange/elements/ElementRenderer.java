@@ -155,7 +155,7 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //Border - Rendered first so that the same mesh can be reused, as the fragment of the background is drawn on top
         ShaderProgram borderShader = style.getBorderShader().getProgram();
-        style.getBorderShader().bindResources();
+        style.getBorderShader().applyBindings();
         borderShader.bind();
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
@@ -164,7 +164,7 @@ public class ElementRenderer implements IElementRenderer {
 
         //Background
         ShaderProgram backgroundShader = style.getBackgroundShader().getProgram();
-        style.getBackgroundShader().bindResources();
+        style.getBackgroundShader().applyBindings();
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
         mesh.render(backgroundShader, style.getBackgroundDrawStyle().value);

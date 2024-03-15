@@ -12,11 +12,16 @@ import gbw.melange.shading.errors.ShaderCompilationIssue;
  * @version $Id: $Id
  */
 public interface IWrappedShader extends Disposable {
+
     /**
-     * An IWrappedShader be supplied a {@code Consumer<ShaderProgram>} to bind various resources and textures to the shader. <br/>
-     * This method should be called before using the shader for rendering regardless. Its fallback is a NOOP () -> {}
+     * Bind a resource to the shader - texture, contants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}
      */
-    void bindResources();
+    void bindResource(ShaderResourceBinding binding);
+    /**
+     * An IWrappedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
+     * This method should be called before using the shader for rendering regardless.
+     */
+    void applyBindings();
 
     /**
      * Compiles the program and throws an error immediately if the compilation process isn't successful.

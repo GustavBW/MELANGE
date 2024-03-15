@@ -5,6 +5,8 @@ import gbw.melange.shading.errors.ShaderCompilationIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -22,13 +24,13 @@ public class WrappedShader implements IWrappedShader {
     public static WrappedShader NONE = new WrappedShader("MELANGE_NONE_SHADER", VertexShader.NONE, FragmentShader.TRANSPARENT);
     /** Constant <code>TEXTURE</code> */
     public static WrappedShader TEXTURE = new WrappedShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
-    private static final Consumer<ShaderProgram> NOOP_CONSUMER = unused -> {};
+
     private static int nextInstanceId = 0;
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
     private final boolean isStatic;
-    private Consumer<ShaderProgram> bindResources = NOOP_CONSUMER;
+    private List<ShaderResourceBinding> bindings;
     private ShaderProgram program;
     private final int instanceId;
     private boolean failedCompilation = false;
@@ -38,26 +40,38 @@ public class WrappedShader implements IWrappedShader {
     private int desiredResolution = 500;
 
     public WrappedShader(String localName, VertexShader vertexShader, FragmentShader fragmentShader) {
-        this(localName, vertexShader, fragmentShader, NOOP_CONSUMER);
+        this(localName, vertexShader, fragmentShader, true);
+    }
+    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
+        this(localName, vertex, fragment, isStatic, new ArrayList<>());
     }
 
-    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, Consumer<ShaderProgram> bindResources){
-        this(localName, vertex, fragment, bindResources, true);
-    }
-    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, Consumer<ShaderProgram> bindResources, boolean isStatic){
+    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings){
         this.vertexShader = vertex;
         this.fragmentShader = fragment;
         this.localName = localName;
-        this.bindResources = bindResources;
         this.isStatic = isStatic;
         this.instanceId = nextInstanceId++;
+        this.bindings = bindings;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void bindResources() {
-        bindResources.accept(program);
+    public void applyBindings() {
+        for (int i = 0; i < bindings.size(); i++){
+            ShaderResourceBinding binding = bindings.get(i);
+            //Swap to primes for complete solution. This only allows 100 unique bindings per shader, which should be enough, but you never know
+            binding.bind(instanceId * 100 + i, program);
+        }
     }
+
+    @Override
+    public void bindResource(ShaderResourceBinding binding){
+        bindings.add(binding);
+    }
+
+
+
     /** {@inheritDoc} */
     @Override
     public void compile() throws ShaderCompilationIssue {
@@ -73,11 +87,11 @@ public class WrappedShader implements IWrappedShader {
     }
     @Override
     public IWrappedShader copy(){
-        return new WrappedShader(localName, vertexShader, fragmentShader, bindResources, isStatic);
+        return new WrappedShader(localName, vertexShader, fragmentShader, isStatic, bindings);
     }
     @Override
     public IWrappedShader copyAs(String newLocalName){
-        return new WrappedShader(newLocalName, vertexShader, fragmentShader, bindResources, isStatic);
+        return new WrappedShader(newLocalName, vertexShader, fragmentShader, isStatic, bindings);
     }
 
     /** {@inheritDoc} */
@@ -122,8 +136,8 @@ public class WrappedShader implements IWrappedShader {
     void replaceProgram(ShaderProgram program){
         this.program = program;
     }
-    void changeBindings(Consumer<ShaderProgram> bindings){
-        this.bindResources = bindings;
+    void changeBindings(List<ShaderResourceBinding> bindings){
+        this.bindings = bindings;
     }
     int getInstanceId(){
         return instanceId;

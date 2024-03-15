@@ -113,7 +113,7 @@ public class AutomaticElementTransformResolver implements IAETR {
         double rootScaleX = computed.getWidth();
         double rootScaleY = computed.getHeight();
 
-        resolveSubTree(transformAccess, findSubTreeBFS(element), rootScaleX, rootScaleY, rootOffsetX, rootOffsetY);
+        resolveSubTree(transformAccess, subTree, rootScaleX, rootScaleY, rootOffsetX, rootOffsetY);
     }
 
     //To avoid GC during runtime

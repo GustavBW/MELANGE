@@ -55,11 +55,11 @@ public class ColorService implements Colors {
     /** {@inheritDoc} */
     @Override
     public IWrappedShader image(Texture src) {
-        Consumer<ShaderProgram> bindTexture = sp -> {
-            src.bind(0); //This might be mildly unsafe
-            sp.setUniformi("u_texture", 0);
-        };
-        IWrappedShader wrapped = new WrappedShader("TEXTURE_"+(nextId++), VertexShader.DEFAULT, FragmentShader.TEXTURE, bindTexture);
+        IWrappedShader wrapped = new WrappedShader("TEXTURE_"+(nextId++), VertexShader.DEFAULT, FragmentShader.TEXTURE);
+        wrapped.bindResource((index, program) -> {
+            src.bind(index);
+            program.setUniformi("u_texture", index);
+        });
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

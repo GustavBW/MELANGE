@@ -77,7 +77,8 @@ public class ParallelMonitoredExecutionEnvironment {
             element.invokeProvider();
             moveToStable.run();
         }catch(Exception handled){
-            log.warn("LoadingElement "+element+" content provider failed! " + handled.getMessage());
+            log.warn("LoadingElement "+element+" content provider failed!");
+            handled.printStackTrace();
             moveToError.run();
         }
     }

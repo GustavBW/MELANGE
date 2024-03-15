@@ -1,7 +1,7 @@
 package gbw.melange.elements.styling;
 
 import gbw.melange.common.elementary.styling.BevelConfig;
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.shading.IWrappedShader;

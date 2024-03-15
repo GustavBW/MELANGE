@@ -2,7 +2,7 @@ package gbw.melange.mesh;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Vector3;
-import gbw.melange.common.gl_wrappers.EVertexAttribute;
+import gbw.melange.common.gl.EVertexAttribute;
 
 import java.util.ArrayList;
 import java.util.List;

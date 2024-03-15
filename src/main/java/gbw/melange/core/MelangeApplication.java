@@ -42,6 +42,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         lwjglConfig.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
         lwjglConfig.setTransparentFramebuffer(true);
         lwjglConfig.setWindowedMode(1000,1000);
+        lwjglConfig.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL30,3,3);
         return run(mainClass, lwjglConfig, config);
     }
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig, MelangeConfig melangeConfig) throws Exception {
@@ -109,9 +110,9 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
         log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
 
-        Gdx.gl.glEnable(GL20.GL_BLEND); // Enable blending for transparency
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
-        if(config.cachingEnabled){
+        Gdx.gl.glEnable(GL30.GL_BLEND); // Enable blending for transparency
+        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
+        if(config.glDebugEnabled){
             Gdx.gl.glEnable(GL43C.GL_DEBUG_OUTPUT);
         }
 
@@ -137,18 +138,18 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
     @Override
     public void render(){
-        frame++;
         //Handle backlog
         while(runOnMainThread.peek() != null){
             runOnMainThread.poll().run();
         }
+        frame++;
 
         //Render spaces
         for(ISpace space : spaceNavigator.getOrderedList()){
             space.render(testCam.view);
         }
         int glErrCausedBySpaces = Gdx.gl.glGetError();
-        if(glErrCausedBySpaces != GL20.GL_NO_ERROR){
+        if(glErrCausedBySpaces != GL30.GL_NO_ERROR){
             log.warn("OpenGL error after rendering spaces: " + glErrCausedBySpaces);
         }
 

@@ -1,7 +1,7 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class ElementRenderer implements IElementRenderer {
         final double[] bounds = element.computed().getAxisAlignedBounds();
         final double appWidth = Gdx.graphics.getWidth(), appHeight = Gdx.graphics.getHeight();
         /*
-        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glEnable(GL30.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(
                 (int) (bounds[0] * appWidth),
                 (int) (bounds[1] * appHeight),
@@ -88,10 +88,10 @@ public class ElementRenderer implements IElementRenderer {
                 (int) (bounds[3] * appHeight)
         );
         Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glDisable(GL30.GL_SCISSOR_TEST);
         */
-        Gdx.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
+        Gdx.gl.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
         fbo.getColorBufferTexture().bind(69);
 
         ShaderProgram finalShader = WrappedShader.TEXTURE.getProgram();
@@ -117,7 +117,7 @@ public class ElementRenderer implements IElementRenderer {
 
             // Clear the FBO before rendering to it
             Gdx.gl.glClearColor(0, 0, 0, 0);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
 
             // Bind the shader
             ShaderProgram shaderProgram = shader.program();
@@ -152,15 +152,21 @@ public class ElementRenderer implements IElementRenderer {
         fbo.begin();
         //Clear to transparent
         Gdx.gl.glClearColor(0,0,0,0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         //Border - Rendered first so that the same mesh can be reused, as the fragment of the background is drawn on top
         ShaderProgram borderShader = style.getBorderShader().getProgram();
         style.getBorderShader().applyBindings();
         borderShader.bind();
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
+
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
         mesh.render(borderShader, style.getBorderDrawStyle().value);
-        //TODO: Reset borderWidth so that draw style can be properly misused for creative purposes
+        Gdx.gl.glLineWidth(0);
+
+        int glErrCausedByBorderShader = Gdx.gl.glGetError();
+        if(glErrCausedByBorderShader != GL30.GL_NO_ERROR){
+            log.warn("OpenGL error after main render pass for shader + " + style.getBorderShader() + " spaces: " + glErrCausedByBorderShader);
+        }
 
         //Background
         ShaderProgram backgroundShader = style.getBackgroundShader().getProgram();
@@ -168,6 +174,11 @@ public class ElementRenderer implements IElementRenderer {
         backgroundShader.bind();
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
         mesh.render(backgroundShader, style.getBackgroundDrawStyle().value);
+
+        int glErrCausedByBackgroundShader = Gdx.gl.glGetError();
+        if(glErrCausedByBackgroundShader != GL30.GL_NO_ERROR){
+            log.warn("OpenGL error after main render pass for shader + " + style.getBackgroundShader() + " spaces: " + glErrCausedByBackgroundShader);
+        }
 
         fbo.end();
     }

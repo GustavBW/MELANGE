@@ -1,6 +1,6 @@
 package gbw.melange.common.elementary.styling;
 
-import gbw.melange.common.gl_wrappers.GLDrawStyle;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
@@ -40,25 +40,25 @@ public interface IReferenceStyleDefinition {
     /**
      * <p>backgroundDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
     GLDrawStyle backgroundDrawStyle();
     /**
      * <p>backgroundDrawStyle.</p>
      *
-     * @param style a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @param style a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
     void backgroundDrawStyle(GLDrawStyle style);
     /**
      * <p>borderDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
     GLDrawStyle borderDrawStyle();
     /**
      * <p>borderDrawStyle.</p>
      *
-     * @param style a {@link gbw.melange.common.gl_wrappers.GLDrawStyle} object
+     * @param style a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
     void borderDrawStyle(GLDrawStyle style);
     /**

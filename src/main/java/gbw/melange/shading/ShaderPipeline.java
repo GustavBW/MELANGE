@@ -1,5 +1,8 @@
 package gbw.melange.shading;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
@@ -43,7 +46,7 @@ public class ShaderPipeline implements IShaderPipeline {
         }
     }
 
-    private void cacheAllStatic(List<IWrappedShader> recentlyCompiled) throws ShaderCompilationIssue, IOException {
+    private void cacheAllStatic(List<IWrappedShader> recentlyCompiled) {
         if (sendToMain == null) {
             log.warn("Caching is enabled but no way of ensuring execution on main thread (for GL context purposes) is provided. Aborting caching step");
             return;
@@ -70,6 +73,11 @@ public class ShaderPipeline implements IShaderPipeline {
                 log.warn("Caching failed for " + shader.shortName() + ", skipping.");
                 log.warn(e.toString());
                 continue;
+            }
+
+            int glErrFromCaching = Gdx.gl.glGetError();
+            if(glErrFromCaching != GL30.GL_NO_ERROR){
+                log.warn("OpenGL error after caching " + shader.shortName() + " to texture: " + glErrFromCaching);
             }
 
             ((WrappedShader) shader).replaceProgram(WrappedShader.TEXTURE.getProgram()); //Is compiled at this point

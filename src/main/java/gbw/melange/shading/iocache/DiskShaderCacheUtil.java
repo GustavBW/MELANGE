@@ -1,19 +1,27 @@
 package gbw.melange.shading.iocache;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
+import gbw.melange.core.MelangeApplication;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class DiskShaderCacheUtil {
+    private static final Logger log = LoggerFactory.getLogger(DiskShaderCacheUtil.class);
 
     public static final String SHADER_CACHE_PATH = "./assets/system/generated/shaders";
 
@@ -21,7 +29,7 @@ public class DiskShaderCacheUtil {
      * Draw 2D shader to texture stored at {@link DiskShaderCacheUtil#SHADER_CACHE_PATH}
      * ToString is used to generate the filename, so make sure its unique.
      */
-    public static Texture cacheOrUpdateExisting(IWrappedShader shader) throws Exception {
+    public static Texture cacheOrUpdateExisting(@NotNull IWrappedShader shader) throws Exception {
 
         init(); //Just a check
 
@@ -69,6 +77,18 @@ public class DiskShaderCacheUtil {
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
+
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter("./assets/system/generated/readme.md"))){
+            String generatedReadmeDisclaimer = """
+                    # Don't panic. \n
+                    ### This directory and its sub-directories are strictly for system use and interfering with it manually is really bad idea. \n
+                    Certain services and utilities allow you to interfere safely, so feel free to investigate how you may use these resources.
+                    """;
+            bw.write(generatedReadmeDisclaimer);
+        }catch (Exception e) {
+            log.warn("Error occurred during DiskShaderCache.init():");
+            log.warn(e.getMessage());
+        }
     }
 
     /**
@@ -83,19 +103,19 @@ public class DiskShaderCacheUtil {
         frameBuffer.begin();
 
         Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glEnable(GL30.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 
         shader.applyBindings();
         shader.getProgram().bind();
 
-        FULL_SCREEN_QUAD.render(shader.getProgram(), GL20.GL_TRIANGLES);
+        FULL_SCREEN_QUAD.render(shader.getProgram(), GL30.GL_TRIANGLES);
 
         frameBuffer.end();
 
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        Gdx.gl.glDisable(GL30.GL_BLEND);
 
         return frameBuffer;
     }
@@ -106,7 +126,8 @@ public class DiskShaderCacheUtil {
      */
     private static void saveFBOtoPNG(FrameBuffer fbo, String fileName) {
         Pixmap pixmap = getPixmapFromFrameBuffer(fbo);
-        PixmapIO.writePNG(Gdx.files.external(SHADER_CACHE_PATH + "/" + fileName), pixmap);
+        FileHandle handle = Gdx.files.local("./assets/system/generated/shaders" + "/" + fileName + ".png");
+        PixmapIO.writePNG(handle, pixmap);
         pixmap.dispose();
     }
 
@@ -124,8 +145,8 @@ public class DiskShaderCacheUtil {
         ByteBuffer pixels = pixmap.getPixels();
 
         // Read the pixels from the framebuffer
-        Gdx.gl.glPixelStorei(GL20.GL_PACK_ALIGNMENT, 1);
-        Gdx.gl.glReadPixels(0, 0, width, height, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, pixels);
+        Gdx.gl.glPixelStorei(GL30.GL_PACK_ALIGNMENT, 1);
+        Gdx.gl.glReadPixels(0, 0, width, height, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, pixels);
 
         // Unbind the framebuffer to return to default
         FrameBuffer.unbind();

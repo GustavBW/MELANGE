@@ -165,7 +165,7 @@ public class ElementRenderer implements IElementRenderer {
 
         int glErrCausedByBorderShader = Gdx.gl.glGetError();
         if(glErrCausedByBorderShader != GL30.GL_NO_ERROR){
-            log.warn("OpenGL error after main render pass for shader + " + style.getBorderShader() + " spaces: " + glErrCausedByBorderShader);
+            log.warn("OpenGL error after main render pass for border shader + " + style.getBorderShader().shortName() + " code: " + glErrCausedByBorderShader);
         }
 
         //Background
@@ -177,7 +177,7 @@ public class ElementRenderer implements IElementRenderer {
 
         int glErrCausedByBackgroundShader = Gdx.gl.glGetError();
         if(glErrCausedByBackgroundShader != GL30.GL_NO_ERROR){
-            log.warn("OpenGL error after main render pass for shader + " + style.getBackgroundShader() + " spaces: " + glErrCausedByBackgroundShader);
+            log.warn("OpenGL error after main render pass for background shader + " + style.getBackgroundShader().shortName() + " code: " + glErrCausedByBackgroundShader);
         }
 
         fbo.end();

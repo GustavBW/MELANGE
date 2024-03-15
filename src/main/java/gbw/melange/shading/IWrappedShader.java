@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 
+import java.util.List;
+
 /**
  * Represents a fully self-contained (besides from u_projTrans if applicable), uncompiled, shader program. <br/>
  * Initializing an instance of this through the Colors service will assure that it is managed and compiled automatically before rendering begins.
@@ -14,9 +16,10 @@ import gbw.melange.shading.errors.ShaderCompilationIssue;
 public interface IWrappedShader extends Disposable {
 
     /**
-     * Bind a resource to the shader - texture, contants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}
+     * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}
+     * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed.
      */
-    void bindResource(ShaderResourceBinding binding);
+    void bindResource(ShaderResourceBinding binding, List<Disposable> disposables);
     /**
      * An IWrappedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
      * This method should be called before using the shader for rendering regardless.

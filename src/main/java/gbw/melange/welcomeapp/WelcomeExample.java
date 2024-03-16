@@ -17,21 +17,10 @@ import java.util.Set;
  */
 public class WelcomeExample {
 
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects
-     * @throws java.lang.Exception if any.
-     */
     public static void main(String[] args) throws Exception {
         Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.values()));
-        logLevel.remove(IMelangeConfig.LogLevel.BOOT_SEQ_INFO);
-        logLevel.remove(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO);
-        logLevel.remove(IMelangeConfig.LogLevel.VIEW_INFO);
-        logLevel.remove(IMelangeConfig.LogLevel.HOOKS);
-        logLevel.remove(IMelangeConfig.LogLevel.ELEMENT_UPDATES);
 
         IMelangeConfig config = new MelangeConfig()
             .enableGLDebug(true)

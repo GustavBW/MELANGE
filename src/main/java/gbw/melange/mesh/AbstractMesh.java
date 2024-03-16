@@ -40,9 +40,6 @@ public class AbstractMesh {
 
     /**
      * <p>Constructor for AbstractMesh.</p>
-     *
-     * @param xyz an array of {@link float} objects
-     * @param faces an array of {@link int} objects
      */
     public AbstractMesh(float[] xyz, int[] faces){
 

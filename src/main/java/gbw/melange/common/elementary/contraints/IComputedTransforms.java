@@ -34,8 +34,6 @@ public interface IComputedTransforms {
     /**
      * Returns the axis aligned bounds of the element in the form of a double array.
      * The array is in the form of: [x, y, width, height] disregards rotation and is not necessarily the exact extends of the mesh.
-     *
-     * @return an array of {@link double} objects
      */
     double[] getAxisAlignedBounds();
 

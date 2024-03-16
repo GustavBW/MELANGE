@@ -34,6 +34,7 @@ public class HomeScreen implements IHomeScreen {
                 .build();
         final double borderWidth = 5;
 
+        /*
         space.createElement("HI")
             .styling()
                 .setBackgroundColor(colors.fromFragment(FragmentShader.DEBUG_UV))
@@ -43,7 +44,9 @@ public class HomeScreen implements IHomeScreen {
                 .setBorderWidth(borderWidth)
                 .apply()
             .build();
+         */
 
+        /*
         space.createElement(() -> "HI")
             .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
             .styling()
@@ -54,7 +57,7 @@ public class HomeScreen implements IHomeScreen {
                 .setBorderWidth(borderWidth)
                 .apply()
             .build();
-
+        */
 
         space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
                 .styling()

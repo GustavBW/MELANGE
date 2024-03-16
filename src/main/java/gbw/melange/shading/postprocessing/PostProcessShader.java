@@ -1,7 +1,6 @@
 package gbw.melange.shading.postprocessing;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import gbw.melange.shading.FragmentShader;
 
 /**
  * Type alias for ShaderProgram for now

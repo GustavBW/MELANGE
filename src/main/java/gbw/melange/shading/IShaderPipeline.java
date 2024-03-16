@@ -1,5 +1,6 @@
 package gbw.melange.shading;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 
@@ -31,5 +32,11 @@ public interface IShaderPipeline extends Disposable {
      * This should increase render performance drastically.
      */
     void useCaching(boolean yesNo);
+
+    /**
+     * Clears all content in the dedicated output folder.
+     * Shouldn't necessarily break anything, but is essentially a manual cache invalidation method.
+     */
+    void clearCache();
 
 }

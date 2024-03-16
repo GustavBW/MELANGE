@@ -1,5 +1,6 @@
 package gbw.melange.core.discovery;
 
+import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.errors.ClassConfigurationIssue;
@@ -8,10 +9,14 @@ import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.CoreRootMarker;
 import gbw.melange.core.elementary.ISpaceRegistry;
+import gbw.melange.mesh.IMeshPipelineConfig;
+import gbw.melange.shading.IShadingPipelineConfig;
 import gbw.melange.shading.ShadingRootMarker;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -34,6 +39,7 @@ public class DiscoveryAgent<T> {
     //Hooks
     private final List<OnRender> onRenderHookImpls = new ArrayList<>();
     private final List<OnInit<?>> onInitHookImpls = new ArrayList<>();
+    private final IMelangeConfig config;
     /**
      * <p>locateButDontInstantiate.</p>
      *
@@ -42,16 +48,15 @@ public class DiscoveryAgent<T> {
      * @return a {@link gbw.melange.core.discovery.DiscoveryAgent} object
      * @throws gbw.melange.common.errors.ClassConfigurationIssue if any.
      */
-    public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType) throws ClassConfigurationIssue{
-        DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType);
+    public static <T> DiscoveryAgent<T> locateButDontInstantiate(Class<T> mainClassType, IMelangeConfig config) throws ClassConfigurationIssue{
+        DiscoveryAgent<T> instance = new DiscoveryAgent<>(mainClassType, config);
         //System
-        log.info("______________________SYSTEM_______________________");
         instance.setUpReflections();
+        instance.registerConfigurations(config);
         instance.registerSpaceRegistry();
         instance.registerSpaceProviders();
         instance.registerCoreSpringServices();
         //User
-        log.info("______________________USER_______________________");
         instance.registerUserMainClass();
         instance.registerUserViews();
         //Hooks
@@ -60,12 +65,17 @@ public class DiscoveryAgent<T> {
 
         return instance;
     }
+
     private void registerSpaceRegistry() throws ClassConfigurationIssue {
         Set<Class<? extends ISpaceRegistry>> spaceRegistries = systemRootReflections.getSubTypesOf(ISpaceRegistry.class);
-        log.info("Found registries: " + spaceRegistries.stream().map(Class::toString).toList());
+
+        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO)){
+            log.info("Found registries: " + spaceRegistries.stream().map(Class::toString).toList());
+        }
+
         for (Class<? extends ISpaceRegistry> registry : spaceRegistries){
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(registry);
-            if(constructorErrMsg != null){
+            if (constructorErrMsg != null){
                 throw new ClassConfigurationIssue(registry + ": " + constructorErrMsg);
             }
 
@@ -113,10 +123,14 @@ public class DiscoveryAgent<T> {
         //Damn, var is actually useful for avoiding "oh no our type erasure forces you to use raw types - we're still going to make a yellow line anyways" - issues
         var providers = systemRootReflections.getSubTypesOf(ISpaceProvider.class);
         providers = TypeFilter.retainInstantiable(providers);
-        log.info("Found space providers: " + providers.stream().map(Class::toString).toList());
+
+        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO)) {
+            log.info("Found space providers: " + providers.stream().map(Class::toString).toList());
+        }
+
         for (var provider : providers) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(provider);
-            if(constructorErrMsg != null){
+            if (constructorErrMsg != null){
                 throw new ClassConfigurationIssue(provider + ": " + constructorErrMsg);
             }
 
@@ -125,7 +139,11 @@ public class DiscoveryAgent<T> {
     }
     private void gatherUserOnInitImpl() throws ClassConfigurationIssue  {
         Set<Class<? extends OnInit>> onInitImpls = userRootReflections.getSubTypesOf(OnInit.class);
-        log.info("Found OnInit hooks: " + onInitImpls.stream().map(Class::toString).toList());
+
+        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.HOOKS)) {
+            log.info("Found OnInit hooks: " + onInitImpls.stream().map(Class::toString).toList());
+        }
+
         for (Class<? extends OnInit> onInitImpl : onInitImpls){
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onInitImpl);
             if(constructorErrMsg != null){
@@ -137,7 +155,11 @@ public class DiscoveryAgent<T> {
     }
     private void gatherUserOnRenderImpl() throws ClassConfigurationIssue {
         Set<Class<? extends OnRender>> onRenderImpls = userRootReflections.getSubTypesOf(OnRender.class);
-        log.info("Found onRender hooks: " + onRenderImpls.stream().map(Class::toString).toList());
+
+        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.HOOKS)) {
+            log.info("Found onRender hooks: " + onRenderImpls.stream().map(Class::toString).toList());
+        }
+
         for (Class<? extends OnRender> onRenderImpl : onRenderImpls) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(onRenderImpl);
             if(constructorErrMsg != null){
@@ -162,11 +184,25 @@ public class DiscoveryAgent<T> {
         this.userRootReflections = new Reflections(supposedRootPackageOfUser.getName());
         this.systemRootReflections = new Reflections(CoreRootMarker.class.getPackage().getName());
     }
+
+    private void registerConfigurations(IMelangeConfig config) {
+        // Register the existing config instance as a bean
+        programContext.registerBean("melangeConfig", IMelangeConfig.class, () -> config);
+
+        // Register sub-configurations separately
+        // This allows shading and mesh to have 0 deps on Core or Common, but still receive their respective configs
+        //programContext.registerBean("shaderPipelineConfig", IShadingPipelineConfig.class, config::getShadingConfig);
+        //programContext.registerBean("meshPipelineConfig", IMeshPipelineConfig.class, config::getMeshConfig);
+    }
+
     private void registerUserViews() throws ClassConfigurationIssue {
         Set<Class<?>> views = userRootReflections.getTypesAnnotatedWith(View.class);
         views = TypeFilter.retainInstantiable(views);
 
-        log.info("Found views: " + views.stream().map(Class::toString).toList());
+        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.VIEW_INFO)) {
+            log.info("Found views: " + views.stream().map(Class::toString).toList());
+        }
+
         for (Class<?> viewType : views) {
             String constructorErrMsg = BeanConstructorValidator.isValidClassForRegistration(viewType);
             if(constructorErrMsg != null){
@@ -188,9 +224,9 @@ public class DiscoveryAgent<T> {
 
 
 
-    private DiscoveryAgent(Class<T> userMainClass){
+    private DiscoveryAgent(Class<T> userMainClass, IMelangeConfig config){
         this.userMainClass = userMainClass;
-
+        this.config = config;
     }
 
 

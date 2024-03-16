@@ -14,36 +14,24 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 public enum MeshTable {
     SQUARE(
         new float[] { // x, y, z
-            -1f,  -1f,  0, //v0
-            1f,   -1f,  0, //v1
-            1f,   1f,   0, //v2
-            -1f,  1f,   0, //v3
+            -1f, -1f,  0, //v0
+             1f, -1f,  0, //v1
+             1f,  1f,  0, //v2
+            -1f,  1f,  0, //v3
         }, new float[]{ //u, v
             0, 1, 1, 1, 1, 0, 0, 0
         }, new short[] {0, 1, 2, 2, 3, 0} //Tris
     ),
     RHOMBUS(
-        new float[] { // x, y, z
-            1f, .5f, 0,
-            0, -1f, 0,
-            1f, 0f, 0,
-            0, 1, 0
-        }, new float[]{ //u, v
-            0, 1, 1, 1, 1, 0, 0, 0
-        }, new short[] {0, 3, 1, 1, 3, 2} //Tris
+            createCircleVertices(4),
+            createCircleUVs(4),
+            createCircleIndices(4)
     ),
     EQUILATERAL_TRIANGLE(
-        new float[]{
-            -0.5f, 0f, 0f, // Bottom left
-            0.5f, 0f, 0f, // Bottom right
-            0f, 1f, 0f,   // Top
-        }, new float[]{
-            0f, 0f, // Bottom left
-            1f, 0f, // Bottom right
-            0.5f, 1f, // Top
-        }, new short[]{0, 1, 2}
+            createCircleVertices(3),
+            createCircleUVs(3),
+            createCircleIndices(3)
     ),
-
     CIRCLE_8(
         createCircleVertices(8), // Radius 1, 32 vertices
         createCircleUVs(8),

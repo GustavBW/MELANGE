@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.navigation.ISpaceNavigator;
 import gbw.melange.shading.Colors;
-import gbw.melange.shading.FragmentShader;
+import gbw.melange.shading.impl.FragmentShader;
 import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;

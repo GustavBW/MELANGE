@@ -1,7 +1,7 @@
 package gbw.melange.core.discovery;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Constructor;
@@ -15,7 +15,7 @@ import java.lang.reflect.Modifier;
  */
 public class BeanConstructorValidator {
 
-    private static final Logger log = LoggerFactory.getLogger(BeanConstructorValidator.class);
+    private static final Logger log = LogManager.getLogger();
 
     /**
      * Checks if a given class can be instantiated or not in a bean-way

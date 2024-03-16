@@ -3,8 +3,8 @@ package gbw.melange.welcomeapp;
 import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.MelangeConfig;
 import gbw.melange.core.MelangeApplication;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class WelcomeExample {
 
-    private static final Logger log = LoggerFactory.getLogger(WelcomeExample.class);
+    private static final Logger log = LogManager.getLogger();
 
     /**
      * <p>main.</p>

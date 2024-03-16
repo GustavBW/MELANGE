@@ -11,8 +11,8 @@ import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Service
 public class ShaderPipeline implements IShaderPipeline {
 
-    private static final Logger log = LoggerFactory.getLogger(ShaderPipeline.class);
+    private static final Logger log = LogManager.getLogger(ShaderPipeline.class);
     private final Queue<IWrappedShader> unCompiled = new ConcurrentLinkedQueue<>(
             //TODO: Find a better way to register the premade ones. Iterating through enum values?
             List.of(WrappedShader.TEXTURE, WrappedShader.DEFAULT, WrappedShader.NONE)

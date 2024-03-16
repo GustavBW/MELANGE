@@ -21,8 +21,8 @@ import gbw.melange.core.discovery.DiscoveryAgent;
 import gbw.melange.core.interactions.IInputListener;
 import gbw.melange.core.elementary.SpaceNavigator;
 import org.lwjgl.opengl.GL43C;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
-    private static final Logger log = LoggerFactory.getLogger(MelangeApplication.class);
+    private static final Logger log = LogManager.getLogger();
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass) throws Exception {
         return run(mainClass, new MelangeConfig());
     }

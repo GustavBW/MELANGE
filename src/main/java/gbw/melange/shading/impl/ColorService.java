@@ -8,8 +8,8 @@ import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.shading.procedural.gradients.IGradientBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class ColorService implements Colors {
 
-    private static final Logger log = LoggerFactory.getLogger(ColorService.class);
+    private static final Logger log = LogManager.getLogger();
 
     private static int nextId = 0;
     private final IShaderPipeline pipeline;

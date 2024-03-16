@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.GLShaderAttr;
 import gbw.melange.shading.IWrappedShader;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,7 +19,7 @@ import java.io.FileWriter;
 import java.nio.ByteBuffer;
 
 public class DiskShaderCacheUtil implements Disposable {
-    private static final Logger log = LoggerFactory.getLogger(DiskShaderCacheUtil.class);
+    private static final Logger log = LogManager.getLogger();
 
     public static final String SHADER_CACHE_PATH = "./assets/system/generated/shaders";
     private final Matrix4 unitMatrix = new Matrix4();

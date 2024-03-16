@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>WelcomeExample class.</p>
- *
  * @author GustavBW
  * @version $Id: $Id
  */

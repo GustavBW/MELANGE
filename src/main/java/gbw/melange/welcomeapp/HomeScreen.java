@@ -28,10 +28,15 @@ public class HomeScreen implements IHomeScreen {
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {
         IScreenSpace space = provider.getScreenSpace(this);
-        IWrappedShader fragmentShader = new GradientFragmentShaderBuilder("HomeScreenGradient", pipeline)
+        IWrappedShader fragmentShaderA = new GradientFragmentShaderBuilder("HS_Gradient_A", pipeline)
                 .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
                 .setRotation(45)
                 .build();
+        IWrappedShader fragmentShaderB = new GradientFragmentShaderBuilder("HS_Gradient_B", pipeline)
+                .addStops(Color.CORAL, 0, Color.CHARTREUSE, .5, Color.FIREBRICK, 1)
+                .setRotation(135)
+                .build();
+
         final double borderWidth = 5;
 
         /*
@@ -61,7 +66,7 @@ public class HomeScreen implements IHomeScreen {
 
         space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
                 .styling()
-                    .setBackgroundColor(colors.fromFragment(FragmentShader.DEBUG_UV))
+                    .setBackgroundColor(fragmentShaderA)
                     .setBorderColor(colors.constant(Color.WHITE))
                     .apply()
                 .constraints()
@@ -71,7 +76,7 @@ public class HomeScreen implements IHomeScreen {
 
         space.createElement().setMesh(MeshTable.EQUILATERAL_TRIANGLE.getMesh())
                 .styling()
-                    .setBackgroundColor(fragmentShader)
+                    .setBackgroundColor(fragmentShaderB)
                     .setBorderColor(colors.constant(Color.WHITE))
                     .apply()
                 .constraints()

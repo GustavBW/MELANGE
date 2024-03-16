@@ -12,8 +12,8 @@ import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 /**
  * <p>HomeScreen class.</p>
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @View(layer = View.HOME_SCREEN_LAYER, focusPolicy = View.FocusPolicy.RETAIN_LATEST)
 public class HomeScreen implements IHomeScreen {
-    private static final Logger log = LoggerFactory.getLogger(HomeScreen.class);
+    private static final Logger log = LogManager.getLogger();
 
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {

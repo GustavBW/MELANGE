@@ -13,8 +13,8 @@ import gbw.melange.mesh.IMeshPipelineConfig;
 import gbw.melange.shading.IShadingPipelineConfig;
 import gbw.melange.shading.ShadingRootMarker;
 import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.context.ApplicationContext;
@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class DiscoveryAgent<T> {
 
-    private static final Logger log = LoggerFactory.getLogger(DiscoveryAgent.class);
+    private static final Logger log = LogManager.getLogger();
     private final Class<T> userMainClass;
     private Reflections userRootReflections, systemRootReflections;
     private final AnnotationConfigApplicationContext programContext = new AnnotationConfigApplicationContext();

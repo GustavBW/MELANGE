@@ -6,8 +6,8 @@ import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.welcomeapp.HomeScreen;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @View
 public class CanItFindThis{
-    private static final Logger log = LoggerFactory.getLogger(CanItFindThis.class);
+    private static final Logger log = LogManager.getLogger(CanItFindThis.class);
     /**
      * <p>Constructor for CanItFindThis.</p>
      *

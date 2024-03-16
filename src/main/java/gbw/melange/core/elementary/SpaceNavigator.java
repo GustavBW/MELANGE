@@ -5,8 +5,8 @@ import gbw.melange.core.MelangeApplication;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.elementary.space.SpaceLayerEntry;
 import gbw.melange.common.navigation.ISpaceNavigator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,7 +19,7 @@ import java.util.*;
  */
 @Service
 public class SpaceNavigator implements ISpaceNavigator {
-    private static final Logger log = LoggerFactory.getLogger(SpaceNavigator.class);
+    private static final Logger log = LogManager.getLogger();
     private final List<ISpace> ordered = new ArrayList<>();
     /**
      * Lookup table for all configurations and policies assigned to this space.

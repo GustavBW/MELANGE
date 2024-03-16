@@ -6,8 +6,9 @@ import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.ShaderClassification;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * @version $Id: $Id
  */
 public class WrappedShader implements IWrappedShader {
-    private static final Logger log = LoggerFactory.getLogger(WrappedShader.class);
+    private static final Logger log = LogManager.getLogger();
 
     /** Constant <code>DEFAULT</code> */
     public static WrappedShader DEFAULT = new WrappedShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT);

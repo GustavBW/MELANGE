@@ -12,8 +12,8 @@ import gbw.melange.core.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.elements.ElementBuilder;
 import gbw.melange.elements.ElementRenderer;
 import gbw.melange.elements.SpaceBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  */
 public class ScreenSpace implements IScreenSpace {
 
-    private static final Logger log = LoggerFactory.getLogger(ScreenSpace.class);
+    private static final Logger log = LogManager.getLogger();
     private final Matrix4 matrix = new Matrix4();
     private final IElementRenderer renderer = new ElementRenderer();
     private final IAETR constraintResolver = new AutomaticElementTransformResolver();

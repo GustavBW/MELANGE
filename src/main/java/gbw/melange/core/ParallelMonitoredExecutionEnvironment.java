@@ -2,8 +2,8 @@ package gbw.melange.core;
 
 import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.hooks.OnInit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  */
 public class ParallelMonitoredExecutionEnvironment {
 
-    private static final Logger log = LoggerFactory.getLogger(ParallelMonitoredExecutionEnvironment.class);
+    private static final Logger log = LogManager.getLogger();
     private static ParallelMonitoredExecutionEnvironment instance;
     private static final ExecutorService executor = Executors.newFixedThreadPool(16);
     private final MelangeApplication<?> appInstance;

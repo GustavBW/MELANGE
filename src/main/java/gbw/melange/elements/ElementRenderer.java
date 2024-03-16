@@ -13,8 +13,8 @@ import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.impl.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
  * @version $Id: $Id
  */
 public class ElementRenderer implements IElementRenderer {
-    private static final Logger log = LoggerFactory.getLogger(ElementRenderer.class);
+    private static final Logger log = LogManager.getLogger();
 
 
     /**

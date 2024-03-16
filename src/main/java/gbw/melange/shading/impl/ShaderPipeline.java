@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import gbw.melange.shading.IShaderPipeline;
-import gbw.melange.shading.IShadingPipelineConfig;
-import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.ShaderClassification;
+import gbw.melange.shading.*;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import org.apache.logging.log4j.LogManager;
@@ -100,15 +97,21 @@ public class ShaderPipeline implements IShaderPipeline {
                 continue;
             }
 
-            ((WrappedShader) shader).replaceProgram(new ShaderProgram(VertexShader.DEFAULT.code(), FragmentShader.TEXTURE.code())); //Is compiled at this point
+            ShaderProgram pureTextureSampler = new ShaderProgram(VertexShader.DEFAULT.code(), FragmentShader.TEXTURE.code());
 
-            final Texture asLoadedFromDisk = new Texture(locationOfTexture);
+            ShaderProgram old = ((WrappedShader) shader).replaceProgram(pureTextureSampler);
+            
+            log.debug("| " + shader.shortName() + " | had program " + old + " replaced with " + pureTextureSampler);
+            old.dispose();
+
+            Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
             //Clear bindings
             ((WrappedShader) shader).changeBindings(new ArrayList<>());
             shader.bindResource((index, program) -> {
+                log.debug("| " + shader.shortName() + " | had texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
                 asLoadedFromDisk.bind(index);
-                program.setUniformi("u_texture",index);
+                program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
             }, List.of(asLoadedFromDisk));
         }
         final int actualHits = cacheUtil.getHits() - hitsPre;

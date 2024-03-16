@@ -29,7 +29,7 @@ public class WrappedShader implements IWrappedShader {
     /** Constant <code>TEXTURE</code> */
     public static WrappedShader TEXTURE = new WrappedShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
-    private static int nextInstanceId = 0;
+    private static int nextInstanceId = 1;
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
@@ -146,8 +146,13 @@ public class WrappedShader implements IWrappedShader {
         combinedDisposables.forEach(Disposable::dispose);
     }
 
-    void replaceProgram(ShaderProgram program){
+    /**
+     * @return the old program
+     */
+    ShaderProgram replaceProgram(ShaderProgram program){
+        ShaderProgram old = this.program;
         this.program = program;
+        return old;
     }
     void changeBindings(List<ShaderResourceBinding> bindings){
         this.bindings = bindings;

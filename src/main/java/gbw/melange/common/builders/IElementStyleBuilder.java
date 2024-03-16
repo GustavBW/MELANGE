@@ -31,22 +31,12 @@ public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder
     /**
      * Set the background color, image, gradient or others of this element. <br/>
      * Access various options by grabbing the {@link gbw.melange.shading.Colors} service through an autowired field in your view. <br/>
-     *      <pre>
-     *          {@code
-     *
-     * @param shader a {@link gbw.melange.shading.IWrappedShader} object
-     * @return a {@link gbw.melange.common.builders.IElementStyleBuilder} object
      */
     IElementStyleBuilder<T> setBackgroundColor(IWrappedShader shader);
 
     /**
      * Set the border color, image, gradient or others of this element. <br/>
      * Access various options by grabbing the {@link gbw.melange.shading.Colors} service through an autowired field in your view. <br/>
-     *      <pre>
-     *          {@code
-     *
-     * @param shader a {@link gbw.melange.shading.IWrappedShader} object
-     * @return a {@link gbw.melange.common.builders.IElementStyleBuilder} object
      */
     IElementStyleBuilder<T> setBorderColor(IWrappedShader shader);
     /**

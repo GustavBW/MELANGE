@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(MelangeApplication.class);
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass) throws Exception {
         return run(mainClass, new MelangeConfig());
     }

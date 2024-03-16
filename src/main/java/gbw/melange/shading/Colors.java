@@ -3,6 +3,7 @@ package gbw.melange.shading;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import gbw.melange.shading.impl.FragmentShader;
 import gbw.melange.shading.procedural.gradients.IGradientBuilder;
 
 /**
@@ -53,7 +54,7 @@ public interface Colors {
     /**
      * <p>fromFragment.</p>
      *
-     * @param fragmentShader a {@link gbw.melange.shading.FragmentShader} object
+     * @param fragmentShader a {@link FragmentShader} object
      * @return a {@link gbw.melange.shading.IWrappedShader} object
      */
     IWrappedShader fromFragment(FragmentShader fragmentShader);

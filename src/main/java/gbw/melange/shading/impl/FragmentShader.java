@@ -1,6 +1,7 @@
-package gbw.melange.shading;
+package gbw.melange.shading.impl;
 
 import com.badlogic.gdx.graphics.Color;
+import gbw.melange.shading.ShaderClassification;
 
 import java.util.Objects;
 

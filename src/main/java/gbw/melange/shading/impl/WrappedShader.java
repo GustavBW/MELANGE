@@ -1,14 +1,16 @@
-package gbw.melange.shading;
+package gbw.melange.shading.impl;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.ShaderClassification;
+import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * A self contained ShaderProgram, allowing for explicit compilation and error detection.

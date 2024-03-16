@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import gbw.melange.shading.GLShaderAttr;
 import gbw.melange.shading.IWrappedShader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -15,14 +17,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DiskShaderCacheUtil implements Disposable {
     private static final Logger log = LoggerFactory.getLogger(DiskShaderCacheUtil.class);
 
     public static final String SHADER_CACHE_PATH = "./assets/system/generated/shaders";
-    private static final List<Disposable> disposeOnExit = new ArrayList<>();
+    private final Matrix4 unitMatrix = new Matrix4();
+    private int hits = 0;
     private final Mesh screenQuad;
 
     public DiskShaderCacheUtil(){
@@ -32,13 +33,12 @@ public class DiskShaderCacheUtil implements Disposable {
                 VertexAttribute.TexCoords(0)
         );
         screenQuad.setVertices(new float[] {
-                -1f, -1f, 0, 0, 0,
-                1f, -1f, 0, 1, 0,
-                1f,  1f, 0, 1, 1,
-                -1f,  1f, 0, 0, 1
+                -1f, -1f, 0, 0, 1,
+                 1f, -1f, 0, 1, 1,
+                 1f,  1f, 0, 1, 0,
+                -1f,  1f, 0, 0, 0
         });
         screenQuad.setIndices(new short[] {0, 1, 2, 2, 3, 0});
-        disposeOnExit.add(screenQuad);
     }
 
     /**
@@ -65,6 +65,7 @@ public class DiskShaderCacheUtil implements Disposable {
 
             resultingFBO.dispose();
         } else {
+            hits++;
             toReturn = Gdx.files.local(getExactLocationOf(derivedFileName));
             Texture existing = new Texture(toReturn);
 
@@ -79,6 +80,9 @@ public class DiskShaderCacheUtil implements Disposable {
         }
 
         return toReturn;
+    }
+    public int getHits(){
+        return hits;
     }
 
     /**
@@ -104,6 +108,11 @@ public class DiskShaderCacheUtil implements Disposable {
         }
     }
 
+    public void clearCache(){
+        FileHandle shadersDir = Gdx.files.local(SHADER_CACHE_PATH);
+        shadersDir.deleteDirectory();
+    }
+
     public FrameBuffer renderToFBO(IWrappedShader shader, int resX, int resY, boolean depth) {
         FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, resX, resY, depth);
         frameBuffer.begin();
@@ -116,6 +125,7 @@ public class DiskShaderCacheUtil implements Disposable {
 
         shader.applyBindings();
         shader.getProgram().bind();
+        shader.getProgram().setUniformMatrix(GLShaderAttr.MATRIX.glValue(), unitMatrix);
 
         screenQuad.render(shader.getProgram(), GL30.GL_TRIANGLES);
 

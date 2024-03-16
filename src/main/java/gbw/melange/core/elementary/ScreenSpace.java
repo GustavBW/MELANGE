@@ -2,6 +2,7 @@ package gbw.melange.core.elementary;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.ISpaceBuilder;
 import gbw.melange.common.elementary.*;
@@ -37,6 +38,11 @@ public class ScreenSpace implements IScreenSpace {
     private final List<IElement<?>> errorQueue = new CopyOnWriteArrayList<>();
     private final List<IConstrainedElement> additionOrder = new ArrayList<>();
     private boolean visible = false;
+    private final IMelangeConfig config;
+
+    ScreenSpace(IMelangeConfig config){
+        this.config = config;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -127,12 +133,18 @@ public class ScreenSpace implements IScreenSpace {
         loadingQueue.remove(element);
         renderQueue.add(element);
         resolveConstraints(element);
-        log.info(element + " moved to render queue");
+
+        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.ELEMENT_UPDATES)){
+            log.info(element + " moved to render queue");
+        }
     }
     private void moveFromLoadingToError(IElement<?> element){
         loadingQueue.remove(element);
         errorQueue.add(element);
         resolveConstraints(element);
-        log.info(element + " moved to error queue");
+
+        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.ELEMENT_UPDATES)) {
+            log.info(element + " moved to error queue");
+        }
     }
 }

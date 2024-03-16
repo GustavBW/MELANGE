@@ -1,10 +1,11 @@
-package gbw.melange.shading;
+package gbw.melange.shading.impl;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import gbw.melange.shading.errors.ShaderCompilationIssue;
+import gbw.melange.shading.Colors;
+import gbw.melange.shading.IShaderPipeline;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;
 import gbw.melange.shading.procedural.gradients.IGradientBuilder;
 import org.slf4j.Logger;
@@ -13,11 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Consumer;
 
 /**
  * The implementation of the Api detailed by {@link Colors}

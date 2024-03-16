@@ -1,15 +1,19 @@
-package gbw.melange.shading;
+package gbw.melange.shading.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import gbw.melange.shading.IShaderPipeline;
+import gbw.melange.shading.IShadingPipelineConfig;
+import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -29,6 +33,12 @@ public class ShaderPipeline implements IShaderPipeline {
     private boolean cachingEnabled = false;
     private Queue<Runnable> sendToMain;
     private final DiskShaderCacheUtil cacheUtil = new DiskShaderCacheUtil();
+    private final IShadingPipelineConfig config;
+
+    @Autowired
+    public ShaderPipeline(IShadingPipelineConfig config){
+        this.config = config;
+    }
 
     public void setMainThreadQueue(Queue<Runnable> sendToMain){
         this.sendToMain = sendToMain;
@@ -43,7 +53,10 @@ public class ShaderPipeline implements IShaderPipeline {
             wrapped.compile(); //throws
             recentlyCompiled.add(wrapped);
         }
-        log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::shortName).toList());
+
+        if (config.getLogLevel().contains(IShadingPipelineConfig.PipelineLogLevel.COMPILE_STEP_INFO)){
+            log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::shortName).toList());
+        }
 
         if(cachingEnabled){
             cacheAllStatic(recentlyCompiled);
@@ -63,12 +76,13 @@ public class ShaderPipeline implements IShaderPipeline {
                 .filter(shader -> shader.getClassification().abstractValRep > ShaderClassification.PURE_SAMPLER.abstractValRep)
                 .toList();
 
-        sendToMain.add(() -> cacheOnMain(toBeCached));
+        performCachingStep(toBeCached);
     }
 
-    private void cacheOnMain(List<IWrappedShader> toBeCached) {
-        for (IWrappedShader shader : toBeCached){
+    private void performCachingStep(List<IWrappedShader> toBeCached) {
+        int hitsPre = cacheUtil.getHits();
 
+        for (IWrappedShader shader : toBeCached){
             FileHandle locationOfTexture;
             try {
                 locationOfTexture = cacheUtil.cacheOrUpdateExisting(shader);
@@ -76,7 +90,7 @@ public class ShaderPipeline implements IShaderPipeline {
                 //I just love silent errors. It makes it so easy to produce brittle software with bad error handling.
                 int glErrFromCaching = Gdx.gl.glGetError();
                 if(glErrFromCaching != GL30.GL_NO_ERROR){
-                    log.warn("OpenGL error after caching " + shader.shortName() + " to texture: " + glErrFromCaching + " skipping.");
+                    log.warn("OpenGL error after caching " + shader.shortName() + " to texture: " + glErrFromCaching + ", skipping.");
                     continue;
                 }
             } catch (GdxRuntimeException e){
@@ -96,8 +110,12 @@ public class ShaderPipeline implements IShaderPipeline {
                 program.setUniformi("u_texture",index);
             }, List.of(asLoadedFromDisk));
         }
+        final int actualHits = cacheUtil.getHits() - hitsPre;
 
-        log.info("Cache step complete without issue for: " + toBeCached.stream().map(IWrappedShader::shortName).toList());
+        if (config.getLogLevel().contains(IShadingPipelineConfig.PipelineLogLevel.CACHING_STEP_INFO)) {
+            log.info("Cache step complete without issue for: " + toBeCached.stream().map(IWrappedShader::shortName).toList());
+            log.info("Cache hits: " + actualHits + "/" + toBeCached.size());
+        }
     }
 
 
@@ -115,7 +133,15 @@ public class ShaderPipeline implements IShaderPipeline {
     }
 
     @Override
-    public void dispose() {
+    public void clearCache() {
+        if (config.getLogLevel().contains(IShadingPipelineConfig.PipelineLogLevel.LIFE_CYCLE_INFO)) {
+            log.info("Clearing existing generated content");
+        }
+        cacheUtil.clearCache();
+    }
 
+    @Override
+    public void dispose() {
+        cacheUtil.dispose();
     }
 }

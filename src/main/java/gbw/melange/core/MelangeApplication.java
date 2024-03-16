@@ -8,10 +8,12 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.viewport.*;
+import gbw.melange.common.IMelangeConfig;
+import gbw.melange.common.MelangeConfig;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
-import gbw.melange.shading.ShaderPipeline;
+import gbw.melange.shading.impl.ShaderPipeline;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
@@ -32,7 +34,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass) throws Exception {
         return run(mainClass, new MelangeConfig());
     }
-    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, MelangeConfig config) throws Exception {
+    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, IMelangeConfig config) throws Exception {
         final Lwjgl3ApplicationConfiguration lwjglConfig = new Lwjgl3ApplicationConfiguration();
         lwjglConfig.setForegroundFPS(60);
         lwjglConfig.setTitle("MelangeApp");
@@ -45,7 +47,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         lwjglConfig.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL30,3,3);
         return run(mainClass, lwjglConfig, config);
     }
-    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig, MelangeConfig melangeConfig) throws Exception {
+    public static <T> ApplicationContext run(@NonNull Class<T> mainClass, Lwjgl3ApplicationConfiguration lwjglConfig, IMelangeConfig melangeConfig) throws Exception {
         bootTimeA = System.currentTimeMillis();
         MelangeApplication<T> app = new MelangeApplication<>(mainClass, melangeConfig);
 
@@ -57,13 +59,16 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private static long lwjglInitTimeA;
     private DiscoveryAgent<T> discoveryAgent;
     private static long bootTimeA;
-    private final MelangeConfig config;
-    public MelangeApplication(Class<T> userMainClass, MelangeConfig config) throws ClassConfigurationIssue {
+    private final IMelangeConfig config;
+    public MelangeApplication(Class<T> userMainClass, IMelangeConfig config) throws ClassConfigurationIssue {
         log.info("Welcome to the spice, MELANGE.");
         this.config = config;
         long discoveryTimeA = System.currentTimeMillis();
-        discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass);
-        log.info("Discovery pass time: " + (System.currentTimeMillis() - discoveryTimeA) + "ms");
+        discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass, config);
+
+        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+            log.info("Discovery pass time: " + (System.currentTimeMillis() - discoveryTimeA) + "ms");
+        }
     }
 
     private ApplicationContext getContext(){
@@ -77,9 +82,13 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     @Override
     public void create(){
         final long lwjglInitTime = (System.currentTimeMillis() - lwjglInitTimeA);
-        log.info("LWJGL init time: " + lwjglInitTime + "ms");
+
+        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+            log.info("LWJGL init time: " + lwjglInitTime + "ms");
+        }
 
         ParallelMonitoredExecutionEnvironment.setInstance(this);
+
         ISpaceRegistry spaceRegistry;
         InputProcessor inputListener;
         try {
@@ -91,14 +100,20 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
             shaderPipeline = context.getBean(ShaderPipeline.class);
             shaderPipeline.setMainThreadQueue(runOnMainThread);
+            if (config.getClearGeneratedOnStart()){
+                shaderPipeline.clearCache();
+            }
 
             inputListener = context.getBean(IInputListener.class);
             Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
-            shaderPipeline.useCaching(config.cachingEnabled);
+            shaderPipeline.useCaching(config.getUseCaching());
             shaderPipeline.compileAndCache();
-            log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
+
+            if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
+                log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
+            }
 
         } catch (ViewConfigurationIssue | ShaderCompilationIssue | IOException e) {
             //Escalation allowed since we're within the boot sequence
@@ -108,11 +123,13 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         final long elementResolvePassTimeA = System.currentTimeMillis();
         spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
-        log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
+        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+            log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
+        }
 
         Gdx.gl.glEnable(GL30.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
-        if(config.glDebugEnabled){
+        if(config.getEnableGLDebug()){
             Gdx.gl.glEnable(GL43C.GL_DEBUG_OUTPUT);
         }
 
@@ -121,8 +138,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         testCam.update();
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
-        log.info("Total startup time: " + (totalBootTime) + "ms");
-        log.info("MELANGE Framework startup time: " + (totalBootTime - lwjglInitTime) + "ms");
+        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+            log.info("Total startup time: " + (totalBootTime) + "ms");
+            log.info("MELANGE Framework startup time: " + (totalBootTime - lwjglInitTime) + "ms");
+        }
     }
     private long frame = 0;
 

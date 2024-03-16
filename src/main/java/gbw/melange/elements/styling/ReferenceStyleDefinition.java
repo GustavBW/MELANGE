@@ -5,7 +5,7 @@ import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.WrappedShader;
+import gbw.melange.shading.impl.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 import java.util.ArrayList;

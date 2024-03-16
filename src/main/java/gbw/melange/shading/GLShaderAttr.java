@@ -1,4 +1,4 @@
-package gbw.melange.common.gl;
+package gbw.melange.shading;
 
 /**
  * <p>GLShaderAttr class.</p>
@@ -29,7 +29,7 @@ public enum GLShaderAttr {
      *
      * @return a {@link java.lang.String} object
      */
-    public String getName() {
+    public String glValue() {
         return name;
     }
 }

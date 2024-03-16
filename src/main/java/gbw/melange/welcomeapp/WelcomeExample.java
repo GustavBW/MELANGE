@@ -1,10 +1,13 @@
 package gbw.melange.welcomeapp;
 
+import gbw.melange.common.IMelangeConfig;
+import gbw.melange.common.MelangeConfig;
 import gbw.melange.core.MelangeApplication;
-import gbw.melange.core.MelangeConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>WelcomeExample class.</p>
@@ -23,10 +26,17 @@ public class WelcomeExample {
      * @throws java.lang.Exception if any.
      */
     public static void main(String[] args) throws Exception {
-        MelangeConfig config = new MelangeConfig()
+        Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.values()));
+        logLevel.remove(IMelangeConfig.LogLevel.BOOT_SEQ_INFO);
+        logLevel.remove(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO);
+        logLevel.remove(IMelangeConfig.LogLevel.VIEW_INFO);
+        logLevel.remove(IMelangeConfig.LogLevel.HOOKS);
+        logLevel.remove(IMelangeConfig.LogLevel.ELEMENT_UPDATES);
+
+        IMelangeConfig config = new MelangeConfig()
             .enableGLDebug(true)
-            .setLogLevel(0)
-            .clearGeneratedContentOnExit(false);
+            .setLogLevel(logLevel)
+            .clearGeneratedOnStart(true);
 
         MelangeApplication.run(WelcomeExample.class, config);
     }

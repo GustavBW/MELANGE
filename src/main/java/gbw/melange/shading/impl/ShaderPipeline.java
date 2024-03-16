@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IShadingPipelineConfig;
@@ -82,7 +83,7 @@ public class ShaderPipeline implements IShaderPipeline {
     private void performCachingStep(List<IWrappedShader> toBeCached) {
         int hitsPre = cacheUtil.getHits();
 
-        for (IWrappedShader shader : toBeCached){
+        for (IWrappedShader shader : toBeCached){ //TODO: Check if this can be parallelized
             FileHandle locationOfTexture;
             try {
                 locationOfTexture = cacheUtil.cacheOrUpdateExisting(shader);
@@ -99,7 +100,7 @@ public class ShaderPipeline implements IShaderPipeline {
                 continue;
             }
 
-            ((WrappedShader) shader).replaceProgram(WrappedShader.TEXTURE.getProgram()); //Is compiled at this point
+            ((WrappedShader) shader).replaceProgram(new ShaderProgram(VertexShader.DEFAULT.code(), FragmentShader.TEXTURE.code())); //Is compiled at this point
 
             final Texture asLoadedFromDisk = new Texture(locationOfTexture);
 

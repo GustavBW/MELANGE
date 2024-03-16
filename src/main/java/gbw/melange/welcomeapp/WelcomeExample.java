@@ -23,7 +23,8 @@ public class WelcomeExample {
         IMelangeConfig config = new MelangeConfig()
             .enableGLDebug(true)
             .setLogLevel(logLevel)
-            .clearGeneratedOnStart(true);
+            .clearGeneratedOnStart(true)
+                .useCaching(false);
 
         MelangeApplication.run(WelcomeExample.class, config);
     }

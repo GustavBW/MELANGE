@@ -33,6 +33,9 @@ public class WrappedShader implements IWrappedShader {
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
+    /**
+     * Whether parameters of this shader changes during runtime (not static) or not (is static)
+     */
     private final boolean isStatic;
     private List<ShaderResourceBinding> bindings;
     private final List<Disposable> combinedDisposables = new ArrayList<>();
@@ -130,7 +133,7 @@ public class WrappedShader implements IWrappedShader {
     /** {@inheritDoc} */
     @Override
     public boolean isStatic(){
-        return isStatic;
+        return isStatic && fragmentShader.isStatic();
     }
     /** {@inheritDoc} */
     @Override

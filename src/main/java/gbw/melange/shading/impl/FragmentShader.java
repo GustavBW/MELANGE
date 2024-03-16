@@ -16,6 +16,7 @@ public class FragmentShader {
     private final String code;
     private final String localName;
     private ShaderClassification classification;
+    private final boolean isStatic;
 
     /**
      * <p>Constructor for FragmentShader.</p>
@@ -27,9 +28,13 @@ public class FragmentShader {
         this(localName, code, ShaderClassification.COMPLEX);
     }
     public FragmentShader(String localName, String code, ShaderClassification classification){
+        this(localName, code, classification, true);
+    }
+    public FragmentShader(String localName, String code, ShaderClassification classification, boolean isStatic){
         this.code = code;
         this.localName = localName;
         this.classification = classification;
+        this.isStatic = isStatic;
     }
 
     /**
@@ -46,6 +51,9 @@ public class FragmentShader {
     }
     public ShaderClassification getClassification(){
         return classification;
+    }
+    public boolean isStatic(){
+        return isStatic;
     }
     public void setClassification(ShaderClassification classification){
         this.classification = classification;
@@ -75,7 +83,6 @@ public class FragmentShader {
         precision mediump float;
         #endif
         
-        varying vec4 v_color;
         varying vec2 v_texCoords;
         
         void main() {
@@ -96,13 +103,12 @@ public class FragmentShader {
         precision mediump float;
         #endif
         
-        varying vec4 v_color;
         varying vec2 v_texCoords;
             
         void main() {
             gl_FragColor = vec4(v_texCoords.x, v_texCoords.y, 0, 1);
         }
-    """, ShaderClassification.COMPLEX); //Set to complex to make sure it updates as this is debugging
+    """, ShaderClassification.COMPLEX, false); //Set to complex and not static to make sure it updates every frame as this is for debugging
 
     /** Constant <code>TRANSPARENT</code> */
     public static final FragmentShader TRANSPARENT = FragmentShader.constant(new Color(0,0,0,0));

@@ -23,7 +23,7 @@ public class Log4jConfigFactory extends ConfigurationFactory {
         builder.setConfigurationName(name);
         builder.setStatusLevel(Level.ERROR);
 
-        builder.add(builder.newLogger("gbw.melange", Level.INFO)
+        builder.add(builder.newLogger("gbw.melange", Level.DEBUG)
                 .add(builder.newAppenderRef("Stdout"))
                 .addAttribute("additivity", false));
 

@@ -1,4 +1,4 @@
-package gbw.melange.shading.procedural.gradients;
+package gbw.melange.shading;
 
 /**
  * <p>InterpolationType class.</p>
@@ -15,5 +15,10 @@ public enum InterpolationType {
      * Looks like a logistic distribution (S-curve).
      */
     HERMIT,
-    QUADRATIC;
+    /**
+     * float out = 1.0 - ( 1.0 / (in + 1.0));
+     */
+    LOGARITHMIC,
+    QUADRATIC,
+    NONE;
 }

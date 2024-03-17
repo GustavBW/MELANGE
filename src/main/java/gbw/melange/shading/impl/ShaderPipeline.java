@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.*;
 import gbw.melange.shading.errors.Errors;
@@ -53,7 +52,7 @@ public class ShaderPipeline implements IShaderPipeline {
             recentlyCompiled.add(wrapped);
         }
 
-        if (config.getLogLevel().contains(IShadingPipelineConfig.PipelineLogLevel.COMPILE_STEP_INFO)){
+        if (config.getLoggingAspects().contains(IShadingPipelineConfig.PipelineLogLevel.COMPILE_STEP_INFO)){
             log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::shortName).toList());
         }
 
@@ -80,6 +79,8 @@ public class ShaderPipeline implements IShaderPipeline {
 
     private void performCachingStep(List<IWrappedShader> toBeCached) {
         int hitsPre = cacheUtil.getHits();
+        int cachingFailures = 0;
+        final List<String> successFullCaches = new ArrayList<>();
 
         for (IWrappedShader shader : toBeCached){ //TODO: Check if this can be parallelized
             FileHandle locationOfTexture;
@@ -87,24 +88,24 @@ public class ShaderPipeline implements IShaderPipeline {
                 locationOfTexture = cacheUtil.cacheOrUpdateExisting(shader);
 
                 //I just love silent errors. It makes it so easy to produce brittle software with bad error handling.
-                int glErrFromCaching = Gdx.gl.glGetError();
-                if(glErrFromCaching != GL30.GL_NO_ERROR){
-                    log.warn("OpenGL error after caching " + shader.shortName() + " to texture: " + glErrFromCaching + ", skipping.");
-                    continue;
-                }
-            } catch (GdxRuntimeException e){
-                log.warn("Caching failed for " + shader.shortName() + ", skipping.");
+                Errors.checkAndThrow("Caching | " + shader.shortName() + " to texture");
+
+                successFullCaches.add(shader.shortName());
+            } catch (Exception e){ //Catch all of them hands
+                log.warn("Caching | Failure for " + shader.shortName() + ", skipping.");
                 log.warn(e.toString());
+                cachingFailures++;
                 continue;
             }
 
+            log.trace("Caching | Clearing original bindings for " + shader.shortName());
             ((WrappedShader) shader).clearBindings();
             ((WrappedShader) shader).replaceProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
             shader.bindResource((index, program) -> {
-                log.debug("| " + shader.shortName() + " | binding texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
+                log.trace("| " + shader.shortName() + " | binding texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
 
                 asLoadedFromDisk.bind(index);
                 Errors.checkAndThrow("binding texture " + asLoadedFromDisk + " to shader: " + program + " at index: " + index);
@@ -116,9 +117,9 @@ public class ShaderPipeline implements IShaderPipeline {
         }
         final int actualHits = cacheUtil.getHits() - hitsPre;
 
-        if (config.getLogLevel().contains(IShadingPipelineConfig.PipelineLogLevel.CACHING_STEP_INFO)) {
-            log.info("Cache step complete without issue for: " + toBeCached.stream().map(IWrappedShader::shortName).toList());
-            log.info("Cache hits: " + actualHits + "/" + toBeCached.size());
+        if (config.getLoggingAspects().contains(IShadingPipelineConfig.PipelineLogLevel.CACHING_STEP_INFO)) {
+            log.info("Cache step complete " + ( cachingFailures > 0 ? "with" : "without" ) + " issue(s) for: " + successFullCaches);
+            log.info("Cache hits: " + actualHits + "/" + toBeCached.size() + " failures: " + cachingFailures + "/" + toBeCached.size());
         }
     }
 
@@ -138,7 +139,7 @@ public class ShaderPipeline implements IShaderPipeline {
 
     @Override
     public void clearCache() {
-        if (config.getLogLevel().contains(IShadingPipelineConfig.PipelineLogLevel.LIFE_CYCLE_INFO)) {
+        if (config.getLoggingAspects().contains(IShadingPipelineConfig.PipelineLogLevel.LIFE_CYCLE_INFO)) {
             log.info("Clearing existing generated content");
         }
         cacheUtil.clearCache();

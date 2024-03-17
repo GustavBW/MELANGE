@@ -33,13 +33,12 @@ public class MelangeConfig implements IMelangeConfig {
     }
 
     @Override
-    public IMelangeConfig setLogLevel(Set<LogLevel> values){
-        //TODO: Implement this
+    public IMelangeConfig setLoggingAspects(Set<LogLevel> values){
         this.logLevel = values;
         return this;
     }
     @Override
-    public Set<LogLevel> getLogLevel(){
+    public Set<LogLevel> getLoggingAspects(){
         return logLevel;
     }
 

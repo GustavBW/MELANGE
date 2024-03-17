@@ -27,18 +27,16 @@ public class WrappedShader implements IWrappedShader {
     /** Constant <code>TEXTURE</code> */
     public static WrappedShader TEXTURE = new WrappedShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
-    private static int nextInstanceId = 1;
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
     /**
      * Whether parameters of this shader changes during runtime (not static) or not (is static)
      */
-    private final boolean isStatic;
+    private boolean isStatic;
     private List<ShaderResourceBinding> bindings;
     private final List<Disposable> combinedDisposables = new ArrayList<>();
     private ShaderProgram program;
-    private final int instanceId;
     private boolean failedCompilation = false;
     /**
      * If this texture is rendered to disk for memory purposes, what resolution should it be stored as.
@@ -57,7 +55,6 @@ public class WrappedShader implements IWrappedShader {
         this.fragmentShader = fragment;
         this.localName = localName;
         this.isStatic = isStatic;
-        this.instanceId = nextInstanceId++;
         this.bindings = bindings;
     }
 
@@ -127,6 +124,8 @@ public class WrappedShader implements IWrappedShader {
         this.program = new ShaderProgram(vertex.code(), frag.code());
     }
     void clearBindings(){
+        log.trace("Clearing bindings " + bindings);
+        bindings.clear();
         combinedDisposables.forEach(Disposable::dispose);
         combinedDisposables.clear();
     }
@@ -154,9 +153,25 @@ public class WrappedShader implements IWrappedShader {
     public int getResolution() {
         return desiredResolution;
     }
+
+    @Override
+    public FragmentShader getFragment() {
+        return fragmentShader;
+    }
+
+    @Override
+    public VertexShader getVertex() {
+        return vertexShader;
+    }
+
     /** {@inheritDoc} */
     @Override
     public boolean isStatic(){
         return isStatic && fragmentShader.isStatic();
+    }
+
+    @Override
+    public void setStatic(boolean yesNo) {
+        this.isStatic = yesNo;
     }
 }

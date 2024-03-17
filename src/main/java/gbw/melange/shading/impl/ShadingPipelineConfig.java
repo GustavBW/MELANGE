@@ -12,13 +12,13 @@ public class ShadingPipelineConfig implements IShadingPipelineConfig {
     private Set<IShadingPipelineConfig.PipelineLogLevel> logLevel = new HashSet<>(Set.of(IShadingPipelineConfig.PipelineLogLevel.values()));
 
     @Override
-    public IShadingPipelineConfig setLogLevel(Set<PipelineLogLevel> level) {
+    public IShadingPipelineConfig setLoggingAspects(Set<PipelineLogLevel> level) {
         this.logLevel = level;
         return this;
     }
 
     @Override
-    public Set<PipelineLogLevel> getLogLevel() {
+    public Set<PipelineLogLevel> getLoggingAspects() {
         return logLevel;
     }
 }

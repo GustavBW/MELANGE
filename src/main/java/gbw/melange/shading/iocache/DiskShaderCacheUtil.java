@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 public class DiskShaderCacheUtil implements Disposable {
     private static final Logger log = LogManager.getLogger();
 
-    public static final String SHADER_CACHE_PATH = "./assets/system/generated/shaders";
+    public static final String SHADER_CACHE_PATH = "./assets/system/generated/textures";
     private final Matrix4 unitMatrix = new Matrix4();
     private int hits = 0;
     private final Mesh screenQuad;
@@ -97,7 +97,7 @@ public class DiskShaderCacheUtil implements Disposable {
             try(BufferedWriter bw = new BufferedWriter(new FileWriter("./assets/system/generated/readme.md"))){
                 String generatedReadmeDisclaimer = """
                     # Don't panic. \n
-                    ### This directory and its sub-directories are strictly for system use and interfering with it manually is really bad idea. \n
+                    ### This directory and its sub-directories are strictly for system use and interfering with it manually is a really bad idea. \n
                     Certain services and utilities allow you to interfere safely, so feel free to investigate how you may use these resources.
                     """;
                 bw.write(generatedReadmeDisclaimer);
@@ -109,8 +109,8 @@ public class DiskShaderCacheUtil implements Disposable {
     }
 
     public void clearCache(){
-        FileHandle shadersDir = Gdx.files.local(SHADER_CACHE_PATH);
-        shadersDir.deleteDirectory();
+        FileHandle texturesDir = Gdx.files.local(SHADER_CACHE_PATH);
+        texturesDir.deleteDirectory();
     }
 
     public FrameBuffer renderToFBO(IWrappedShader shader, int resX, int resY, boolean depth) {
@@ -123,8 +123,8 @@ public class DiskShaderCacheUtil implements Disposable {
         Gdx.gl.glEnable(GL30.GL_BLEND);
         Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 
-        shader.applyBindings();
         shader.getProgram().bind();
+        shader.applyBindings();
         shader.getProgram().setUniformMatrix(GLShaderAttr.MATRIX.glValue(), unitMatrix);
 
         screenQuad.render(shader.getProgram(), GL30.GL_TRIANGLES);
@@ -149,7 +149,7 @@ public class DiskShaderCacheUtil implements Disposable {
     }
 
     private String getExactLocationOf(String fileName){
-        return "./assets/system/generated/shaders" + "/" + fileName + ".png";
+        return SHADER_CACHE_PATH + "/" + fileName + ".png";
     }
 
     /**

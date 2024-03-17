@@ -5,18 +5,20 @@ import gbw.melange.shading.*;
 import gbw.melange.shading.impl.FragmentShader;
 import gbw.melange.shading.impl.VertexShader;
 import gbw.melange.shading.impl.WrappedShader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>GradientFragmentShaderBuilder class.</p>
+ * <p>GradientFragmentBuilder class.</p>
  *
  * @author GustavBW
  * @version $Id: $Id
  */
-public class GradientFragmentShaderBuilder implements IGradientBuilder {
-
+public class GradientFragmentBuilder implements IGradientBuilder {
+    private static final Logger log = LogManager.getLogger();
     private double rotationDeg = 0;
     private InterpolationType interpolationType = InterpolationType.HERMIT;
     private final List<Color> colors = new ArrayList<>();
@@ -24,40 +26,20 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
     private final String localName;
     private final IShaderPipeline pipeline;
 
-    /**
-     * <p>Constructor for GradientFragmentShaderBuilder.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     */
-    public GradientFragmentShaderBuilder(String localName){
+
+    public GradientFragmentBuilder(String localName){
         this(localName, null);
     }
-    /**
-     * <p>Constructor for GradientFragmentShaderBuilder.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     * @param rotationDeg a double
-     */
-    public GradientFragmentShaderBuilder(String localName, double rotationDeg){
+
+    public GradientFragmentBuilder(String localName, double rotationDeg){
         this(localName, rotationDeg, null);
     }
-    /**
-     * <p>Constructor for GradientFragmentShaderBuilder.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     * @param pipeline a {@link gbw.melange.shading.IShaderPipeline} object
-     */
-    public GradientFragmentShaderBuilder(String localName, IShaderPipeline pipeline){
+
+    public GradientFragmentBuilder(String localName, IShaderPipeline pipeline){
         this(localName,0, pipeline);
     }
-    /**
-     * <p>Constructor for GradientFragmentShaderBuilder.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     * @param rotationDeg a double
-     * @param pipeline a {@link gbw.melange.shading.IShaderPipeline} object
-     */
-    public GradientFragmentShaderBuilder(String localName, double rotationDeg, IShaderPipeline pipeline){
+
+    public GradientFragmentBuilder(String localName, double rotationDeg, IShaderPipeline pipeline){
         this.rotationDeg = rotationDeg;
         this.localName = localName;
         this.pipeline = pipeline;
@@ -73,6 +55,11 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
     /** {@inheritDoc} */
     @Override
     public IGradientBuilder setInterpolationType(InterpolationType type){
+        if(type == InterpolationType.NONE){
+            log.warn("Improper API Usage: A gradient requires interpolation - that like the whole deal. The attempted value of " + type + " has been ignored.");
+            return this;
+        }
+
         this.interpolationType = type;
         return this;
     }
@@ -159,13 +146,14 @@ public class GradientFragmentShaderBuilder implements IGradientBuilder {
     private String appendInterpolationFunction(int stepIndex){
         return switch (interpolationType) {
             case HERMIT -> "smoothstep(position"+stepIndex+", position"+(stepIndex+1)+", progress);";
-            case LINEAR -> "(progress - position"+stepIndex+") / (position"+(stepIndex+1)+" - position"+stepIndex+");";
+            case LINEAR, NONE -> "(progress - position"+stepIndex+") / (position"+(stepIndex+1)+" - position"+stepIndex+");";
             case QUADRATIC -> "(progress - position"+stepIndex+") / (position"+(stepIndex+1)+" - position"+stepIndex+");\n" +
                     "\t\tif (t < 0.5) {\n" +
                     "\t\t\tt = 2.0 * t * t; \n" +
                     "\t\t} else {\n" +
                     "\t\t\tt = -1.0 + (4.0 - 2.0 * t) * t;\n" +
                     "\t\t}";
+            case LOGARITHMIC -> "position"+stepIndex+" + position" + (stepIndex+1) + " * (1.0 - ( 1.0 / (progress + 1.0)));";
         };
     }
 

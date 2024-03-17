@@ -10,6 +10,6 @@ public interface IShadingPipelineConfig {
         LIFE_CYCLE_INFO;
     }
 
-    IShadingPipelineConfig setLogLevel(Set<PipelineLogLevel> level);
-    Set<PipelineLogLevel> getLogLevel();
+    IShadingPipelineConfig setLoggingAspects(Set<PipelineLogLevel> level);
+    Set<PipelineLogLevel> getLoggingAspects();
 }

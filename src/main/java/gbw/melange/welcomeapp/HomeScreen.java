@@ -6,11 +6,9 @@ import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.navigation.ISpaceNavigator;
-import gbw.melange.shading.Colors;
-import gbw.melange.shading.impl.FragmentShader;
-import gbw.melange.shading.IShaderPipeline;
-import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;
+import gbw.melange.shading.*;
+import gbw.melange.shading.procedural.gradients.GradientFragmentBuilder;
+import gbw.melange.shading.procedural.voronoi.VoronoiFragmentBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,13 +26,9 @@ public class HomeScreen implements IHomeScreen {
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {
         IScreenSpace space = provider.getScreenSpace(this);
-        IWrappedShader fragmentShaderA = new GradientFragmentShaderBuilder("HS_Gradient_A", pipeline)
-                .addStops(Color.MAGENTA, 0,Color.ROYAL, .5, Color.CYAN, 1)
-                .setRotation(45)
-                .build();
-        IWrappedShader fragmentShaderB = new GradientFragmentShaderBuilder("HS_Gradient_B", pipeline)
-                .addStops(Color.CORAL, 0, Color.CHARTREUSE, .5, Color.FIREBRICK, 1)
-                .setRotation(135)
+        IWrappedShader fragmentShaderA = new VoronoiFragmentBuilder("HS_Gradient_A", pipeline)
+                .vertsAsPoints(MeshTable.SQUARE.getMesh())
+                .setDistanceType(Vec2DistFunc.CHEBYSHEV)
                 .build();
 
         final double borderWidth = 5;
@@ -64,7 +58,7 @@ public class HomeScreen implements IHomeScreen {
             .build();
         */
 
-        space.createElement().setMesh(MeshTable.RHOMBUS.getMesh())
+        space.createElement().setMesh(MeshTable.SQUARE.getMesh())
                 .styling()
                     .setBackgroundColor(fragmentShaderA)
                     .setBorderColor(colors.constant(Color.WHITE))
@@ -74,14 +68,5 @@ public class HomeScreen implements IHomeScreen {
                     .apply()
                 .build();
 
-        space.createElement().setMesh(MeshTable.EQUILATERAL_TRIANGLE.getMesh())
-                .styling()
-                    .setBackgroundColor(fragmentShaderB)
-                    .setBorderColor(colors.constant(Color.WHITE))
-                    .apply()
-                .constraints()
-                    .setBorderWidth(borderWidth)
-                    .apply()
-                .build();
     }
 }

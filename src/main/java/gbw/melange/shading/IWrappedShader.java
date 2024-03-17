@@ -3,6 +3,8 @@ package gbw.melange.shading;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
+import gbw.melange.shading.impl.FragmentShader;
+import gbw.melange.shading.impl.VertexShader;
 
 import java.util.List;
 
@@ -16,12 +18,18 @@ import java.util.List;
 public interface IWrappedShader extends Disposable {
 
     /**
-     * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}
-     * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed.
+     * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}<br/>
+     * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed. <br/>
+     * Duly note that OpenGL has limits to the amount of bindings possible, so you might want to batch things that require unique indexes and no indexes at all.
+     * @param binding any function taking in the bind index and the program. Example:
+     * <pre>
+     *      {@code (int index, ShaderProgram program) -> { any }}
+     * </pre>
      */
     void bindResource(ShaderResourceBinding binding, Disposable... disposables);
     /**
      * An IWrappedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
+     * Do bind the shader program itself to the gl context ({@link ShaderProgram#bind()}) before invoking this method, or gl gets angry.
      * This method should be called before using the shader for rendering regardless.
      */
     void applyBindings();
@@ -35,8 +43,6 @@ public interface IWrappedShader extends Disposable {
     /**
      * Compiles the program and throws an error immediately if the compilation process isn't successful.
      * Before this method is invoked, {@link gbw.melange.shading.IWrappedShader#getProgram()} will return null.
-     *
-     * @throws gbw.melange.shading.errors.ShaderCompilationIssue if any.
      */
     void compile() throws ShaderCompilationIssue;
 
@@ -47,10 +53,18 @@ public interface IWrappedShader extends Disposable {
     IWrappedShader copyAs(String newLocalName);
 
     /**
-     * Whether this shader is modified during its lifespan or not. If not, it will be rendered to a texture, which is drawn instead.
+     * Whether this shader is modified during its lifespan or not. If not, it is a candidate for cashing and might be rendered to a texture, which is drawn instead.
      * The texture itself will be stored on disk in assets/system/generated and used from there.
      */
     boolean isStatic();
+
+    /**
+     * Overrides any default value. If done before {@link IShaderPipeline#compileAndCache()} is called,
+     * which generally happens as one of the last things during create, this will be successful.
+     * If not, it will make no difference as of right now. //TODO: Implement cache invalidation for this case
+     * @param yesNo true / false
+     */
+    void setStatic(boolean yesNo);
 
     /**
      * @return null if not compiled, else a ShaderProgram
@@ -77,4 +91,7 @@ public interface IWrappedShader extends Disposable {
      * Get the resolution for storing this shader to disk
      */
     int getResolution();
+
+    FragmentShader getFragment();
+    VertexShader getVertex();
 }

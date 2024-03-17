@@ -2,6 +2,7 @@ package gbw.melange.shading.procedural.gradients;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.InterpolationType;
 
 /**
  * <p>IGradientBuilder interface.</p>
@@ -13,7 +14,7 @@ public interface IGradientBuilder {
     /**
      * <p>setInterpolationType.</p>
      *
-     * @param type a {@link gbw.melange.shading.procedural.gradients.InterpolationType} object
+     * @param type a {@link InterpolationType} object
      * @return a {@link gbw.melange.shading.procedural.gradients.IGradientBuilder} object
      */
     IGradientBuilder setInterpolationType(InterpolationType type);

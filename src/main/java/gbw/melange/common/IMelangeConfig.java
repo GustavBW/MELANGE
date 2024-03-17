@@ -32,9 +32,9 @@ public interface IMelangeConfig {
      *
      * @default all
      */
-    IMelangeConfig setLogLevel(Set<LogLevel> values);
+    IMelangeConfig setLoggingAspects(Set<LogLevel> values);
 
-    Set<LogLevel> getLogLevel();
+    Set<LogLevel> getLoggingAspects();
 
     IMelangeConfig setShadingConfig(IShadingPipelineConfig shadingConfig);
     IShadingPipelineConfig getShadingConfig();

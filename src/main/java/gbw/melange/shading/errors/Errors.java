@@ -31,5 +31,8 @@ public class Errors {
         }
     }
 
+    public static void debugLogAllGLInfo(Logger logger){
+
+    }
 
 }

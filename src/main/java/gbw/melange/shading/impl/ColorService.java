@@ -7,7 +7,7 @@ import gbw.melange.shading.Colors;
 import gbw.melange.shading.GLShaderAttr;
 import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;
+import gbw.melange.shading.procedural.gradients.GradientFragmentBuilder;
 import gbw.melange.shading.procedural.gradients.IGradientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * The implementation of the Api detailed by {@link Colors}
@@ -65,7 +64,7 @@ public class ColorService implements Colors {
     /** {@inheritDoc} */
     @Override
     public IGradientBuilder linearGradient() {
-        return new GradientFragmentShaderBuilder("GRADIENT_"+(nextId++), pipeline);
+        return new GradientFragmentBuilder("GRADIENT_"+(nextId++), pipeline);
     }
 
     /** {@inheritDoc} */

@@ -155,6 +155,8 @@ public class ElementRenderer implements IElementRenderer {
         //Clear to transparent
         Gdx.gl.glClearColor(0,0,0,0);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+        Errors.checkAndThrow("main render pass | clearing screen to color (0,0,0,0)");
+
         //Border - Rendered first so that the same mesh can be reused, as the fragment of the background is drawn on top
         ShaderProgram borderShader = style.getBorderShader().getProgram();
         borderShader.bind();
@@ -162,13 +164,13 @@ public class ElementRenderer implements IElementRenderer {
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
 
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
-        Errors.checkAndThrow( " | main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
+        Errors.checkAndThrow( "main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
 
         mesh.render(borderShader, style.getBorderDrawStyle().value);
-        Errors.checkAndThrow(" | main render pass | border shader:\t" + style.getBorderShader().shortName());
+        Errors.checkAndThrow("main render pass | border shader:\t" + style.getBorderShader().shortName());
 
         Gdx.gl.glLineWidth(1f);
-        Errors.checkAndThrow(" | main render pass | resetting line width");
+        Errors.checkAndThrow("main render pass | resetting line width");
 
         //Background
         ShaderProgram backgroundShader = style.getBackgroundShader().getProgram();

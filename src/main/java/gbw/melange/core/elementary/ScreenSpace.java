@@ -16,10 +16,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Stream;
 
 /**
  * <p>ScreenSpace class.</p>
@@ -134,7 +132,7 @@ public class ScreenSpace implements IScreenSpace {
         renderQueue.add(element);
         resolveConstraints(element);
 
-        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.ELEMENT_UPDATES)){
+        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.ELEMENT_UPDATES)){
             log.info(element + " moved to render queue");
         }
     }
@@ -143,7 +141,7 @@ public class ScreenSpace implements IScreenSpace {
         errorQueue.add(element);
         resolveConstraints(element);
 
-        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.ELEMENT_UPDATES)) {
+        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.ELEMENT_UPDATES)) {
             log.info(element + " moved to error queue");
         }
     }

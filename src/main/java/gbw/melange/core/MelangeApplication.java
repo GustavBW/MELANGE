@@ -14,6 +14,7 @@ import gbw.melange.common.MelangeConfig;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.shading.errors.Errors;
 import gbw.melange.shading.impl.ShaderPipeline;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
@@ -68,7 +69,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         long discoveryTimeA = System.currentTimeMillis();
         discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass, config);
 
-        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
             log.info("Discovery pass time: " + (System.currentTimeMillis() - discoveryTimeA) + "ms");
         }
     }
@@ -85,9 +86,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     public void create(){
         final long lwjglInitTime = (System.currentTimeMillis() - lwjglInitTimeA);
 
-        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+        if (config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
             log.info("LWJGL init time: " + lwjglInitTime + "ms");
         }
+
+        Errors.checkAndThrow("create lifecycle just begun");
 
         ParallelMonitoredExecutionEnvironment.setInstance(this);
 
@@ -113,7 +116,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             shaderPipeline.useCaching(config.getUseCaching());
             shaderPipeline.compileAndCache();
 
-            if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
+            if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
                 log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
             }
 
@@ -125,7 +128,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         final long elementResolvePassTimeA = System.currentTimeMillis();
         spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
-        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
             log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
         }
 
@@ -134,6 +137,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         if(config.getEnableGLDebug()){
             Gdx.gl.glEnable(GL43C.GL_DEBUG_OUTPUT);
         }
+        Errors.checkAndThrow("setting blending function to GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA");
 
         IntBuffer buffer = BufferUtils.newIntBuffer(1);
         Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_IMAGE_UNITS, buffer);
@@ -144,7 +148,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         testCam.update();
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
-        if(config.getLogLevel().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
             log.info("Total startup time: " + (totalBootTime) + "ms");
             log.info("MELANGE Framework startup time: " + (totalBootTime - lwjglInitTime) + "ms");
         }
@@ -172,10 +176,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         //Render spaces
         for(ISpace space : spaceNavigator.getOrderedList()){
             space.render(testCam.view);
-        }
-        int glErrCausedBySpaces = Gdx.gl.glGetError();
-        if(glErrCausedBySpaces != GL30.GL_NO_ERROR){
-            log.warn("OpenGL error after rendering spaces: " + glErrCausedBySpaces);
+            Errors.checkAndLog(log, "rendering space " + space + " with Mat4: " + testCam.view);
         }
 
         //Hooks

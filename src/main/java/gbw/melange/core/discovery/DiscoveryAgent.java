@@ -9,14 +9,10 @@ import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.CoreRootMarker;
 import gbw.melange.core.elementary.ISpaceRegistry;
-import gbw.melange.mesh.IMeshPipelineConfig;
-import gbw.melange.shading.IShadingPipelineConfig;
 import gbw.melange.shading.ShadingRootMarker;
 import org.reflections.Reflections;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -69,7 +65,7 @@ public class DiscoveryAgent<T> {
     private void registerSpaceRegistry() throws ClassConfigurationIssue {
         Set<Class<? extends ISpaceRegistry>> spaceRegistries = systemRootReflections.getSubTypesOf(ISpaceRegistry.class);
 
-        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO)){
+        if (config.getLoggingAspects().contains(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO)){
             log.info("Found registries: " + spaceRegistries.stream().map(Class::toString).toList());
         }
 
@@ -124,7 +120,7 @@ public class DiscoveryAgent<T> {
         var providers = systemRootReflections.getSubTypesOf(ISpaceProvider.class);
         providers = TypeFilter.retainInstantiable(providers);
 
-        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO)) {
+        if (config.getLoggingAspects().contains(IMelangeConfig.LogLevel.SPRING_REFLECT_INFO)) {
             log.info("Found space providers: " + providers.stream().map(Class::toString).toList());
         }
 
@@ -140,7 +136,7 @@ public class DiscoveryAgent<T> {
     private void gatherUserOnInitImpl() throws ClassConfigurationIssue  {
         Set<Class<? extends OnInit>> onInitImpls = userRootReflections.getSubTypesOf(OnInit.class);
 
-        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.HOOKS)) {
+        if (config.getLoggingAspects().contains(IMelangeConfig.LogLevel.HOOKS)) {
             log.info("Found OnInit hooks: " + onInitImpls.stream().map(Class::toString).toList());
         }
 
@@ -156,7 +152,7 @@ public class DiscoveryAgent<T> {
     private void gatherUserOnRenderImpl() throws ClassConfigurationIssue {
         Set<Class<? extends OnRender>> onRenderImpls = userRootReflections.getSubTypesOf(OnRender.class);
 
-        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.HOOKS)) {
+        if (config.getLoggingAspects().contains(IMelangeConfig.LogLevel.HOOKS)) {
             log.info("Found onRender hooks: " + onRenderImpls.stream().map(Class::toString).toList());
         }
 
@@ -199,7 +195,7 @@ public class DiscoveryAgent<T> {
         Set<Class<?>> views = userRootReflections.getTypesAnnotatedWith(View.class);
         views = TypeFilter.retainInstantiable(views);
 
-        if (config.getLogLevel().contains(IMelangeConfig.LogLevel.VIEW_INFO)) {
+        if (config.getLoggingAspects().contains(IMelangeConfig.LogLevel.VIEW_INFO)) {
             log.info("Found views: " + views.stream().map(Class::toString).toList());
         }
 

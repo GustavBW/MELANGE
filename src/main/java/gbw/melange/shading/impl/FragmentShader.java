@@ -18,12 +18,6 @@ public class FragmentShader {
     private ShaderClassification classification;
     private final boolean isStatic;
 
-    /**
-     * <p>Constructor for FragmentShader.</p>
-     *
-     * @param localName a {@link java.lang.String} object
-     * @param code a {@link java.lang.String} object
-     */
     public FragmentShader(String localName, String code) {
         this(localName, code, ShaderClassification.COMPLEX);
     }
@@ -37,15 +31,10 @@ public class FragmentShader {
         this.isStatic = isStatic;
     }
 
-    /**
-     * <p>GLSL code.</p>
-     */
     public String code() {
         return code;
     }
-    /**
-     * <p>Debugging name.</p>
-     */
+
     public String name(){
         return localName;
     }

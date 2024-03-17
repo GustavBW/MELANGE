@@ -8,9 +8,9 @@ package gbw.melange.shading.procedural.noise;
  * <p>This class does not make use of the <i>Random</i> class.</p>
  *
  * @author Matthew A. Johnston (WarmWaffles)
- *
+ * @author GustavBW (extended environment functionality)
  */
-public class PerlinNoise {
+public class PerlinNoise implements NoiseProvider {
     private int    octaves;
     private double amplitude;
     private double frequency;
@@ -30,7 +30,13 @@ public class PerlinNoise {
     }
 
     public PerlinNoise() {
-        set(0,0,0,0,0);
+        set(1,1,1,1,1);
+    }
+
+    private int next = 0;
+    @Override
+    public double getNext(){
+        return getHeight(next++, next++);
     }
 
     /**

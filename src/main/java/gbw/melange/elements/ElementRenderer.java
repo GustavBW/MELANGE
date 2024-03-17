@@ -161,8 +161,18 @@ public class ElementRenderer implements IElementRenderer {
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
 
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
+        int glErrCausedByLineWidth = Gdx.gl.glGetError();
+        if(glErrCausedByLineWidth != GL30.GL_NO_ERROR){
+            log.warn("OpenGL Error | main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth() + " code: " + glErrCausedByLineWidth);
+        }
+
         mesh.render(borderShader, style.getBorderDrawStyle().value);
-        Gdx.gl.glLineWidth(0);
+        Gdx.gl.glLineWidth(1f);
+
+        int glErrCausedByResettingLineWidth = Gdx.gl.glGetError();
+        if(glErrCausedByResettingLineWidth != GL30.GL_NO_ERROR){
+            log.warn("OpenGL Error | main render pass | resetting line width code: " + glErrCausedByResettingLineWidth);
+        }
 
         int glErrCausedByBorderShader = Gdx.gl.glGetError();
         if(glErrCausedByBorderShader != GL30.GL_NO_ERROR){

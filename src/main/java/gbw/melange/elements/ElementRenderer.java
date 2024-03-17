@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
+import gbw.melange.shading.errors.Errors;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.impl.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
@@ -161,23 +162,13 @@ public class ElementRenderer implements IElementRenderer {
         borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
 
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
-        int glErrCausedByLineWidth = Gdx.gl.glGetError();
-        if(glErrCausedByLineWidth != GL30.GL_NO_ERROR){
-            log.warn("OpenGL Error | main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth() + " code: " + glErrCausedByLineWidth);
-        }
+        Errors.checkAndThrow( " | main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
 
         mesh.render(borderShader, style.getBorderDrawStyle().value);
+        Errors.checkAndThrow(" | main render pass | border shader:\t" + style.getBorderShader().shortName());
+
         Gdx.gl.glLineWidth(1f);
-
-        int glErrCausedByResettingLineWidth = Gdx.gl.glGetError();
-        if(glErrCausedByResettingLineWidth != GL30.GL_NO_ERROR){
-            log.warn("OpenGL Error | main render pass | resetting line width code: " + glErrCausedByResettingLineWidth);
-        }
-
-        int glErrCausedByBorderShader = Gdx.gl.glGetError();
-        if(glErrCausedByBorderShader != GL30.GL_NO_ERROR){
-            log.warn("OpenGL Error | main render pass | border shader:\t" + style.getBorderShader().shortName() + " code: " + glErrCausedByBorderShader);
-        }
+        Errors.checkAndThrow(" | main render pass | resetting line width");
 
         //Background
         ShaderProgram backgroundShader = style.getBackgroundShader().getProgram();

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.*;
+import gbw.melange.shading.errors.Errors;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import org.apache.logging.log4j.LogManager;
@@ -106,12 +107,11 @@ public class ShaderPipeline implements IShaderPipeline {
                 log.debug("| " + shader.shortName() + " | had texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
 
                 asLoadedFromDisk.bind(index);
-                program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
+                Errors.checkAndThrow(" | binding texture " + asLoadedFromDisk + " to shader: " + program + " at index: " + index);
 
-                int glErrCachedByBindingTexture = Gdx.gl.glGetError();
-                if(glErrCachedByBindingTexture != GL30.GL_NO_ERROR){
-                    log.warn("OpenGL Error | resource binding | binding:\t" + asLoadedFromDisk + " to: " + program + " code: " + glErrCachedByBindingTexture);
-                }
+                program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
+                Errors.checkAndThrow(" | setting shader uniformi " + program + " index: " + index + " as param: " + GLShaderAttr.TEXTURE.glValue());
+
             }, asLoadedFromDisk);
         }
         final int actualHits = cacheUtil.getHits() - hitsPre;

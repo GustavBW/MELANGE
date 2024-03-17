@@ -67,7 +67,7 @@ public class WrappedShader implements IWrappedShader {
         for (int i = 0; i < bindings.size(); i++){
             ShaderResourceBinding binding = bindings.get(i);
             //Swap to primes for complete solution. This only allows 100 unique bindings per shader, which should be enough, but you never know
-            binding.bind(instanceId * 100 + i, program);
+            binding.bind((i + 1), program);
         }
     }
 

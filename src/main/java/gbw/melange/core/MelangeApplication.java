@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.viewport.*;
 import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.MelangeConfig;
@@ -27,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
 import java.io.IOException;
+import java.nio.IntBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
@@ -132,6 +134,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         if(config.getEnableGLDebug()){
             Gdx.gl.glEnable(GL43C.GL_DEBUG_OUTPUT);
         }
+
+        IntBuffer buffer = BufferUtils.newIntBuffer(1);
+        Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_IMAGE_UNITS, buffer);
+        log.debug("OpenGL Texture unit range: " + buffer.get(0));
 
         testCam = new PerspectiveCamera();
         viewport = new FitViewport(1, 1, testCam);

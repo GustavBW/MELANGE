@@ -104,13 +104,13 @@ public class ShaderPipeline implements IShaderPipeline {
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
             shader.bindResource((index, program) -> {
-                log.debug("| " + shader.shortName() + " | had texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
+                log.debug("| " + shader.shortName() + " | binding texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
 
                 asLoadedFromDisk.bind(index);
-                Errors.checkAndThrow(" | binding texture " + asLoadedFromDisk + " to shader: " + program + " at index: " + index);
+                Errors.checkAndThrow("binding texture " + asLoadedFromDisk + " to shader: " + program + " at index: " + index);
 
                 program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
-                Errors.checkAndThrow(" | setting shader uniformi " + program + " index: " + index + " as param: " + GLShaderAttr.TEXTURE.glValue());
+                Errors.checkAndThrow("setting shader uniformi for " + program + " at index: " + index + " as param: " + GLShaderAttr.TEXTURE.glValue());
 
             }, asLoadedFromDisk);
         }

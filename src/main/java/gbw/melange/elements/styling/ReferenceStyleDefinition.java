@@ -24,8 +24,8 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
     /** Constant <code>NONE</code> */
     public static final IReferenceStyleDefinition NONE = new ReferenceStyleDefinition();
     static {
-        NONE.borderShader(WrappedShader.NONE);
-        NONE.backgroundShader(WrappedShader.NONE);
+        NONE.borderShader(WrappedShader.DEFAULT);
+        NONE.backgroundShader(WrappedShader.DEFAULT);
         NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
         NONE.borderDrawStyle(GLDrawStyle.POINTS);
     }

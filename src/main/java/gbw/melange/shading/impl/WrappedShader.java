@@ -7,7 +7,6 @@ import gbw.melange.shading.ShaderClassification;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
@@ -24,8 +23,7 @@ public class WrappedShader implements IWrappedShader {
 
     /** Constant <code>DEFAULT</code> */
     public static WrappedShader DEFAULT = new WrappedShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT);
-    /** Constant <code>NONE</code> */
-    public static WrappedShader NONE = new WrappedShader("MELANGE_NONE_SHADER", VertexShader.NONE, FragmentShader.TRANSPARENT);
+
     /** Constant <code>TEXTURE</code> */
     public static WrappedShader TEXTURE = new WrappedShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
@@ -79,9 +77,11 @@ public class WrappedShader implements IWrappedShader {
     }
 
     @Override
-    public void bindResource(ShaderResourceBinding binding, List<Disposable> disposables){
+    public void bindResource(ShaderResourceBinding binding, Disposable... disposables){
         bindings.add(binding);
-        this.combinedDisposables.addAll(disposables);
+
+        if(disposables == null) return;
+        this.combinedDisposables.addAll(List.of(disposables));
     }
 
     /** {@inheritDoc} */
@@ -96,7 +96,6 @@ public class WrappedShader implements IWrappedShader {
                 "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
             );
         }
-        combinedDisposables.add(program);
     }
     @Override
     public IWrappedShader copy(){
@@ -105,6 +104,31 @@ public class WrappedShader implements IWrappedShader {
     @Override
     public IWrappedShader copyAs(String newLocalName){
         return new WrappedShader(newLocalName, vertexShader, fragmentShader, isStatic, bindings);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString(){
+        return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader.localName() + "\", fragment shader: \"" + fragmentShader.name() +"\"";
+    }
+    /** {@inheritDoc} */
+    @Override
+    public void dispose() {
+        combinedDisposables.forEach(Disposable::dispose);
+        program.dispose();
+    }
+
+    /**
+     * @return the old program
+     */
+    void replaceProgram(VertexShader vertex, FragmentShader frag){
+        this.program.dispose();
+        this.program = new ShaderProgram(vertex.code(), frag.code());
+    }
+    void clearBindings(){
+        combinedDisposables.forEach(Disposable::dispose);
+        combinedDisposables.clear();
     }
 
     /** {@inheritDoc} */
@@ -134,27 +158,5 @@ public class WrappedShader implements IWrappedShader {
     @Override
     public boolean isStatic(){
         return isStatic && fragmentShader.isStatic();
-    }
-    /** {@inheritDoc} */
-    @Override
-    public String toString(){
-        return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader.localName() + "\", fragment shader: \"" + fragmentShader.name() +"\"";
-    }
-    /** {@inheritDoc} */
-    @Override
-    public void dispose() {
-        combinedDisposables.forEach(Disposable::dispose);
-    }
-
-    /**
-     * @return the old program
-     */
-    ShaderProgram replaceProgram(ShaderProgram program){
-        ShaderProgram old = this.program;
-        this.program = program;
-        return old;
-    }
-    void changeBindings(List<ShaderResourceBinding> bindings){
-        this.bindings = bindings;
     }
 }

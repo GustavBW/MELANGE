@@ -26,7 +26,7 @@ public class ShaderPipeline implements IShaderPipeline {
     private static final Logger log = LogManager.getLogger(ShaderPipeline.class);
     private final Queue<IWrappedShader> unCompiled = new ConcurrentLinkedQueue<>(
             //TODO: Find a better way to register the premade ones. Iterating through enum values?
-            List.of(WrappedShader.TEXTURE, WrappedShader.DEFAULT, WrappedShader.NONE)
+            List.of(WrappedShader.TEXTURE, WrappedShader.DEFAULT)
     );
     private boolean cachingEnabled = false;
     private Queue<Runnable> sendToMain;
@@ -97,22 +97,16 @@ public class ShaderPipeline implements IShaderPipeline {
                 continue;
             }
 
-            ShaderProgram pureTextureSampler = new ShaderProgram(VertexShader.DEFAULT.code(), FragmentShader.TEXTURE.code());
-
-            ShaderProgram old = ((WrappedShader) shader).replaceProgram(pureTextureSampler);
-            
-            log.debug("| " + shader.shortName() + " | had program " + old + " replaced with " + pureTextureSampler);
-            old.dispose();
+            ((WrappedShader) shader).clearBindings();
+            ((WrappedShader) shader).replaceProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
-            //Clear bindings
-            ((WrappedShader) shader).changeBindings(new ArrayList<>());
             shader.bindResource((index, program) -> {
                 log.debug("| " + shader.shortName() + " | had texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
                 asLoadedFromDisk.bind(index);
                 program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
-            }, List.of(asLoadedFromDisk));
+            }, asLoadedFromDisk);
         }
         final int actualHits = cacheUtil.getHits() - hitsPre;
 

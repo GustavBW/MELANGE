@@ -25,7 +25,7 @@ public class WelcomeExample {
             .enableGLDebug(true)
             .setLogLevel(logLevel)
             .clearGeneratedOnStart(true)
-            .useCaching(true);
+            .useCaching(false);
 
 
         MelangeApplication.run(WelcomeExample.class, config);

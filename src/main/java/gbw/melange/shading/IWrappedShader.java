@@ -19,7 +19,7 @@ public interface IWrappedShader extends Disposable {
      * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}
      * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed.
      */
-    void bindResource(ShaderResourceBinding binding, List<Disposable> disposables);
+    void bindResource(ShaderResourceBinding binding, Disposable... disposables);
     /**
      * An IWrappedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
      * This method should be called before using the shader for rendering regardless.

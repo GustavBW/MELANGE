@@ -19,16 +19,5 @@ public record VertexShader(String localName, String code) {
             gl_Position =  u_projTrans * a_position;
         }
     """);
-    public static final VertexShader NONE = new VertexShader("MELANGE_NONE_VERTEX",
-    """
-        #ifdef GL_ES
-            precision mediump float;
-        #endif
-        const vec4 nothing = vec4(0,0,0,0);
-        void main() {
-            gl_Position = nothing;
-        }
-        """
-    );
 
 }

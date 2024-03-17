@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.shading.Colors;
+import gbw.melange.shading.GLShaderAttr;
 import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.procedural.gradients.GradientFragmentShaderBuilder;
@@ -55,8 +56,8 @@ public class ColorService implements Colors {
         IWrappedShader wrapped = new WrappedShader("TEXTURE_"+(nextId++), VertexShader.DEFAULT, FragmentShader.TEXTURE);
         wrapped.bindResource((index, program) -> {
             src.bind(index);
-            program.setUniformi("u_texture", index);
-        }, List.of(src));
+            program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
+        }, src);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

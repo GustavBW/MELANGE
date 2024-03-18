@@ -30,7 +30,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     private IContentProvider<T> contentProvider;
 
     //Not allowed to be null, but is null to detect changes.
-    //There might be some about of unnecessary copying going on here, but before Rules are established its hard to know how careful to be in terms of deep copies / shallow copies
+    //There might be some about of unnecessary copying going on here, but before Rules are established it's hard to know how careful to be in terms of deep copies / shallow copies
     private IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
     private IReferenceConstraintDefinition referenceConstraints = new ReferenceConstraintDefinition();
 
@@ -70,6 +70,8 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     @Override
     public IElement<T> build() {
         //TODO: Based on <T>, find the matching content renderer
+
+
         if(contentProvider != null){
             ILoadingElement<T> element = new LoadingElement<>(
                     mesh,

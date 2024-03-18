@@ -101,7 +101,7 @@ public class ElementRenderer implements IElementRenderer {
         fbo.getColorBufferTexture().bind(69);
         finalShader.setUniformi("u_texture", 69);
 
-        element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.value);
+        element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.glValue);
     }
 
     private static FrameBuffer postProcessPass(IElement<?> element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
@@ -131,7 +131,7 @@ public class ElementRenderer implements IElementRenderer {
             shaderProgram.setUniformi("u_texture", 0); // Assuming the shader samples from "u_texture"
 
             // Render using the full-screen quad mesh (or appropriate geometry)
-            element.getMesh().render(shaderProgram, GLDrawStyle.TRIANGLES.value);
+            element.getMesh().render(shaderProgram, GLDrawStyle.TRIANGLES.glValue);
 
             if (flip) {
                 fboB.end(); // Done writing to B
@@ -166,7 +166,7 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
         Errors.checkAndThrow( "main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
 
-        mesh.render(borderShader, style.getBorderDrawStyle().value);
+        mesh.render(borderShader, style.getBorderDrawStyle().glValue);
         Errors.checkAndThrow("main render pass | border shader:\t" + style.getBorderShader().shortName());
 
         Gdx.gl.glLineWidth(1f);
@@ -177,7 +177,7 @@ public class ElementRenderer implements IElementRenderer {
         backgroundShader.bind();
         style.getBackgroundShader().applyBindings();
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
-        mesh.render(backgroundShader, style.getBackgroundDrawStyle().value);
+        mesh.render(backgroundShader, style.getBackgroundDrawStyle().glValue);
 
         int glErrCausedByBackgroundShader = Gdx.gl.glGetError();
         if(glErrCausedByBackgroundShader != GL30.GL_NO_ERROR){

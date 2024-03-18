@@ -19,10 +19,10 @@ public enum GLDrawStyle {
     LINE_LOOP(GL30.GL_LINE_LOOP),
     POINTS(GL30.GL_POINTS);
 
-    public final int value;
+    public final int glValue;
 
     GLDrawStyle(int gl30value) {
-        this.value = gl30value;
+        this.glValue = gl30value;
     }
 
     /**
@@ -30,7 +30,7 @@ public enum GLDrawStyle {
      */
     public static GLDrawStyle fromGL30(int gl30Value) {
         for (GLDrawStyle style : values()) {
-            if (style.value == gl30Value) {
+            if (style.glValue == gl30Value) {
                 return style;
             }
         }

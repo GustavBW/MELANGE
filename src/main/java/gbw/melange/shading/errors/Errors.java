@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import org.apache.logging.log4j.Logger;
 
-public class Errors {
+public final class Errors {
 
     /**
      * Throws an exception immediately if a gl error is present.
@@ -29,10 +29,6 @@ public class Errors {
         if(someGlErr != GL30.GL_NO_ERROR){
             logger.warn("| GL Error " + someGlErr + " | " + msg);
         }
-    }
-
-    public static void debugLogAllGLInfo(Logger logger){
-
     }
 
 }

@@ -1,11 +1,10 @@
 package gbw.melange.shading.impl;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.*;
+import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.Errors;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;

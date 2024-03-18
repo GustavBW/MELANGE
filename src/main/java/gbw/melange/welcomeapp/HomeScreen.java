@@ -1,13 +1,14 @@
 package gbw.melange.welcomeapp;
 
 import com.badlogic.gdx.graphics.Color;
-import gbw.melange.common.MeshTable;
+import gbw.melange.mesh.constants.MeshTable;
 import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.navigation.ISpaceNavigator;
 import gbw.melange.shading.*;
-import gbw.melange.shading.procedural.gradients.GradientFragmentBuilder;
+import gbw.melange.shading.constants.InterpolationType;
+import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.procedural.voronoi.VoronoiFragmentBuilder;
 import gbw.melange.welcomeapp.processors.IHomeScreen;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +27,11 @@ public class HomeScreen implements IHomeScreen {
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {
         IScreenSpace space = provider.getScreenSpace(this);
+
         IWrappedShader fragmentShaderA = new VoronoiFragmentBuilder("HS_Gradient_A", pipeline)
-                .vertsAsPoints(MeshTable.SQUARE.getMesh())
-                .setDistanceType(Vec2DistFunc.CHEBYSHEV)
+                .addRandomPoints(10)
+                .setDistanceType(Vec2DistFunc.MANHATTAN)
+                .setInterpolationType(InterpolationType.LINEAR)
                 .build();
 
         final double borderWidth = 5;

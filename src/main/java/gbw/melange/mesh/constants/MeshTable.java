@@ -1,4 +1,4 @@
-package gbw.melange.common;
+package gbw.melange.mesh.constants;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;

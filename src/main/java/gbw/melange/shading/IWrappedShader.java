@@ -2,11 +2,10 @@ package gbw.melange.shading;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.impl.FragmentShader;
 import gbw.melange.shading.impl.VertexShader;
-
-import java.util.List;
 
 /**
  * Represents a fully self-contained (besides from u_projTrans if applicable), uncompiled, shader program. <br/>

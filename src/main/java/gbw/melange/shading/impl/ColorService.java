@@ -4,7 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.shading.Colors;
-import gbw.melange.shading.GLShaderAttr;
+import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.IShaderPipeline;
 import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.procedural.gradients.GradientFragmentBuilder;

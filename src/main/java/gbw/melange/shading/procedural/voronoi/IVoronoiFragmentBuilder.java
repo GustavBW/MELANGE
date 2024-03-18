@@ -2,8 +2,8 @@ package gbw.melange.shading.procedural.voronoi;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.InterpolationType;
-import gbw.melange.shading.Vec2DistFunc;
+import gbw.melange.shading.constants.InterpolationType;
+import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.procedural.noise.NoiseProvider;
 import gbw.melange.shading.procedural.noise.PerlinNoise;
 /**

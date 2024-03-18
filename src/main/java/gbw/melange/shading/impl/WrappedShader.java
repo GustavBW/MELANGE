@@ -1,16 +1,20 @@
 package gbw.melange.shading.impl;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.common.events.observability.IPrestineBlockingObservable;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.ShaderClassification;
+import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A self contained ShaderProgram, allowing for explicit compilation and error detection.
@@ -34,10 +38,11 @@ public class WrappedShader implements IWrappedShader {
      * Whether parameters of this shader changes during runtime (not static) or not (is static)
      */
     private boolean isStatic;
-    private List<ShaderResourceBinding> bindings;
+    private final List<ShaderResourceBinding> bindings;
     private final List<Disposable> combinedDisposables = new ArrayList<>();
     private ShaderProgram program;
     private boolean failedCompilation = false;
+
     /**
      * If this texture is rendered to disk for memory purposes, what resolution should it be stored as.
      */
@@ -49,7 +54,6 @@ public class WrappedShader implements IWrappedShader {
     public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
         this(localName, vertex, fragment, isStatic, new ArrayList<>());
     }
-
     public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings){
         this.vertexShader = vertex;
         this.fragmentShader = fragment;
@@ -72,7 +76,6 @@ public class WrappedShader implements IWrappedShader {
     public ShaderClassification getClassification() {
         return fragmentShader.getClassification();
     }
-
     @Override
     public void bindResource(ShaderResourceBinding binding, Disposable... disposables){
         bindings.add(binding);

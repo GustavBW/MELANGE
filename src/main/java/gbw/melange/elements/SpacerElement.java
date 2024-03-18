@@ -1,7 +1,7 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.common.MeshTable;
+import gbw.melange.mesh.constants.MeshTable;
 import gbw.melange.common.elementary.contraints.IComputedTransforms;
 import gbw.melange.common.elementary.contraints.IElementConstraints;
 import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;

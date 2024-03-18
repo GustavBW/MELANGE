@@ -1,7 +1,7 @@
 package gbw.melange.elements;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.common.MeshTable;
+import gbw.melange.mesh.constants.MeshTable;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementConstraintBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
@@ -69,6 +69,7 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     /** {@inheritDoc} */
     @Override
     public IElement<T> build() {
+        //TODO: Based on <T>, find the matching content renderer
         if(contentProvider != null){
             ILoadingElement<T> element = new LoadingElement<>(
                     mesh,

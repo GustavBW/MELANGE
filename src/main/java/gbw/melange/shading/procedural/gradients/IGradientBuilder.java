@@ -2,7 +2,7 @@ package gbw.melange.shading.procedural.gradients;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.InterpolationType;
+import gbw.melange.shading.constants.InterpolationType;
 
 /**
  * <p>IGradientBuilder interface.</p>

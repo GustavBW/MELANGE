@@ -1,4 +1,4 @@
-package gbw.melange.shading;
+package gbw.melange.shading.constants;
 
 /**
  * For caching purposes

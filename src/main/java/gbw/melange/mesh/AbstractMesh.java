@@ -76,28 +76,28 @@ public class AbstractMesh {
 
         return new AbstractMesh(vertexDataTable, indices, vertices.length);
     }
-    /**
-     * Ordered by field usage
-     */
-    public static final EVertexAttribute[] DEFAULT_ATTRIBUTE_ORDERING = EVertexAttribute.values();
-    private record Face(Vector3 v1, Vector3 v2, Vector3 v3){}
     private List<Face> faces;
     private List<Vector3> positionData;
+    private final Map<Vector3, List<Face>> allFacesOfVert = new HashMap<>();
+    private int currentVertCount = 0;
 
     /**
      * <p>Constructor for AbstractMesh.</p>
      */
     public AbstractMesh(LinkedHashMap<EVertexAttribute,float[]> dataTable, short[] indicies, int vertexCount) throws InvalidMeshIssue {
+        this.currentVertCount = vertexCount;
         if(!dataTable.containsKey(EVertexAttribute.POSITION)){
             positionData = new ArrayList<>();
             faces = new ArrayList<>();
         } else {
             positionData = extractVector3(dataTable, EVertexAttribute.POSITION, vertexCount);
-            faces = calculateFaces(positionData, indicies);
+            faces = calculateFaces(positionData, indicies, allFacesOfVert);
         }
     }
 
-    public static List<Face> calculateFaces(List<Vector3> positionData, short[] indices) {
+
+
+    public static List<Face> calculateFaces(List<Vector3> positionData, short[] indices, Map<Vector3, List<Face>> allFacesOfVert) {
         List<Face> faces = new ArrayList<>();
         for (int i = 0; i < indices.length; i += 3) {
             // Ensure there are at least 3 indices left to form a face
@@ -105,7 +105,11 @@ public class AbstractMesh {
                 Vector3 v1 = positionData.get(indices[i] & 0xFFFF); // & 0xFFFF converts short to unsigned
                 Vector3 v2 = positionData.get(indices[i + 1] & 0xFFFF);
                 Vector3 v3 = positionData.get(indices[i + 2] & 0xFFFF);
-                faces.add(new Face(v1, v2, v3));
+                Face face = new Face(v1, v2, v3);
+                allFacesOfVert.computeIfAbsent(v1, k -> new ArrayList<>()).add(face);
+                allFacesOfVert.computeIfAbsent(v2, k -> new ArrayList<>()).add(face);
+                allFacesOfVert.computeIfAbsent(v3, k -> new ArrayList<>()).add(face);
+                faces.add(face);
             }
         }
         return faces;

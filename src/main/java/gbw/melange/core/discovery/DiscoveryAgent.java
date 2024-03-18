@@ -9,7 +9,10 @@ import gbw.melange.common.hooks.OnInit;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.CoreRootMarker;
 import gbw.melange.core.elementary.ISpaceRegistry;
+import gbw.melange.events.EventsRootMarker;
+import gbw.melange.mesh.MeshRootMarker;
 import gbw.melange.shading.ShadingRootMarker;
+import gbw.melange.tooling.DevToolingRootMarker;
 import org.reflections.Reflections;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,35 +81,15 @@ public class DiscoveryAgent<T> {
             programContext.registerBean(registry);
         }
     }
-    /**
-     * <p>instantiateAndPrepare.</p>
-     *
-     * @throws gbw.melange.common.errors.ViewConfigurationIssue if any.
-     */
     public void instantiateAndPrepare() throws ViewConfigurationIssue {
         refresh();
     }
-    /**
-     * <p>getOnRenderList.</p>
-     *
-     * @return a {@link java.util.List} object
-     */
     public List<OnRender> getOnRenderList(){
         return onRenderHookImpls;
     }
-    /**
-     * <p>Getter for the field <code>onInitHookImpls</code>.</p>
-     *
-     * @return a {@link java.util.List} object
-     */
     public List<OnInit<?>> getOnInitHookImpls(){
         return onInitHookImpls;
     }
-    /**
-     * <p>Getter for the field <code>userViewInformation</code>.</p>
-     *
-     * @return a {@link java.util.Map} object
-     */
     public Map<Class<?>, View> getUserViewInformation(){
         return userViewInformation;
     }
@@ -114,6 +97,9 @@ public class DiscoveryAgent<T> {
     private void registerCoreSpringServices() {
         programContext.scan(CoreRootMarker.class.getPackageName());
         programContext.scan(ShadingRootMarker.class.getPackageName());
+        programContext.scan(DevToolingRootMarker.class.getPackageName());
+        programContext.scan(MeshRootMarker.class.getPackageName());
+        programContext.scan(EventsRootMarker.class.getPackageName());
     }
     private void registerSpaceProviders() throws ClassConfigurationIssue {
         //Damn, var is actually useful for avoiding "oh no our type erasure forces you to use raw types - we're still going to make a yellow line anyways" - issues

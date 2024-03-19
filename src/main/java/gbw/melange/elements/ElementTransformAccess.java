@@ -34,4 +34,8 @@ public class ElementTransformAccess {
     public void setTranslation(IConstrainedElement element, double x, double y, double z){
         ((ComputedTransforms) element.computed()).getMatrix().setTranslation((float) x, (float) y, (float) z);
     }
+
+    public void setRotation(IConstrainedElement element, Vector3 axis, double deg){
+        ((ComputedTransforms) element.computed()).getMatrix().setToRotation(axis,(float) deg);
+    }
 }

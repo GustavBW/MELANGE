@@ -1,8 +1,11 @@
 package gbw.melange.core.elementary;
 
+import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.contraints.IComputedTransforms;
 import gbw.melange.common.elementary.types.IConstrainedElement;
 import gbw.melange.elements.ElementTransformAccess;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -17,6 +20,7 @@ import java.util.*;
  * @version $Id: $Id
  */
 public class AutomaticElementTransformResolver implements IAETR {
+    private static final Logger log = LogManager.getLogger();
 
     public static class ElementSubTree {
         public IConstrainedElement root;
@@ -59,11 +63,12 @@ public class AutomaticElementTransformResolver implements IAETR {
         IConstrainedElement parent = subTree.root;
         List<ElementSubTree> children = subTree.children;
 
-        //System.out.println("Resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
+        log.debug("Element: " + parent + " resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
 
         // Apply translation and scale to the current root of the subtree
         transformAccess.setTranslation(parent, parentOffsetX, parentOffsetY, 0);
         transformAccess.setScale(parent, parentWidth, parentHeight, 1);
+        transformAccess.setRotation(parent, Vector3.Y, 90);
 
         if (children == null || children.isEmpty()) {
             return;

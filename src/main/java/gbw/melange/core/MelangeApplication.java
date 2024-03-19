@@ -148,7 +148,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_IMAGE_UNITS, buffer);
         log.debug("OpenGL Texture unit range: " + buffer.get(0));
 
-        testCam = new PerspectiveCamera();
+        //Following is from: https://gamefromscratch.com/libgdx-tutorial-part-16-cameras/
+        float aspectRatio = (float)Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth();
+
+        testCam = new PerspectiveCamera(90, 1 * aspectRatio, 1);
+        testCam.position.set( 1, .5f,0);
         viewport = new FitViewport(1, 1, testCam);
         testCam.update();
         devTools.setSdir(new SuperDicyInternalReferences(testCam, viewport));
@@ -158,8 +162,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             log.info("Total startup time: " + (totalBootTime) + "ms");
             log.info("MELANGE Framework startup time: " + (totalBootTime - lwjglInitTime) + "ms");
         }
+        timestampOfRenderCycleStart = System.currentTimeMillis();
     }
-    private long frame = 0;
+    private long frames = 0;
+    private long timestampOfRenderCycleStart;
 
     /**
      * Task backlog from last render pass or within last render pass.
@@ -177,11 +183,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         while(runOnMainThread.peek() != null){
             runOnMainThread.poll().run();
         }
-        frame++;
+        frames++;
 
         //Render spaces
         for(ISpace space : spaceNavigator.getOrderedList()){
-            space.render(testCam.view);
+            space.render(testCam.combined);
             Errors.checkAndLog(log, "rendering space " + space + " with Mat4: " + testCam.view);
         }
 
@@ -207,6 +213,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
     @Override
     public void dispose(){
+        long delta = System.currentTimeMillis() - timestampOfRenderCycleStart;
+        log.debug("avg frame time for session: " + (delta / frames) + " ms per frame, or " + (1000 / (delta / frames)) + " fps");
         for(ISpace space : spaceNavigator.getOrderedList()){
             space.dispose();
         }

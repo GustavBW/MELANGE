@@ -9,16 +9,16 @@ import java.util.Set;
 @Configuration
 public class ShadingPipelineConfig implements IShadingPipelineConfig {
 
-    private Set<IShadingPipelineConfig.PipelineLogLevel> logLevel = new HashSet<>(Set.of(IShadingPipelineConfig.PipelineLogLevel.values()));
+    private Set<LogLevel> logLevel = new HashSet<>(Set.of(LogLevel.values()));
 
     @Override
-    public IShadingPipelineConfig setLoggingAspects(Set<PipelineLogLevel> level) {
+    public IShadingPipelineConfig setLoggingAspects(Set<LogLevel> level) {
         this.logLevel = level;
         return this;
     }
 
     @Override
-    public Set<PipelineLogLevel> getLoggingAspects() {
+    public Set<LogLevel> getLoggingAspects() {
         return logLevel;
     }
 }

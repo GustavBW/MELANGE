@@ -196,11 +196,19 @@ public enum Key {
      private static final Map<Integer, Key> lookupTable = new HashMap<>();
      static {
           for (Key value : Key.values()) {
+               //There are some colluding values.
+               if(lookupTable.containsKey(value.code)) continue;
+
                lookupTable.put(value.code, value);
           }
      }
      public static Key valueOf(int i){
           if(i == 0 || !lookupTable.containsKey(i)) return UNKNOWN;
           return lookupTable.get(i);
+     }
+
+     @Override
+     public String toString(){
+          return this.name() + "{"+this.code+"}";
      }
 }

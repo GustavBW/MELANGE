@@ -1,9 +1,12 @@
 package gbw.melange.common;
 
+import gbw.melange.core.MelangeApplication;
 import gbw.melange.mesh.IMeshPipelineConfig;
 import gbw.melange.mesh.MeshPipelineConfig;
 import gbw.melange.shading.IShadingPipelineConfig;
 import gbw.melange.shading.impl.ShadingPipelineConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,7 @@ import java.util.Set;
 //that instance is preserved and distributed as if the result of the standard BeanProvider<IMelangeConfig>
 @Configuration
 public class MelangeConfig implements IMelangeConfig {
+    private static final Logger log = LogManager.getLogger();
     private boolean cachingEnabled = true;
     private Set<LogLevel> logLevel = new HashSet<>(Set.of(LogLevel.VIEW_INFO, LogLevel.HOOKS, LogLevel.IMPROPER_API_USAGE, LogLevel.PIPELINE_ISSUES));
     private boolean glDebugEnabled = false;
@@ -21,6 +25,15 @@ public class MelangeConfig implements IMelangeConfig {
     private boolean clearGeneratedOnStart = true;
     private IShadingPipelineConfig shadingConfig = new ShadingPipelineConfig();
     private IMeshPipelineConfig meshConfig = new MeshPipelineConfig();
+
+    public void resolve(){
+
+        if(!logLevel.contains(LogLevel.PIPELINE_STATUS)){
+            log.trace("resolve | Removing pipeline info");
+            shadingConfig.setLoggingAspects(new HashSet<>());
+
+        }
+    }
 
     @Override
     public IMelangeConfig useCaching(boolean yesNo){

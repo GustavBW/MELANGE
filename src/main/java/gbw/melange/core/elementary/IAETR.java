@@ -5,7 +5,8 @@ import gbw.melange.common.elementary.types.IConstrainedElement;
 import java.util.List;
 
 /**
- * I-Automatic-Element-Transform-Resolver
+ * I-Automatic-Element-Transform-Resolver. Aka a CSP algorithm
+ * Purposefully stateful to act as a sort of "cache"
  *
  * @author GustavBW
  * @version $Id: $Id

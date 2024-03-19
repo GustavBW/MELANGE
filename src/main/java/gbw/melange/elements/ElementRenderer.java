@@ -166,6 +166,7 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
         Errors.checkAndThrow( "main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
 
+        mesh.transform(appliedMatrix);
         mesh.render(borderShader, style.getBorderDrawStyle().glValue);
         Errors.checkAndThrow("main render pass | border shader:\t" + style.getBorderShader().shortName());
 

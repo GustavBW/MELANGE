@@ -22,6 +22,8 @@ import gbw.melange.common.hooks.OnRender;
 import gbw.melange.core.discovery.DiscoveryAgent;
 import gbw.melange.core.interactions.IInputListener;
 import gbw.melange.core.elementary.SpaceNavigator;
+import gbw.melange.tooling.DevTools;
+import gbw.melange.tooling.SuperDicyInternalReferences;
 import org.lwjgl.opengl.GL43C;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +35,7 @@ import java.nio.IntBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MelangeApplication<T> extends ApplicationAdapter {
-    private static final Logger log = LogManager.getLogger(MelangeApplication.class);
+    private static final Logger log = LogManager.getLogger();
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass) throws Exception {
         return run(mainClass, new MelangeConfig());
     }
@@ -63,9 +65,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private DiscoveryAgent<T> discoveryAgent;
     private static long bootTimeA;
     private final IMelangeConfig config;
-    public MelangeApplication(Class<T> userMainClass, IMelangeConfig config) throws ClassConfigurationIssue {
+    private MelangeApplication(Class<T> userMainClass, IMelangeConfig config) throws ClassConfigurationIssue {
         log.info("Welcome to the spice, MELANGE.");
         this.config = config;
+        config.resolve();
         long discoveryTimeA = System.currentTimeMillis();
         discoveryAgent = DiscoveryAgent.locateButDontInstantiate(userMainClass, config);
 
@@ -96,9 +99,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         ISpaceRegistry spaceRegistry;
         InputProcessor inputListener;
+        DevTools devTools;
         try {
             discoveryAgent.instantiateAndPrepare();
             ApplicationContext context = discoveryAgent.getContext();
+            devTools = context.getBean(DevTools.class);
             spaceRegistry = context.getBean(ISpaceRegistry.class);
             spaceNavigator = context.getBean(SpaceNavigator.class);
             spaceNavigator.loadFromRegistry(spaceRegistry);
@@ -146,6 +151,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         testCam = new PerspectiveCamera();
         viewport = new FitViewport(1, 1, testCam);
         testCam.update();
+        devTools.setSdir(new SuperDicyInternalReferences(testCam, viewport));
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {

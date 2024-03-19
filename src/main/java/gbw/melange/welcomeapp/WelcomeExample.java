@@ -18,8 +18,7 @@ public class WelcomeExample {
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws Exception {
-        Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.PIPELINE_STATUS, IMelangeConfig.LogLevel.PIPELINE_ISSUES));
-
+        Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.values()));
 
         IMelangeConfig config = new MelangeConfig()
             .enableGLDebug(true)

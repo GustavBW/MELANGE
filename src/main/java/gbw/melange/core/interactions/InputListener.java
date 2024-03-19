@@ -1,25 +1,38 @@
 package gbw.melange.core.interactions;
 
 import com.badlogic.gdx.InputProcessor;
+import gbw.melange.common.events.OnClick;
+import gbw.melange.common.events.interactions.Button;
+import gbw.melange.common.events.interactions.Key;
+import gbw.melange.events.ClickService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>InputListener class.</p>
- *
  * @author GustavBW
- * @version $Id: $Id
  */
 @Service
 public class InputListener implements IInputListener {
+
+    private final ClickService clickService;
+
+    @Autowired
+    public InputListener(ClickService clickService){
+        this.clickService = clickService;
+    }
+
+
     /** {@inheritDoc} */
     @Override
     public boolean keyDown(int i) {
+        clickService._keyDown(Key.valueOf(i));
         return false;
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean keyUp(int i) {
+        clickService._keyUp(Key.valueOf(i));
         return false;
     }
 
@@ -31,13 +44,15 @@ public class InputListener implements IInputListener {
 
     /** {@inheritDoc} */
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
+    public boolean touchDown(int x, int y, int pointer, int button) {
+        clickService._mouseDown(Button.valueOf(button), x, y, pointer);
         return false;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean touchUp(int i, int i1, int i2, int i3) {
+    public boolean touchUp(int x, int y, int pointer, int button) {
+        clickService._mouseUp(Button.valueOf(button), x, y, pointer);
         return false;
     }
 
@@ -49,19 +64,20 @@ public class InputListener implements IInputListener {
 
     /** {@inheritDoc} */
     @Override
-    public boolean touchDragged(int i, int i1, int i2) {
+    public boolean touchDragged(int x, int y, int pointer) {
         return false;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean mouseMoved(int i, int i1) {
+    public boolean mouseMoved(int x, int y) {
+        clickService._mouseMoved(x, y);
         return false;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean scrolled(float v, float v1) {
+    public boolean scrolled(float amountX, float amountY) {
         return false;
     }
 }

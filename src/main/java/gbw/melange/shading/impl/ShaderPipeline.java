@@ -51,7 +51,7 @@ public class ShaderPipeline implements IShaderPipeline {
             recentlyCompiled.add(wrapped);
         }
 
-        if (config.getLoggingAspects().contains(IShadingPipelineConfig.PipelineLogLevel.COMPILE_STEP_INFO)){
+        if (config.getLoggingAspects().contains(IShadingPipelineConfig.LogLevel.COMPILE_STEP_INFO)){
             log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::shortName).toList());
         }
 
@@ -116,7 +116,7 @@ public class ShaderPipeline implements IShaderPipeline {
         }
         final int actualHits = cacheUtil.getHits() - hitsPre;
 
-        if (config.getLoggingAspects().contains(IShadingPipelineConfig.PipelineLogLevel.CACHING_STEP_INFO)) {
+        if (config.getLoggingAspects().contains(IShadingPipelineConfig.LogLevel.CACHING_STEP_INFO)) {
             log.info("Cache step complete " + ( cachingFailures > 0 ? "with" : "without" ) + " issue(s) for: " + successFullCaches);
             log.info("Cache hits: " + actualHits + "/" + toBeCached.size() + " failures: " + cachingFailures + "/" + toBeCached.size());
         }
@@ -138,7 +138,7 @@ public class ShaderPipeline implements IShaderPipeline {
 
     @Override
     public void clearCache() {
-        if (config.getLoggingAspects().contains(IShadingPipelineConfig.PipelineLogLevel.LIFE_CYCLE_INFO)) {
+        if (config.getLoggingAspects().contains(IShadingPipelineConfig.LogLevel.LIFE_CYCLE_INFO)) {
             log.info("Clearing existing generated content");
         }
         cacheUtil.clearCache();

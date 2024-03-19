@@ -18,6 +18,7 @@ public interface IMelangeConfig {
         PIPELINE_ISSUES;
     }
 
+    void resolve();
     /**
      * Cache shaders on disk and sample as textures to increase performance.
      *

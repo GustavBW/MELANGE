@@ -30,7 +30,7 @@ public class DevTools implements OnRender {
         click.whileKeyHeld(Key.S, () -> xTrans -= 1);
         click.whileKeyHeld(Key.D, () -> yTrans -= 1);
         click.whileKeyHeld(Key.SPACE, () -> zTrans += 1);
-        click.whileKeyHeld(Key.SHIFT_LEFT, () -> zTrans -= -1);
+        click.whileKeyHeld(Key.SHIFT_LEFT, () -> zTrans -= 1);
     }
 
     public void setSdir(SuperDicyInternalReferences sdir){

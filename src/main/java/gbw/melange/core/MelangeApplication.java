@@ -154,6 +154,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         testCam = new PerspectiveCamera(90, 1 * aspectRatio, 1);
         testCam.position.set( 1, .5f,0);
         viewport = new FitViewport(1, 1, testCam);
+        testCam.near = 0;
+        testCam.far = 10000;
         testCam.update();
         devTools.setSdir(new SuperDicyInternalReferences(testCam, viewport));
 
@@ -184,6 +186,9 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             runOnMainThread.poll().run();
         }
         frames++;
+
+        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
         //Render spaces
         for(ISpace space : spaceNavigator.getOrderedList()){

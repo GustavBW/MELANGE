@@ -1,4 +1,4 @@
-package gbw.melange.shading.impl;
+package gbw.melange.shading.shaders.partial;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.constants.ShaderClassification;

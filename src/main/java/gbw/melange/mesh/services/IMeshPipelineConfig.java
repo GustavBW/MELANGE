@@ -1,4 +1,4 @@
-package gbw.melange.mesh;
+package gbw.melange.mesh.services;
 
 public interface IMeshPipelineConfig {
 

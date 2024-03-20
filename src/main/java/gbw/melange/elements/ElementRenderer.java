@@ -12,7 +12,9 @@ import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.shading.errors.Errors;
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.shading.impl.WrappedShader;
+import gbw.melange.shading.shaders.ITexturedShader;
+import gbw.melange.shading.shaders.TextureShader;
+import gbw.melange.shading.shaders.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,12 +29,13 @@ import java.util.Collection;
  */
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LogManager.getLogger();
-
+    private final ITexturedShader toScreenTextureShader = TextureShader.TEXTURE.copyAs("MELANGE_ER_FINAL_OTS");
 
     /**
      * <p>Constructor for ElementRenderer.</p>
      */
-    public ElementRenderer(){}
+    public ElementRenderer(){
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -50,12 +53,12 @@ public class ElementRenderer implements IElementRenderer {
         }
     }
 
-
+    private final Matrix4 appliedMatrix = new Matrix4();
     private void draw0(Matrix4 parentMatrix, IElement<?> element){
 
         ComputedTransforms computed = ((ComputedTransforms) element.computed());
         Matrix4 elementMatrix = computed.getMatrix();
-        Matrix4 appliedMatrix = new Matrix4(parentMatrix).mul(elementMatrix);
+        appliedMatrix.idt().mul(parentMatrix).mul(elementMatrix);
 
         FrameBuffer fboA = ((Element<?>) element).getComputedShading().getFrameBufferA();
         FrameBuffer fboB = ((Element<?>) element).getComputedShading().getFrameBufferB();
@@ -75,7 +78,6 @@ public class ElementRenderer implements IElementRenderer {
         //Content
         //...
     }
-
     private static void outputToScreen(FrameBuffer fbo, IElement<?> element, Matrix4 appliedMatrix){
         // The long way of clearing only some of the screen
         final double[] bounds = element.computed().getAxisAlignedBounds();
@@ -95,7 +97,7 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
         fbo.getColorBufferTexture().bind(69);
 
-        ShaderProgram finalShader = WrappedShader.TEXTURE.getProgram();
+        ShaderProgram finalShader = TextureShader.TEXTURE.getProgram();
         finalShader.bind();
         finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
         fbo.getColorBufferTexture().bind(69);

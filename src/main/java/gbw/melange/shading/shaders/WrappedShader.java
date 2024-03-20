@@ -1,36 +1,31 @@
-package gbw.melange.shading.impl;
+package gbw.melange.shading.shaders;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.common.events.observability.IPrestineBlockingObservable;
-import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A self contained ShaderProgram, allowing for explicit compilation and error detection.
  *
- * @author GustavBW
- * @version $Id: $Id
+ * @param <T> Type of the specific child instance;
  */
-public class WrappedShader implements IWrappedShader {
+public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWrappedShader<T> {
     private static final Logger log = LogManager.getLogger();
 
-    /** Constant <code>DEFAULT</code> */
-    public static WrappedShader DEFAULT = new WrappedShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT);
+    public static WrappedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false, new ArrayList<>());
 
-    /** Constant <code>TEXTURE</code> */
-    public static WrappedShader TEXTURE = new WrappedShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
+    protected final List<Disposable> combinedDisposables = new ArrayList<>();
+    protected final List<ShaderResourceBinding> bindings;
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
@@ -38,13 +33,12 @@ public class WrappedShader implements IWrappedShader {
      * Whether parameters of this shader changes during runtime (not static) or not (is static)
      */
     private boolean isStatic;
-    private final List<ShaderResourceBinding> bindings;
-    private final List<Disposable> combinedDisposables = new ArrayList<>();
     private ShaderProgram program;
     private boolean failedCompilation = false;
 
     /**
      * If this texture is rendered to disk for memory purposes, what resolution should it be stored as.
+     * E.g. 500x500
      */
     private int desiredResolution = 500;
 
@@ -62,20 +56,31 @@ public class WrappedShader implements IWrappedShader {
         this.bindings = bindings;
     }
 
+
+    private int nextBindingIndex = 0;
+    protected int getNextBindingIndex(){
+        return nextBindingIndex++;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void applyBindings() {
-        for (int i = 0; i < bindings.size(); i++){
-            ShaderResourceBinding binding = bindings.get(i);
-            //Swap to primes for complete solution. This only allows 100 unique bindings per shader, which should be enough, but you never know
-            binding.bind((i + 1), program);
+        applyChildBindings(program);
+        for (var binding : bindings){
+            binding.bind(getNextBindingIndex(), program);
         }
+        nextBindingIndex = 0;
     }
+    protected abstract void applyChildBindings(ShaderProgram program);
 
     @Override
     public ShaderClassification getClassification() {
+        if(getChildClassification().abstractValRep > fragmentShader.getClassification().abstractValRep){
+            return getChildClassification();
+        }
         return fragmentShader.getClassification();
     }
+    protected abstract ShaderClassification getChildClassification();
     @Override
     public void bindResource(ShaderResourceBinding binding, Disposable... disposables){
         bindings.add(binding);
@@ -97,14 +102,27 @@ public class WrappedShader implements IWrappedShader {
             );
         }
     }
-    @Override
-    public IWrappedShader copy(){
-        return new WrappedShader(localName, vertexShader, fragmentShader, isStatic, bindings);
+
+    public T copy(){
+        T child = copyChild();
+        try{
+            child.compile();
+        }catch (Exception partiallyIgnored){
+            log.warn("Compiling a new copy of " + child.shortName() + " failed: " + partiallyIgnored.getMessage());
+        }
+        return child;
     }
-    @Override
-    public IWrappedShader copyAs(String newLocalName){
-        return new WrappedShader(newLocalName, vertexShader, fragmentShader, isStatic, bindings);
+    protected abstract T copyChild();
+    public T copyAs(String newLocalName){
+        T child = copyChildAs(newLocalName);
+        try{
+            child.compile();
+        }catch (Exception partiallyIgnored){
+            log.warn("Compiling a new copy of " + child.shortName() + " as: " + newLocalName + " failed: " + partiallyIgnored.getMessage());
+        }
+        return child;
     }
+    protected abstract T copyChildAs(String newLocalName);
 
 
     /** {@inheritDoc} */
@@ -115,19 +133,21 @@ public class WrappedShader implements IWrappedShader {
     /** {@inheritDoc} */
     @Override
     public void dispose() {
+        disposeChildSpecificResources();
         combinedDisposables.forEach(Disposable::dispose);
         program.dispose();
     }
+    protected abstract void disposeChildSpecificResources();
 
     /**
      * @return the old program
      */
-    void replaceProgram(VertexShader vertex, FragmentShader frag){
+    public void replaceProgram(VertexShader vertex, FragmentShader frag){
         this.program.dispose();
         this.program = new ShaderProgram(vertex.code(), frag.code());
     }
-    void clearBindings(){
-        log.trace("Clearing bindings " + bindings);
+    public void clearBindings(){
+        log.debug("Clearing bindings " + bindings + " for " + this.shortName());
         bindings.clear();
         combinedDisposables.forEach(Disposable::dispose);
         combinedDisposables.clear();

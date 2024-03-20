@@ -15,7 +15,7 @@ import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.shading.errors.Errors;
-import gbw.melange.shading.impl.ShaderPipeline;
+import gbw.melange.shading.services.ShaderPipeline;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
 import gbw.melange.common.hooks.OnRender;
@@ -41,7 +41,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     }
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass, IMelangeConfig config) throws Exception {
         final Lwjgl3ApplicationConfiguration lwjglConfig = new Lwjgl3ApplicationConfiguration();
-        lwjglConfig.setForegroundFPS(60);
+        lwjglConfig.setForegroundFPS(60000);
+        lwjglConfig.setIdleFPS(60000);
         lwjglConfig.setTitle("MelangeApp");
         lwjglConfig.setDecorated(true);
         lwjglConfig.setBackBufferConfig(8, 8, 8, 8, 16, 0, 8); //Samples == AA passes
@@ -152,9 +153,10 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         float aspectRatio = (float)Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth();
 
         testCam = new PerspectiveCamera(90, 1 * aspectRatio, 1);
-        testCam.position.set( 1, .5f,0);
-        viewport = new FitViewport(1, 1, testCam);
-        testCam.near = 0;
+        testCam.position.set( 0,0,0);
+        testCam.lookAt(0,0,0);
+        viewport = new FitViewport(100, 100, testCam);
+        testCam.near = 1f;
         testCam.far = 10000;
         testCam.update();
         devTools.setSdir(new SuperDicyInternalReferences(testCam, viewport));
@@ -186,9 +188,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             runOnMainThread.poll().run();
         }
         frames++;
-
-        Gdx.gl.glClearColor(0,0,0,0);
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
         //Render spaces
         for(ISpace space : spaceNavigator.getOrderedList()){

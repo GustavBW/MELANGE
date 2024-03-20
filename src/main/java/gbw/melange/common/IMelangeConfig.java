@@ -1,7 +1,7 @@
 package gbw.melange.common;
 
-import gbw.melange.mesh.IMeshPipelineConfig;
-import gbw.melange.shading.IShadingPipelineConfig;
+import gbw.melange.mesh.services.IMeshPipelineConfig;
+import gbw.melange.shading.services.IShadingPipelineConfig;
 
 import java.util.Set;
 

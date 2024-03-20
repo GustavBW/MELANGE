@@ -15,7 +15,7 @@ public class DevTools implements OnRender {
     private static final Logger log = LogManager.getLogger();
 
     private SuperDicyInternalReferences sdir = null;
-    private int xTrans = 0, yTrans = 0, zTrans = 0;
+    private float xTrans = 0, yTrans = 0, zTrans = 0;
 
     private boolean[] enabled = new boolean[]{false};
 
@@ -25,12 +25,12 @@ public class DevTools implements OnRender {
             log.info("Enabling Dev tools");
             enabled[0] = true;
         });
-        click.whileKeyHeld(Key.W, () -> xTrans += 1);
-        click.whileKeyHeld(Key.A, () -> yTrans += 1);
-        click.whileKeyHeld(Key.S, () -> xTrans -= 1);
-        click.whileKeyHeld(Key.D, () -> yTrans -= 1);
-        click.whileKeyHeld(Key.SPACE, () -> zTrans += 1);
-        click.whileKeyHeld(Key.SHIFT_LEFT, () -> zTrans -= 1);
+        click.whileKeyHeld(Key.W, () -> zTrans -= .1f);
+        click.whileKeyHeld(Key.A, () -> xTrans += .1f);
+        click.whileKeyHeld(Key.S, () -> zTrans += .1f);
+        click.whileKeyHeld(Key.D, () -> xTrans -= .1f);
+        click.whileKeyHeld(Key.SPACE, () -> yTrans += .1f);
+        click.whileKeyHeld(Key.SHIFT_LEFT, () -> yTrans -= .1f);
     }
 
     public void setSdir(SuperDicyInternalReferences sdir){
@@ -43,5 +43,6 @@ public class DevTools implements OnRender {
             sdir.mainCam().position.set(xTrans, yTrans, zTrans);
             sdir.mainCam().update();
         }
+        //System.out.println("x:  " + xTrans + " y: " + yTrans + " z: " + zTrans);
     }
 }

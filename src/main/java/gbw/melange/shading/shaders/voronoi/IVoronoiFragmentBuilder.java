@@ -1,11 +1,11 @@
-package gbw.melange.shading.procedural.voronoi;
+package gbw.melange.shading.shaders.voronoi;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.shaders.IWrappedShader;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.Vec2DistFunc;
-import gbw.melange.shading.procedural.noise.NoiseProvider;
-import gbw.melange.shading.procedural.noise.PerlinNoise;
+import gbw.melange.shading.shaders.noise.NoiseProvider;
+import gbw.melange.shading.shaders.noise.PerlinNoise;
 /**
  * <p>IVoronoiFragmentBuilder interface.</p>
  *
@@ -60,5 +60,5 @@ public interface IVoronoiFragmentBuilder {
      */
     IVoronoiFragmentBuilder setInterpolationType(InterpolationType interpolationType);
 
-    IWrappedShader build();
+    IVoronoiShader build();
 }

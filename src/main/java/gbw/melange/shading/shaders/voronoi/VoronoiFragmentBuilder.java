@@ -1,4 +1,4 @@
-package gbw.melange.shading.procedural.voronoi;
+package gbw.melange.shading.shaders.voronoi;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
@@ -8,11 +8,11 @@ import gbw.melange.shading.*;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.constants.Vec2DistFunc;
-import gbw.melange.shading.impl.FragmentShader;
-import gbw.melange.shading.impl.VertexShader;
-import gbw.melange.shading.impl.WrappedShader;
-import gbw.melange.shading.procedural.noise.NoiseProvider;
-import gbw.melange.shading.procedural.noise.PerlinNoise;
+import gbw.melange.shading.services.IShaderPipeline;
+import gbw.melange.shading.shaders.noise.NoiseProvider;
+import gbw.melange.shading.shaders.noise.PerlinNoise;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -117,7 +117,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
     }
 
     @Override
-    public IWrappedShader build() {
+    public IVoronoiShader build() {
         String code = glslDeclarations +
                 generateDistanceFunction(distanceType) +
                 generateColorInterpolationFunction(interpolationType) +
@@ -125,7 +125,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
 
         FragmentShader fragment = new FragmentShader(localName, code, ShaderClassification.COMPLEX, true);
         log.trace("Generated fragment shader henceforth known as: " + localName + "\n " + fragment.code());
-        IWrappedShader wrapped = new WrappedShader(localName, VertexShader.DEFAULT, fragment, !points.isEmpty());
+        IVoronoiShader wrapped = new VoronoiShader(localName, VertexShader.DEFAULT, fragment, !points.isEmpty(), new ArrayList<>());
         if (pipeline != null) {
             log.trace(localName + " registered to pipeline " + pipeline);
             pipeline.registerForCompilation(wrapped);
@@ -133,11 +133,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
 
         if(!points.isEmpty()){
             VecUtil.redistribute(points, 0, 1);
-            final float[] flattenedPoints = VecUtil.flattenVec2(points);
-            wrapped.bindResource((index, program) -> {
-                program.setUniform2fv(VoronoiShaderAttr.POINTS.glValue, flattenedPoints, 0, flattenedPoints.length);
-                program.setUniformi("u_num"+VoronoiShaderAttr.POINTS.glValue, flattenedPoints.length);
-            });
+            wrapped.setPoints(points);
         }
         return wrapped;
     }
@@ -148,7 +144,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
         precision mediump float;
     #endif
     """ +
-    "uniform vec2 "+VoronoiShaderAttr.POINTS.glValue+"["+IVoronoiFragmentBuilder.MAX_NUM_POINTS+"];\n" +
+    "uniform vec2 "+ VoronoiShaderAttr.POINTS.glValue+"["+IVoronoiFragmentBuilder.MAX_NUM_POINTS+"];\n" +
     "uniform int u_num"+VoronoiShaderAttr.POINTS.glValue+";\n" +
     """
     varying vec2 v_texCoords;

@@ -1,4 +1,4 @@
-package gbw.melange.mesh;
+package gbw.melange.mesh.services;
 
 import org.springframework.context.annotation.Configuration;
 

@@ -1,14 +1,14 @@
-package gbw.melange.shading.impl;
+package gbw.melange.shading.services;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.shading.Colors;
 import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.IShaderPipeline;
-import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.procedural.gradients.GradientFragmentBuilder;
-import gbw.melange.shading.procedural.gradients.IGradientBuilder;
+import gbw.melange.shading.shaders.*;
+import gbw.melange.shading.shaders.gradients.GradientFragmentBuilder;
+import gbw.melange.shading.shaders.gradients.IGradientBuilder;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,23 +36,23 @@ public class ColorService implements Colors {
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader constant(Color color) {
+    public IWrappedShader<?> constant(Color color) {
         float r = color.r, g = color.g, b = color.b, a = color.a;
-        IWrappedShader wrapped = new WrappedShader("CONSTANT_RGBA_"+(nextId++)+"("+r+","+g+","+b+","+a+")", VertexShader.DEFAULT, FragmentShader.constant(color));
+        IWrappedShader<?> wrapped = new BlindShader("CONSTANT_RGBA_"+(nextId++)+"("+r+","+g+","+b+","+a+")", VertexShader.DEFAULT, FragmentShader.constant(color));
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader image(FileHandle src) throws IOException {
+    public ITexturedShader image(FileHandle src) throws IOException {
         return image(new Texture(src));
     }
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader image(Texture src) {
-        IWrappedShader wrapped = new WrappedShader("TEXTURE_"+(nextId++), VertexShader.DEFAULT, FragmentShader.TEXTURE);
+    public ITexturedShader image(Texture src) {
+        ITexturedShader wrapped = new TextureShader("TEXTURE_"+(nextId++), VertexShader.DEFAULT, FragmentShader.TEXTURE);
         wrapped.bindResource((index, program) -> {
             src.bind(index);
             program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
@@ -76,8 +76,8 @@ public class ColorService implements Colors {
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader fromFragment(FragmentShader fragmentShader) {
-        IWrappedShader wrapped = new WrappedShader("CUSTOM_FRAGMENT_"+(nextId++), VertexShader.DEFAULT, fragmentShader);
+    public BlindShader fromFragment(FragmentShader fragmentShader) {
+        BlindShader wrapped = new BlindShader("CUSTOM_FRAGMENT_"+(nextId++), VertexShader.DEFAULT, fragmentShader);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

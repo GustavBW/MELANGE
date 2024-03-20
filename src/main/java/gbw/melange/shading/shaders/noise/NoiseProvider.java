@@ -1,4 +1,4 @@
-package gbw.melange.shading.procedural.noise;
+package gbw.melange.shading.shaders.noise;
 
 @FunctionalInterface
 public interface NoiseProvider {

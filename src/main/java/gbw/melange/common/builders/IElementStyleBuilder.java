@@ -2,7 +2,8 @@ package gbw.melange.common.builders;
 
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.BevelConfig;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.services.Colors;
+import gbw.melange.shading.shaders.IWrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 /**
@@ -30,13 +31,13 @@ public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder
 
     /**
      * Set the background color, image, gradient or others of this element. <br/>
-     * Access various options by grabbing the {@link gbw.melange.shading.Colors} service through an autowired field in your view. <br/>
+     * Access various options by grabbing the {@link Colors} service through an autowired field in your view. <br/>
      */
     IElementStyleBuilder<T> setBackgroundColor(IWrappedShader shader);
 
     /**
      * Set the border color, image, gradient or others of this element. <br/>
-     * Access various options by grabbing the {@link gbw.melange.shading.Colors} service through an autowired field in your view. <br/>
+     * Access various options by grabbing the {@link Colors} service through an autowired field in your view. <br/>
      */
     IElementStyleBuilder<T> setBorderColor(IWrappedShader shader);
     /**

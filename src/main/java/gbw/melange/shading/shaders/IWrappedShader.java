@@ -1,11 +1,13 @@
-package gbw.melange.shading;
+package gbw.melange.shading.shaders;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
-import gbw.melange.shading.impl.FragmentShader;
-import gbw.melange.shading.impl.VertexShader;
+import gbw.melange.shading.services.IShaderPipeline;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.partial.VertexShader;
 
 /**
  * Represents a fully self-contained (besides from u_projTrans if applicable), uncompiled, shader program. <br/>
@@ -14,15 +16,21 @@ import gbw.melange.shading.impl.VertexShader;
  * @author GustavBW
  * @version $Id: $Id
  */
-public interface IWrappedShader extends Disposable {
+public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable {
 
     /**
      * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}<br/>
      * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed. <br/>
-     * Duly note that OpenGL has limits to the amount of bindings possible, so you might want to batch things that require unique indexes and no indexes at all.
-     * @param binding any function taking in the bind index and the program. Example:
+     * Duly note that OpenGL has limits to the amount of unique binding indexes for different purposes (textures for instance) possible, so you might want to batch things that require unique indexes and no indexes at all.
+     * @param binding any function taking in the bind index and the program. Example: <br/>
+     *
      * <pre>
-     *      {@code (int index, ShaderProgram program) -> { any }}
+     *      {@code
+     *      shader.bindResource((int index, ShaderProgram program) -> {
+     *              anything here
+ *          }, resource0, resource1...)
+ *          }
+     *
      * </pre>
      */
     void bindResource(ShaderResourceBinding binding, Disposable... disposables);
@@ -41,15 +49,15 @@ public interface IWrappedShader extends Disposable {
 
     /**
      * Compiles the program and throws an error immediately if the compilation process isn't successful.
-     * Before this method is invoked, {@link gbw.melange.shading.IWrappedShader#getProgram()} will return null.
+     * Before this method is invoked, {@link IWrappedShader#getProgram()} will return null.
      */
     void compile() throws ShaderCompilationIssue;
 
     /**
      * Deep-copies (I think) a given shader.
      */
-    IWrappedShader copy();
-    IWrappedShader copyAs(String newLocalName);
+    T copy();
+    T copyAs(String newLocalName);
 
     /**
      * Whether this shader is modified during its lifespan or not. If not, it is a candidate for cashing and might be rendered to a texture, which is drawn instead.

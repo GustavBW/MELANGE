@@ -1,6 +1,5 @@
-package gbw.melange.shading.impl;
+package gbw.melange.shading.services;
 
-import gbw.melange.shading.IShadingPipelineConfig;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashSet;

@@ -66,9 +66,9 @@ public class AutomaticElementTransformResolver implements IAETR {
         log.debug("Element: " + parent + " resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
 
         // Apply translation and scale to the current root of the subtree
-        transformAccess.setTranslation(parent, parentOffsetX, parentOffsetY, 0);
-        transformAccess.setScale(parent, parentWidth, parentHeight, 1);
-        transformAccess.setRotation(parent, Vector3.Z, 90);
+        //transformAccess.setTranslation(parent, parentOffsetX, parentOffsetY, 0);
+        //transformAccess.setScale(parent, parentWidth, parentHeight, 1);
+        //transformAccess.setRotation(parent, Vector3.Z, 1);
 
         if (children == null || children.isEmpty()) {
             return;

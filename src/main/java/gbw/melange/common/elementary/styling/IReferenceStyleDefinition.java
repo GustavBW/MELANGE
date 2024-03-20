@@ -1,7 +1,7 @@
 package gbw.melange.common.elementary.styling;
 
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.shaders.IWrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 import java.util.List;
@@ -16,25 +16,25 @@ public interface IReferenceStyleDefinition {
     /**
      * <p>backgroundShader.</p>
      *
-     * @return a {@link gbw.melange.shading.IWrappedShader} object
+     * @return a {@link IWrappedShader} object
      */
     IWrappedShader backgroundShader();
     /**
      * <p>backgroundShader.</p>
      *
-     * @param program a {@link gbw.melange.shading.IWrappedShader} object
+     * @param program a {@link IWrappedShader} object
      */
     void backgroundShader(IWrappedShader program);
     /**
      * <p>borderShader.</p>
      *
-     * @return a {@link gbw.melange.shading.IWrappedShader} object
+     * @return a {@link IWrappedShader} object
      */
     IWrappedShader borderShader();
     /**
      * <p>borderShader.</p>
      *
-     * @param program a {@link gbw.melange.shading.IWrappedShader} object
+     * @param program a {@link IWrappedShader} object
      */
     void borderShader(IWrappedShader program);
     /**

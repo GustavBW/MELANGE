@@ -1,4 +1,4 @@
-package gbw.melange.shading.impl;
+package gbw.melange.shading.shaders.partial;
 
 /**
  * String alias for now

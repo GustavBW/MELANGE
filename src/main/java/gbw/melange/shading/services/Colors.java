@@ -1,10 +1,13 @@
-package gbw.melange.shading;
+package gbw.melange.shading.services;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.shading.impl.FragmentShader;
-import gbw.melange.shading.procedural.gradients.IGradientBuilder;
+import gbw.melange.shading.shaders.BlindShader;
+import gbw.melange.shading.shaders.ITexturedShader;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.gradients.IGradientBuilder;
+import gbw.melange.shading.shaders.IWrappedShader;
 
 /**
  * Spring-distributed entry point for the melange colors api.
@@ -18,36 +21,36 @@ public interface Colors {
      * <p>constant.</p>
      *
      * @param color a {@link com.badlogic.gdx.graphics.Color} object
-     * @return a {@link gbw.melange.shading.IWrappedShader} object
+     * @return a {@link IWrappedShader} object
      */
-    IWrappedShader constant(Color color);
+    IWrappedShader<?> constant(Color color);
 
     /**
      * <p>image.</p>
      *
      * @throws java.lang.Exception if the file couldn't be found.
      * @param src a {@link com.badlogic.gdx.files.FileHandle} object
-     * @return a {@link gbw.melange.shading.IWrappedShader} object
+     * @return a {@link IWrappedShader} object
      */
-    IWrappedShader image(FileHandle src) throws Exception;
+    ITexturedShader image(FileHandle src) throws Exception;
     /**
      * <p>image.</p>
      *
      * @param src a {@link com.badlogic.gdx.graphics.Texture} object
-     * @return a {@link gbw.melange.shading.IWrappedShader} object
+     * @return a {@link IWrappedShader} object
      */
-    IWrappedShader image(Texture src);
+    ITexturedShader image(Texture src);
 
     /**
      * <p>linearGradient.</p>
      *
-     * @return a {@link gbw.melange.shading.procedural.gradients.IGradientBuilder} object
+     * @return a {@link IGradientBuilder} object
      */
     IGradientBuilder linearGradient();
     /**
      * <p>radialGradient.</p>
      *
-     * @return a {@link gbw.melange.shading.procedural.gradients.IGradientBuilder} object
+     * @return a {@link IGradientBuilder} object
      */
     IGradientBuilder radialGradient();
 
@@ -55,7 +58,7 @@ public interface Colors {
      * <p>fromFragment.</p>
      *
      * @param fragmentShader a {@link FragmentShader} object
-     * @return a {@link gbw.melange.shading.IWrappedShader} object
+     * @return a {@link IWrappedShader} object
      */
-    IWrappedShader fromFragment(FragmentShader fragmentShader);
+    BlindShader fromFragment(FragmentShader fragmentShader);
 }

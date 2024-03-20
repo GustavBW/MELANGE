@@ -1,13 +1,17 @@
-package gbw.melange.shading.impl;
+package gbw.melange.shading.services;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.shading.*;
 import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.Errors;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
+import gbw.melange.shading.shaders.TextureShader;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.IWrappedShader;
+import gbw.melange.shading.shaders.partial.VertexShader;
+import gbw.melange.shading.shaders.WrappedShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +27,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ShaderPipeline implements IShaderPipeline {
 
     private static final Logger log = LogManager.getLogger(ShaderPipeline.class);
-    private final Queue<IWrappedShader> unCompiled = new ConcurrentLinkedQueue<>(
+    private final Queue<IWrappedShader<?>> unCompiled = new ConcurrentLinkedQueue<>(
             //TODO: Find a better way to register the premade ones. Iterating through enum values?
-            List.of(WrappedShader.TEXTURE, WrappedShader.DEFAULT)
+            List.of(TextureShader.TEXTURE, WrappedShader.DEFAULT)
     );
     private boolean cachingEnabled = false;
     private Queue<Runnable> sendToMain;
@@ -44,9 +48,9 @@ public class ShaderPipeline implements IShaderPipeline {
     /** {@inheritDoc} */
     @Override
     public void compileAndCache() throws ShaderCompilationIssue, IOException {
-        List<IWrappedShader> recentlyCompiled = new ArrayList<>(unCompiled.size());
+        List<IWrappedShader<?>> recentlyCompiled = new ArrayList<>(unCompiled.size());
         while(unCompiled.peek() != null){
-            IWrappedShader wrapped = unCompiled.poll();
+            IWrappedShader<?> wrapped = unCompiled.poll();
             wrapped.compile(); //throws
             recentlyCompiled.add(wrapped);
         }
@@ -60,13 +64,13 @@ public class ShaderPipeline implements IShaderPipeline {
         }
     }
 
-    private void cacheAllStatic(List<IWrappedShader> recentlyCompiled) {
+    private void cacheAllStatic(List<IWrappedShader<?>> recentlyCompiled) {
         if (sendToMain == null) {
             log.warn("Caching is enabled but no way of ensuring execution on main thread (for GL context purposes) is provided. Aborting caching step");
             return;
         }
 
-        List<IWrappedShader> toBeCached = recentlyCompiled.stream()
+        List<IWrappedShader<?>> toBeCached = recentlyCompiled.stream()
                 //Only statics
                 .filter(IWrappedShader::isStatic)
                 //Only complex and above
@@ -76,12 +80,12 @@ public class ShaderPipeline implements IShaderPipeline {
         performCachingStep(toBeCached);
     }
 
-    private void performCachingStep(List<IWrappedShader> toBeCached) {
+    private void performCachingStep(List<IWrappedShader<?>> toBeCached) {
         int hitsPre = cacheUtil.getHits();
         int cachingFailures = 0;
         final List<String> successFullCaches = new ArrayList<>();
 
-        for (IWrappedShader shader : toBeCached){ //TODO: Check if this can be parallelized
+        for (IWrappedShader<?> shader : toBeCached){ //TODO: Check if this can be parallelized
             FileHandle locationOfTexture;
             try {
                 locationOfTexture = cacheUtil.cacheOrUpdateExisting(shader);
@@ -98,8 +102,8 @@ public class ShaderPipeline implements IShaderPipeline {
             }
 
             log.trace("Caching | Clearing original bindings for " + shader.shortName());
-            ((WrappedShader) shader).clearBindings();
-            ((WrappedShader) shader).replaceProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
+            ((WrappedShader<?>) shader).clearBindings();
+            ((WrappedShader<?>) shader).replaceProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
 
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
@@ -125,7 +129,7 @@ public class ShaderPipeline implements IShaderPipeline {
 
     /** {@inheritDoc} */
     @Override
-    public void registerForCompilation(IWrappedShader shader) {
+    public void registerForCompilation(IWrappedShader<?> shader) {
         if(shader.isReady()) return;
 
         unCompiled.add(shader);

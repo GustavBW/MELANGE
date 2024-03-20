@@ -1,15 +1,13 @@
 package gbw.melange.common;
 
-import gbw.melange.core.MelangeApplication;
-import gbw.melange.mesh.IMeshPipelineConfig;
-import gbw.melange.mesh.MeshPipelineConfig;
-import gbw.melange.shading.IShadingPipelineConfig;
-import gbw.melange.shading.impl.ShadingPipelineConfig;
+import gbw.melange.mesh.services.IMeshPipelineConfig;
+import gbw.melange.mesh.services.MeshPipelineConfig;
+import gbw.melange.shading.services.IShadingPipelineConfig;
+import gbw.melange.shading.services.ShadingPipelineConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;

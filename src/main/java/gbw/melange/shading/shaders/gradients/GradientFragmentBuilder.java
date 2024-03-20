@@ -1,11 +1,10 @@
-package gbw.melange.shading.procedural.gradients;
+package gbw.melange.shading.shaders.gradients;
 
 import com.badlogic.gdx.graphics.Color;
-import gbw.melange.shading.*;
 import gbw.melange.shading.constants.InterpolationType;
-import gbw.melange.shading.impl.FragmentShader;
-import gbw.melange.shading.impl.VertexShader;
-import gbw.melange.shading.impl.WrappedShader;
+import gbw.melange.shading.services.IShaderPipeline;
+import gbw.melange.shading.shaders.partial.FragmentShader;
+import gbw.melange.shading.shaders.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,24 +63,38 @@ public class GradientFragmentBuilder implements IGradientBuilder {
         this.interpolationType = type;
         return this;
     }
+
+    private static final String glslConstantsDec = """
+    #ifdef GL_ES
+        precision mediump float;
+    #endif
+    
+    varying vec2 v_texCoords;
+    """ +
+    "uniform float "+ GradientShaderAttr.ROTATION.glValue +";\n" +
+    "vec2 direction = vec2(cos("+ GradientShaderAttr.ROTATION.glValue +"), sin("+ GradientShaderAttr.ROTATION.glValue +"));\n" +
+    """
+    
+    const vec2 center = vec2(0.5, 0.5);
+    const vec2 preRotationDirection = vec2(1.0, 0.0);
+    """;
+
+    private static final String glslStartMain = """
+    void main() {
+        vec2 adjustedCoords = v_texCoords - center;
+        vec2 rotatedCoords = adjustedCoords * mat2(direction.x, -direction.y, direction.y, direction.x);
+        rotatedCoords += center;
+        float progress = dot(rotatedCoords - center, preRotationDirection) + 0.5;
+        vec4 color = vec4(color0);
+    """;
+
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader build() {
+    public IGradientShader build() {
         StringBuilder codeBuilder = new StringBuilder();
 
         // Initialize shader and define varying v_texCoords
-        codeBuilder.append("#ifdef GL_ES\n")
-                .append("precision mediump float;\n")
-                .append("#endif\n")
-                .append("varying vec2 v_texCoords;\n");
-
-        // Calculate rotation in radians
-        double radians = Math.toRadians(rotationDeg);
-        // Calculate directional vector for the gradient post-rotation
-        codeBuilder.append("const float angle = ").append(radians).append(";\n")
-                .append("const vec2 center = vec2(0.5, 0.5);\n") // Center for rotation
-                .append("const vec2 preRotationDirection = vec2(1.0, 0.0);\n") // Horizontal gradient pre-rotation
-                .append("const vec2 direction = vec2(cos(angle), sin(angle));\n"); // Direction after rotation
+        codeBuilder.append(glslConstantsDec);
 
         // Constants for color stops
         for (int i = 0; i < colors.size(); i++) {
@@ -92,29 +105,24 @@ public class GradientFragmentBuilder implements IGradientBuilder {
         }
 
         // Main shader logic
-        codeBuilder.append("void main() {\n")
-                // Adjust v_texCoords to rotate around the center
-                .append("\tvec2 adjustedCoords = v_texCoords - center;\n") // Move pivot to center
-                .append("\tvec2 rotatedCoords = adjustedCoords * mat2(direction.x, -direction.y, direction.y, direction.x);\n") // Apply rotation
-                .append("\trotatedCoords += center;\n") // Move pivot back
-                // Calculate progress in the rotated coordinate space
-                .append("\tfloat progress = dot(rotatedCoords - center, preRotationDirection) + 0.5;\n");
+        codeBuilder.append(glslStartMain);
+        appendStopStatements(codeBuilder);
 
-        // Color interpolation logic
-        codeBuilder.append("\tvec4 color = vec4(color0);\n");
-        appendStops(codeBuilder);
-
-        appendGlSetColorStatement(codeBuilder);
+        codeBuilder.append(
+            "\tgl_FragColor = color;\n" +
+        "}");
 
         FragmentShader fragment = new FragmentShader(localName, codeBuilder.toString());
-        IWrappedShader wrapped = new WrappedShader(localName, VertexShader.DEFAULT, fragment);
+        IGradientShader wrapped = new GradientShader(localName, VertexShader.DEFAULT, fragment, true, new ArrayList<>());
         if(pipeline != null){
             pipeline.registerForCompilation(wrapped);
         }
+        wrapped.setRotation(rotationDeg);
+
         return wrapped;
     }
 
-    private void appendStops(StringBuilder shader) {
+    private void appendStopStatements(StringBuilder shader) {
         shader.append("\tif (progress >= position"+0+" && progress <= position"+1+") {\n")
                 .append("\t\tfloat t = " + appendInterpolationFunction(0) + "\n")
                 .append("\t\tcolor = mix(color"+0+", color"+1+", t);\n")
@@ -141,7 +149,7 @@ public class GradientFragmentBuilder implements IGradientBuilder {
 
         shader.append("if (progress > position" + (colors.size() - 1) + ") {\n")
                 .append("\t\tcolor = color" + (colors.size() - 1) + ";\n")
-                .append("\t}");
+                .append("\t}\n");
     }
 
     private String appendInterpolationFunction(int stepIndex){
@@ -158,10 +166,6 @@ public class GradientFragmentBuilder implements IGradientBuilder {
         };
     }
 
-    private void appendGlSetColorStatement(StringBuilder shader) {
-        shader.append("\tgl_FragColor = color;\n")
-                .append("}\n");
-    }
     /** {@inheritDoc} */
     @Override
     public IGradientBuilder addStops(Color color, double relativePosition){

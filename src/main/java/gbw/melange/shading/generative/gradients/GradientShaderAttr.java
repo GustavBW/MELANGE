@@ -1,4 +1,4 @@
-package gbw.melange.shading.shaders.gradients;
+package gbw.melange.shading.generative.gradients;
 
 public enum GradientShaderAttr {
     ROTATION("u_rotation");

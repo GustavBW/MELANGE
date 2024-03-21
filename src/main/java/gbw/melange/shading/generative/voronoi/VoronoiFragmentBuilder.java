@@ -1,4 +1,4 @@
-package gbw.melange.shading.shaders.voronoi;
+package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
@@ -9,10 +9,10 @@ import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.services.IShaderPipeline;
-import gbw.melange.shading.shaders.noise.NoiseProvider;
-import gbw.melange.shading.shaders.noise.PerlinNoise;
-import gbw.melange.shading.shaders.partial.FragmentShader;
-import gbw.melange.shading.shaders.partial.VertexShader;
+import gbw.melange.shading.generative.noise.NoiseProvider;
+import gbw.melange.shading.generative.noise.PerlinNoise;
+import gbw.melange.shading.generative.partial.FragmentShader;
+import gbw.melange.shading.generative.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

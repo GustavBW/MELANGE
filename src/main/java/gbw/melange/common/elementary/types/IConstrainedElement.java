@@ -13,22 +13,16 @@ import gbw.melange.common.elementary.contraints.IElementConstraints;
  */
 public interface IConstrainedElement extends Disposable {
 
-    /**
-     * <p>computed.</p>
-     *
-     * @return a {@link gbw.melange.common.elementary.contraints.IComputedTransforms} object
-     */
     IComputedTransforms computed();
-    /**
-     * <p>getConstraints.</p>
-     *
-     * @return a {@link gbw.melange.common.elementary.contraints.IElementConstraints} object
-     */
     IElementConstraints getConstraints();
-    /**
-     * <p>getMesh.</p>
-     *
-     * @return a {@link com.badlogic.gdx.graphics.Mesh} object
-     */
     Mesh getMesh();
+
+    /**
+     * Resize the mesh to retain its proportions when the viewport resizes.
+     * @param x0 Old viewport width
+     * @param y0 Old viewport height
+     * @param x1 New viewport width
+     * @param y1 New viewport height
+     */
+    void onViewportResize(double x0, double y0, double x1, double y1);
 }

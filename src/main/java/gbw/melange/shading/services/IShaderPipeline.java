@@ -1,7 +1,7 @@
 package gbw.melange.shading.services;
 
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.shading.shaders.IWrappedShader;
+import gbw.melange.shading.generative.IWrappedShader;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 
 import java.io.IOException;

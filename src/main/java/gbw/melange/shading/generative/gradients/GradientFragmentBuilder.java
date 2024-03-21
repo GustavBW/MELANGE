@@ -1,10 +1,10 @@
-package gbw.melange.shading.shaders.gradients;
+package gbw.melange.shading.generative.gradients;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.services.IShaderPipeline;
-import gbw.melange.shading.shaders.partial.FragmentShader;
-import gbw.melange.shading.shaders.partial.VertexShader;
+import gbw.melange.shading.generative.partial.FragmentShader;
+import gbw.melange.shading.generative.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

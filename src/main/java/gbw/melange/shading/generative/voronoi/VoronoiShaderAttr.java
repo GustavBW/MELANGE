@@ -1,4 +1,4 @@
-package gbw.melange.shading.shaders.voronoi;
+package gbw.melange.shading.generative.voronoi;
 
 public enum VoronoiShaderAttr {
     POINTS("u_points");

@@ -1,4 +1,4 @@
-package gbw.melange.shading.shaders.gradients;
+package gbw.melange.shading.generative.gradients;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.constants.InterpolationType;

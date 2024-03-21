@@ -14,7 +14,7 @@ import gbw.melange.shading.errors.Errors;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.generative.ITexturedShader;
 import gbw.melange.shading.generative.TextureShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -110,7 +110,7 @@ public class ElementRenderer implements IElementRenderer {
 
         boolean flip = true; // Determine which FBO is the source and which is the destination
 
-        for (PostProcessShader shader : element.getStylings().getPostProcesses()) {
+        for (IPostProcessShader shader : element.getStylings().getPostProcesses()) {
             if (flip) {
                 fboB.begin(); // Write to B
             } else {
@@ -122,14 +122,13 @@ public class ElementRenderer implements IElementRenderer {
             Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
 
             // Bind the shader
-            ShaderProgram shaderProgram = shader.program();
+            ShaderProgram shaderProgram = shader.getProgram();
             shaderProgram.bind();
             shaderProgram.setUniformMatrix("u_projTrans", appliedMatrix);
 
             // Bind the texture from the other FBO
             Texture inputTexture = flip ? fboA.getColorBufferTexture() : fboB.getColorBufferTexture();
-            inputTexture.bind(0);
-            shaderProgram.setUniformi("u_texture", 0); // Assuming the shader samples from "u_texture"
+            shader.setTexture(inputTexture, "");
 
             // Render using the full-screen quad mesh (or appropriate geometry)
             element.getMesh().render(shaderProgram, GLDrawStyle.TRIANGLES.glValue);

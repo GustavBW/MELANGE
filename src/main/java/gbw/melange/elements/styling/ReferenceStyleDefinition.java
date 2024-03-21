@@ -6,7 +6,7 @@ import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.shading.generative.IWrappedShader;
 import gbw.melange.shading.generative.WrappedShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
         NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
         NONE.borderDrawStyle(GLDrawStyle.POINTS);
     }
-    public final List<PostProcessShader> postProcesses = new ArrayList<>();
+    public final List<IPostProcessShader> postProcesses = new ArrayList<>();
     public IWrappedShader backgroundShader = WrappedShader.DEFAULT;
     public IWrappedShader borderShader = WrappedShader.DEFAULT;
     public GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
@@ -129,7 +129,7 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public List<PostProcessShader> postProcesses() {
+    public List<IPostProcessShader> postProcesses() {
         return postProcesses;
     }
 }

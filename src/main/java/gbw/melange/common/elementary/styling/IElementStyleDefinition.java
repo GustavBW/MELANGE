@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.styling;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.generative.IWrappedShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.List;
 
@@ -52,6 +52,6 @@ public interface IElementStyleDefinition extends Disposable {
      *
      * @return a {@link java.util.List} object
      */
-    List<PostProcessShader> getPostProcesses();
+    List<IPostProcessShader> getPostProcesses();
 
 }

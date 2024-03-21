@@ -38,7 +38,7 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .setInterpolationType(InterpolationType.LINEAR)
                 .build();
 
-        voronoiA.setStatic(false);
+        //voronoiA.setStatic(false);
 
 
         final double borderWidth = 5;

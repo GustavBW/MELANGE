@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.ShaderResourceBinding;
 
+/**
+ * Any shader with a texture sampling input
+ */
 public interface ITexturedShader extends IWrappedShader<ITexturedShader> {
 
     /**

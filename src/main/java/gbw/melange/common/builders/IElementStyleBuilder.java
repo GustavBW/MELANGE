@@ -4,7 +4,7 @@ import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.shading.services.Colors;
 import gbw.melange.shading.generative.IWrappedShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 /**
  * <p>IElementStyleBuilder interface.</p>
@@ -65,8 +65,8 @@ public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder
     /**
      * <p>addPostProcess.</p>
      *
-     * @param postProcess a {@link gbw.melange.shading.postprocessing.PostProcessShader} object
+     * @param postProcess a {@link IPostProcessShader} object
      * @return a {@link gbw.melange.common.builders.IElementStyleBuilder} object
      */
-    IElementStyleBuilder<T> addPostProcess(PostProcessShader postProcess);
+    IElementStyleBuilder<T> addPostProcess(IPostProcessShader postProcess);
 }

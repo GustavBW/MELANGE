@@ -1,30 +1,29 @@
 package gbw.melange.shading.postprocessing;
 
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.Texture;
+import gbw.melange.shading.ShaderResourceBinding;
+import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.shading.generative.TextureShader;
+import gbw.melange.shading.generative.partial.FragmentShader;
+import gbw.melange.shading.generative.partial.VertexShader;
 
-/**
- * Type alias for ShaderProgram for now
- */
-public record PostProcessShader(ShaderProgram program) {
-    public static final String GAUSSIAN_BLUR = """
-            #ifdef GL_ES
-                precision mediump float;
-            #endif
-            
-            varying vec2 v_texCoords;
-            uniform sampler2D u_texture;
-            uniform int kernelSize;
-            uniform float kernel[9];
-            
-            main () {
-                vec2 offset = 1.0 / textureSize(u_texture, 0);
-                vec4 sum = vec4(0.0);
-                for (int i = -kernelSize; i <= kernelSize; i++) {
-                    for (int j = -kernelSize; j <= kernelSize; j++) {
-                        sum += texture2D(u_texture, v_texCoords + vec2(i, j) * offset) * kernel[i + kernelSize * (j + kernelSize)];
-                    }
-                }
-                gl_FragColor = sum;
-            }
-            """;
+import java.util.List;
+
+public abstract class PostProcessShader extends TextureShader implements IPostProcessShader {
+
+    public PostProcessShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings) {
+        super(localName, vertex, fragment, isStatic, bindings);
+    }
+
+    @Override
+    public void setTexture(Texture texture, String glslName) {
+        //completely ignores the custom glslName as the post processing shaders require a standardized format.
+        super.setTexture(texture, GLShaderAttr.TEXTURE.glValue());
+    }
+
+    @Override
+    public void invalidate(){
+        throw new RuntimeException("Implement this first, how 'bout that");
+    }
+
 }

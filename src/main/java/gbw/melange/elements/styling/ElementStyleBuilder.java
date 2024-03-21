@@ -6,7 +6,7 @@ import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.generative.IWrappedShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 /**
  * <p>ElementStyleBuilder class.</p>
@@ -89,7 +89,7 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
 
     /** {@inheritDoc} */
     @Override
-    public IElementStyleBuilder<T> addPostProcess(PostProcessShader postProcess) {
+    public IElementStyleBuilder<T> addPostProcess(IPostProcessShader postProcess) {
 
         referenceStyling.postProcesses().add(postProcess);
         return this;

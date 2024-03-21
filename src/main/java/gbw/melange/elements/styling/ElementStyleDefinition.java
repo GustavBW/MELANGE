@@ -8,7 +8,7 @@ import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.shading.generative.IWrappedShader;
 import gbw.melange.shading.generative.WrappedShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
     private BevelConfig bevelConfig = BevelConfig.DEFAULT;
-    private final List<PostProcessShader> postProcesses = new ArrayList<>();
+    private final List<IPostProcessShader> postProcesses = new ArrayList<>();
 
     /**
      * <p>Constructor for ElementStyleDefinition.</p>
@@ -75,7 +75,7 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public List<PostProcessShader> getPostProcesses() {
+    public List<IPostProcessShader> getPostProcesses() {
         return postProcesses;
     }
 

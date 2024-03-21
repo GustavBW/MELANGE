@@ -2,7 +2,7 @@ package gbw.melange.common.elementary.styling;
 
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.generative.IWrappedShader;
-import gbw.melange.shading.postprocessing.PostProcessShader;
+import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.List;
 
@@ -78,7 +78,7 @@ public interface IReferenceStyleDefinition {
      *
      * @return a {@link java.util.List} object
      */
-    List<PostProcessShader> postProcesses();
+    List<IPostProcessShader> postProcesses();
 
 
 }

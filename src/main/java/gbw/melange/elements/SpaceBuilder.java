@@ -1,5 +1,6 @@
 package gbw.melange.elements;
 
+import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.builders.ISpaceBuilder;
 import gbw.melange.common.elementary.contraints.Anchor;
 import gbw.melange.common.elementary.contraints.ElementAnchoring;

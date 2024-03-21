@@ -39,6 +39,11 @@ public class SpacerElement implements ISpacerElement {
         return mesh;
     }
 
+    @Override
+    public void onViewportResize(double x0, double y0, double x1, double y1) {
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public IComputedTransforms computed() {

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>EVertexAttribute class.</p>
@@ -36,14 +37,15 @@ public enum EVertexAttribute {
         this.usage = usage;
     }
 
-    public static List<EVertexAttribute> from(VertexAttributes attrs){
+    public static List<EVertexAttribute> convert(VertexAttributes attrs){
         List<EVertexAttribute> attributes = new ArrayList<>();
         for (VertexAttribute attr : attrs) {
             boolean found = false;
             for (EVertexAttribute eAttr : EVertexAttribute.values()) {
-                if (attr.usage == eAttr.usage) {
+                if (eAttr.equals(attr)) {
                     attributes.add(eAttr);
                     found = true; // Break inner loop once a match is found
+                    break;
                 }
             }
             if(!found){
@@ -52,6 +54,27 @@ public enum EVertexAttribute {
         }
         return attributes;
     }
+    public static VertexAttribute[] convert(Set<EVertexAttribute> attrs){
+        VertexAttribute[] out = new VertexAttribute[attrs.size()];
+        int index = 0;
+        for(EVertexAttribute current : attrs){
+            VertexAttribute converted = new VertexAttribute(current.usage(), current.componentCount(), current.alias());
+            out[index] = converted;
+            index++;
+        }
+        return out;
+    }
+
+    public static VertexAttribute[] convert(List<EVertexAttribute> attrs){
+        VertexAttribute[] out = new VertexAttribute[attrs.size()];
+        for(int i = 0; i < out.length; i++){
+            EVertexAttribute current = attrs.get(i);
+            VertexAttribute converted = new VertexAttribute(current.usage(), current.componentCount(), current.alias());
+            out[i] = converted;
+        }
+        return out;
+    }
+
     public static String stringRepOf(VertexAttribute va){
         return "VertexAttribute{alias: "+ va.alias + ", usage: " + va.usage + ", compNum: " + va.numComponents + ", type: " + va.type + "}";
     }
@@ -77,14 +100,9 @@ public enum EVertexAttribute {
                 && vAttr.numComponents == this.componentCount()
                 && vAttr.alias.equals(this.alias());
     }
-
     public VertexAttribute asVA(){
         return new VertexAttribute(this.usage, this.numComponents, this.alias);
     }
-
-
-
-
     public static boolean compare(VertexAttribute vAttr, EVertexAttribute evAttr){
         return evAttr.equals(vAttr);
     }

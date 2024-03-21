@@ -1,4 +1,4 @@
-package gbw.melange.shading.shaders;
+package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;

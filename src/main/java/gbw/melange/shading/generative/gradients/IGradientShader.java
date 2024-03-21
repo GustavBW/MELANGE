@@ -1,6 +1,6 @@
-package gbw.melange.shading.shaders.gradients;
+package gbw.melange.shading.generative.gradients;
 
-import gbw.melange.shading.shaders.IWrappedShader;
+import gbw.melange.shading.generative.IWrappedShader;
 
 public interface IGradientShader extends IWrappedShader<IGradientShader> {
     void setRotation(double deg);

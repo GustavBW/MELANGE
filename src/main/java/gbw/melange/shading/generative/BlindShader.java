@@ -1,10 +1,10 @@
-package gbw.melange.shading.shaders;
+package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.shaders.partial.FragmentShader;
-import gbw.melange.shading.shaders.partial.VertexShader;
+import gbw.melange.shading.generative.partial.FragmentShader;
+import gbw.melange.shading.generative.partial.VertexShader;
 
 import java.util.ArrayList;
 import java.util.List;

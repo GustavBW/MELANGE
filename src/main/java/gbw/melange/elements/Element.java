@@ -14,6 +14,7 @@ import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
+import jdk.jshell.spi.ExecutionControl;
 
 //TODO: Move to abstract reference definition pipeline for delayed instantiation?
 /**
@@ -121,5 +122,10 @@ public abstract class Element<T> implements IElement<T> {
         if(element == this) return 0;
         if(element.getConstraints().getAttachedTo() == this) return -1;
         return 1;
+    }
+
+    @Override
+    public void onViewportResize(double x0, double y0, double x1, double y1){
+        throw new RuntimeException("impl this");
     }
 }

@@ -1,13 +1,13 @@
-package gbw.melange.shading.shaders.voronoi;
+package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.VecUtil;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.shaders.WrappedShader;
-import gbw.melange.shading.shaders.partial.FragmentShader;
-import gbw.melange.shading.shaders.partial.VertexShader;
+import gbw.melange.shading.generative.WrappedShader;
+import gbw.melange.shading.generative.partial.FragmentShader;
+import gbw.melange.shading.generative.partial.VertexShader;
 
 import java.util.ArrayList;
 import java.util.List;

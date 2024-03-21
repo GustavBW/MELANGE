@@ -6,8 +6,8 @@ import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
-import gbw.melange.shading.shaders.IWrappedShader;
-import gbw.melange.shading.shaders.WrappedShader;
+import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.generative.WrappedShader;
 import gbw.melange.shading.postprocessing.PostProcessShader;
 
 import java.util.ArrayList;

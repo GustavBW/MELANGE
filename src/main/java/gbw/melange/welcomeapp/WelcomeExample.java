@@ -3,11 +3,15 @@ package gbw.melange.welcomeapp;
 import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.MelangeConfig;
 import gbw.melange.core.MelangeApplication;
+import gbw.melange.mesh.constants.EVertexAttribute;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * @author GustavBW
@@ -25,7 +29,6 @@ public class WelcomeExample {
             .setLoggingAspects(logLevel)
             .clearGeneratedOnStart(true)
             .useCaching(false);
-
 
         MelangeApplication.run(WelcomeExample.class, config);
     }

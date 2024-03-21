@@ -1,4 +1,4 @@
-package gbw.melange.shading.shaders.noise;
+package gbw.melange.shading.generative.noise;
 
 /**
  * <p>A Perlin noise generation utility. Construct the PerlinNoise object with

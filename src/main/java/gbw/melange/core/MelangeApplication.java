@@ -41,8 +41,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     }
     public static <T> ApplicationContext run(@NonNull Class<T> mainClass, IMelangeConfig config) throws Exception {
         final Lwjgl3ApplicationConfiguration lwjglConfig = new Lwjgl3ApplicationConfiguration();
-        lwjglConfig.setForegroundFPS(60000);
-        lwjglConfig.setIdleFPS(60000);
         lwjglConfig.setTitle("MelangeApp");
         lwjglConfig.setDecorated(true);
         lwjglConfig.setBackBufferConfig(8, 8, 8, 8, 16, 0, 8); //Samples == AA passes

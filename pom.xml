@@ -133,12 +133,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 </executions>
                 <configuration>
                     <executable>java</executable>
-                    <workingDirectory>.</workingDirectory>
-                    <longModulepath>false</longModulepath>
                     <arguments>
                         <argument>-Dorg.lwjgl.util.Debug=true</argument>
                         <argument>-Djava.library.path=${module.dep.out.dir}</argument>
-                        <argument>--module-path=${module.out.dir}${path.separator}${module.dep.out.dir}/gdx-backend-lwjgl3-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-platform-1.12.1-natives-desktop.jar${path.separator}${jnigen.dir}/gdx-jnigen-loader-2.4.1.jar</argument>
+                        <argument>--class-path=${module.dep.out.dir}/*</argument>
+                        <argument>--module-path=${module.out.dir}/desktop-1.0-SNAPSHOT.jar{path.separator}${module.dep.out.dir}/gdx-backend-lwjgl3-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-1.12.1.jar${path.separator}${module.dep.out.dir}/gdx-platform-1.12.1-natives-desktop.jar${path.separator}${jnigen.dir}/gdx-jnigen-loader-2.4.1.jar</argument>
                         <argument>--module=desktop/gbw.melange.DesktopLauncher</argument>
                     </arguments>
                 </configuration>

@@ -10,7 +10,7 @@ import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.types.*;
 import gbw.melange.core.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.elements.ElementBuilder;
-import gbw.melange.elements.ElementRenderer;
+import gbw.melange.elements.problematic.ElementRenderer;
 import gbw.melange.elements.SpaceBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,17 +88,7 @@ public class ScreenSpace implements IScreenSpace {
     /** {@inheritDoc} */
     @Override
     public IElementBuilder<?> createElement() {
-        return createElement(null);
-    }
-    /** {@inheritDoc} */
-    @Override
-    public <T> IElementBuilder<T> createElement(T content) {
-        return new ElementBuilder<>(this, content);
-    }
-    /** {@inheritDoc} */
-    @Override
-    public <T> IElementBuilder<T> createElement(IContentProvider<T> contentProvider) {
-        return new ElementBuilder<>(this, contentProvider);
+        return new ElementBuilder<>(this);
     }
     /** {@inheritDoc} */
     @Override

@@ -1,4 +1,4 @@
-package gbw.melange.common.elementary.styling;
+package gbw.melange.mesh.operations;
 
 /**
  * @param subdivs How many vertices to insert

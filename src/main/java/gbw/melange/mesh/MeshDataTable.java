@@ -35,6 +35,7 @@ public class MeshDataTable implements IMeshDataTable {
 
         VertexAttributes attrs = mesh.getVertexAttributes();
         List<EVertexAttribute> mappedAttr = EVertexAttribute.convert(attrs);
+
         if(mappedAttr.size() != attrs.size()){
             log.warn("Unable to map vertex attributes");
             return from(new LinkedHashMap<>(), 0, new short[0]);
@@ -101,6 +102,7 @@ public class MeshDataTable implements IMeshDataTable {
         }
         return faces;
     }
+
     private static final Function<Vector3, List<Face>> faceListProvider = k -> new ArrayList<>();
     @Override
     public List<Face> calculateFaces(Map<Vector3, List<Face>> allFacesOfVert) {
@@ -195,7 +197,6 @@ public class MeshDataTable implements IMeshDataTable {
             }
             currentOffset += componentCount;
         }
-
         // Create the array of VertexAttributes for the Mesh
         VertexAttribute[] vertexAttributes = EVertexAttribute.convert(keyset);
 

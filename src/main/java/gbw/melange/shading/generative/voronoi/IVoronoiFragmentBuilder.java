@@ -1,7 +1,7 @@
 package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.generative.noise.NoiseProvider;
@@ -20,7 +20,7 @@ public interface IVoronoiFragmentBuilder {
      * Add a specific point up to a maximum of {@link IVoronoiFragmentBuilder#MAX_NUM_POINTS}.
      * If points are provided through this builder, the builder will mark the generated shader as static,
      * and if the pipeline is present, it will be cached automatically.
-     * This is the default behaviour for performance reasons, and can be overwritten using {@link IWrappedShader#setStatic(boolean)}
+     * This is the default behaviour for performance reasons, and can be overwritten using {@link IManagedShader#setStatic(boolean)}
      * immediately afterwards.
      */
     IVoronoiFragmentBuilder addPoint(double x, double y);

@@ -107,7 +107,7 @@ class IMeshDataTableTest {
                 1.0f, 1.0f, 0.0f,
                 -1.0f, 1.0f, 0.0f
         });
-        vertexDataTable.put(EVertexAttribute.TEX_COORDS, new float[]{
+        vertexDataTable.put(EVertexAttribute.UV, new float[]{
                 0.0f, 0.0f,
                 1.0f, 0.0f,
                 1.0f, 1.0f,

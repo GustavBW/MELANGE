@@ -1,7 +1,7 @@
 package gbw.melange.shading.services;
 
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 
 import java.io.IOException;
@@ -23,9 +23,9 @@ public interface IShaderPipeline extends Disposable {
     /**
      * <p>registerForCompilation.</p>
      *
-     * @param shader a {@link IWrappedShader} object
+     * @param shader a {@link IManagedShader} object
      */
-    void registerForCompilation(IWrappedShader<?> shader);
+    void registerForCompilation(IManagedShader<?> shader);
 
     /**
      * Whether subsequent compile steps should attempt to statically cache shaders as textures to be drawn instead.

@@ -2,8 +2,8 @@ package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.ShaderResourceBinding;
-import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.partial.FragmentShader;
@@ -12,7 +12,7 @@ import gbw.melange.shading.generative.partial.VertexShader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextureShader extends WrappedShader<ITexturedShader> implements ITexturedShader {
+public class TextureShader extends ManagedShader<ITexturedShader> implements ITexturedShader {
     public static ITexturedShader TEXTURE = new TextureShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE, true, new ArrayList<>());
     public TextureShader(String localName, VertexShader vertex, FragmentShader fragment){
         this(localName, vertex, fragment, true, new ArrayList<>());

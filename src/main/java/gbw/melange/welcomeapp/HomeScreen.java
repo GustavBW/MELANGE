@@ -3,12 +3,11 @@ package gbw.melange.welcomeapp;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import gbw.melange.common.hooks.OnRender;
-import gbw.melange.mesh.constants.MeshTable;
 import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
-import gbw.melange.common.navigation.ISpaceNavigator;
-import gbw.melange.shading.WrappedShader;
+import gbw.melange.mesh.services.Shapes;
+import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
@@ -30,7 +29,7 @@ public class HomeScreen implements IHomeScreen, OnRender {
     private static final Logger log = LogManager.getLogger();
     private final IVoronoiShader voronoiA;
     @Autowired
-    public HomeScreen(ISpaceProvider<IScreenSpace> provider, ISpaceNavigator navigator, Colors colors, IShaderPipeline pipeline) {
+    public HomeScreen(ISpaceProvider<IScreenSpace> provider, Colors colors, IShaderPipeline pipeline, Shapes shapes) {
         IScreenSpace space = provider.getScreenSpace(this);
 
         voronoiA = new VoronoiFragmentBuilder("HS_Gradient_A", pipeline)
@@ -40,9 +39,6 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .build();
 
         voronoiA.setStatic(true);
-
-
-        final double borderWidth = 5;
 
         /*
         space.createElement("HI")
@@ -69,13 +65,15 @@ public class HomeScreen implements IHomeScreen, OnRender {
             .build();
         */
 
-        space.createElement(() -> "Hi").setMesh(MeshTable.SQUARE.getMesh())
+        space.createElement()
+                .setShape(shapes.square())
                 .styling()
                     .setBackgroundColor(voronoiA)
                     .setBorderColor(colors.constant(Color.WHITE))
+                    .setBorderRadius(.1)
                     .apply()
                 .constraints()
-                    .setBorderWidth(borderWidth)
+                    .setBorderWidth(5)
                     .apply()
                 .build();
 
@@ -103,7 +101,7 @@ public class HomeScreen implements IHomeScreen, OnRender {
         }
 
         if(acc >= 10){
-            ((WrappedShader<IVoronoiShader>) voronoiA).setCachedTexture(null);
+            ((ManagedShader<IVoronoiShader>) voronoiA).setCachedTexture(null);
         }
     }
 }

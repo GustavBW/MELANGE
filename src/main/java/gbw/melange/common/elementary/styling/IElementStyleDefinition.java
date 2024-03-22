@@ -2,7 +2,8 @@ package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.mesh.operations.BevelConfig;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.List;
@@ -18,15 +19,15 @@ public interface IElementStyleDefinition extends Disposable {
     /**
      * <p>getBackgroundShader.</p>
      *
-     * @return a {@link IWrappedShader} object
+     * @return a {@link IManagedShader} object
      */
-    IWrappedShader getBackgroundShader();
+    IManagedShader<?> getBackgroundShader();
     /**
      * <p>getBorderShader.</p>
      *
-     * @return a {@link IWrappedShader} object
+     * @return a {@link IManagedShader} object
      */
-    IWrappedShader getBorderShader();
+    IManagedShader<?> getBorderShader();
 
     /**
      * <p>getBackgroundDrawStyle.</p>
@@ -44,7 +45,7 @@ public interface IElementStyleDefinition extends Disposable {
     /**
      * <p>getBorderBevel.</p>
      *
-     * @return a {@link gbw.melange.common.elementary.styling.BevelConfig} object
+     * @return a {@link BevelConfig} object
      */
     BevelConfig getBorderBevel();
     /**

@@ -1,9 +1,9 @@
 package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.ShaderResourceBinding;
-import gbw.melange.shading.WrappedShader;
+import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
@@ -11,7 +11,7 @@ import gbw.melange.shading.generative.partial.VertexShader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlindShader extends WrappedShader {
+public class BlindShader extends ManagedShader {
     public BlindShader(String localName, VertexShader vertex, FragmentShader fragment){
         this(localName, vertex, fragment, true, new ArrayList<>());
     }
@@ -28,12 +28,12 @@ public class BlindShader extends WrappedShader {
     }
 
     @Override
-    protected IWrappedShader<?> copyChild() {
+    protected IManagedShader<?> copyChild() {
         return new BlindShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), bindings);
     }
 
     @Override
-    protected IWrappedShader<?> copyChildAs(String newLocalName) {
+    protected IManagedShader<?> copyChildAs(String newLocalName) {
         return new BlindShader(newLocalName, getVertex(), getFragment(), isStatic(), bindings);
     }
 

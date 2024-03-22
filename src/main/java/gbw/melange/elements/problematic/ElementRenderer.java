@@ -1,4 +1,4 @@
-package gbw.melange.elements;
+package gbw.melange.elements.problematic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;

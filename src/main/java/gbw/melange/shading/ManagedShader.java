@@ -20,10 +20,10 @@ import java.util.List;
  *
  * @param <T> Type of the specific child instance;
  */
-public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWrappedShader<T> {
+public abstract class ManagedShader<T extends IManagedShader<T>> implements IManagedShader<T> {
     private static final Logger log = LogManager.getLogger();
 
-    public static WrappedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false, new ArrayList<>());
+    public static ManagedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false, new ArrayList<>());
 
     protected final List<Disposable> combinedDisposables = new ArrayList<>();
     protected final List<ShaderResourceBinding> bindings;
@@ -46,13 +46,13 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
      */
     private int desiredResolution = 500;
 
-    public WrappedShader(String localName, VertexShader vertexShader, FragmentShader fragmentShader) {
+    public ManagedShader(String localName, VertexShader vertexShader, FragmentShader fragmentShader) {
         this(localName, vertexShader, fragmentShader, true);
     }
-    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
+    public ManagedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
         this(localName, vertex, fragment, isStatic, new ArrayList<>());
     }
-    public WrappedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings){
+    public ManagedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings){
         this.vertexShader = vertex;
         this.fragmentShader = fragment;
         this.localName = localName;

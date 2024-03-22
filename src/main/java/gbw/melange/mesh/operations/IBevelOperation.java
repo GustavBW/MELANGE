@@ -1,7 +1,6 @@
-package gbw.melange.common.elementary.styling;
+package gbw.melange.mesh.operations;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.common.operations.IReallocatingOperation;
 
 /**
  * <p>IBevelOperation interface.</p>

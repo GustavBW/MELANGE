@@ -61,14 +61,6 @@ public class ParallelMonitoredExecutionEnvironment {
                 }
             ));
     }
-    /**
-     * <p>offloadLoadingElement.</p>
-     *
-     * @param element a {@link gbw.melange.common.elementary.types.ILoadingElement} object
-     * @param moveToStable a {@link java.lang.Runnable} object
-     * @param moveToError a {@link java.lang.Runnable} object
-     * @param <T> a T class
-     */
     public static <T> void offloadLoadingElement(ILoadingElement<T> element, Runnable moveToStable, Runnable moveToError){
         executor.submit(() -> instance.handleLoadingElement(element, moveToStable, moveToError));
     }
@@ -78,17 +70,11 @@ public class ParallelMonitoredExecutionEnvironment {
             moveToStable.run();
         }catch(Exception handled){
             log.warn("LoadingElement "+element+" content provider failed!");
-            handled.printStackTrace();
             moveToError.run();
         }
     }
     /**
      * Awaits the predicate in 100ms sleep intervals, then submits whenCompletedDo to be run on the main thread.
-     *
-     * @param object a T object
-     * @param completeWhenTrue a {@link java.util.function.Predicate} object
-     * @param whenCompleteDo a {@link java.util.function.Consumer} object
-     * @param <T> a T class
      */
     public static <T> void offloadAny(T object, Predicate<T> completeWhenTrue, Consumer<T> whenCompleteDo){
         executor.submit(() -> instance.handle0(object, completeWhenTrue, whenCompleteDo));

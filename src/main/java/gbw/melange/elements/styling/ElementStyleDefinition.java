@@ -2,12 +2,12 @@ package gbw.melange.elements.styling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.common.elementary.styling.BevelConfig;
+import gbw.melange.mesh.operations.BevelConfig;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
-import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.WrappedShader;
+import gbw.melange.shading.IManagedShader;
+import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ import java.util.List;
  */
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
-    private IWrappedShader backgroundShader = WrappedShader.DEFAULT;
-    private IWrappedShader borderShader = WrappedShader.DEFAULT;
+    private IManagedShader backgroundShader = ManagedShader.DEFAULT;
+    private IManagedShader borderShader = ManagedShader.DEFAULT;
     private Texture backgroundImage = new Texture(Gdx.files.internal("assets/system/fallback/errors/stderr.jpg"));
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
@@ -45,13 +45,13 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader getBackgroundShader() {
+    public IManagedShader getBackgroundShader() {
         return backgroundShader;
     }
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader getBorderShader() {
+    public IManagedShader getBorderShader() {
         return borderShader;
     }
 

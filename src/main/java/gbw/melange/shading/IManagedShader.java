@@ -15,10 +15,10 @@ import gbw.melange.shading.generative.partial.VertexShader;
  * @author GustavBW
  * @version $Id: $Id
  */
-public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable {
+public interface IManagedShader<T extends IManagedShader<T>> extends Disposable {
 
     /**
-     * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IWrappedShader#applyBindings()}<br/>
+     * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IManagedShader#applyBindings()}<br/>
      * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed. <br/>
      * Duly note that OpenGL has limits to the amount of unique binding indexes for different purposes (textures for instance) possible, so you might want to batch things that require unique indexes and no indexes at all.
      * @param binding any function taking in the bind index and the program. Example: <br/>
@@ -34,7 +34,7 @@ public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable 
      */
     void bindResource(ShaderResourceBinding binding, Disposable... disposables);
     /**
-     * An IWrappedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
+     * An IManagedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
      * Do bind the shader program itself to the gl context ({@link ShaderProgram#bind()}) before invoking this method, or gl gets angry.
      * This method should be called before using the shader for rendering regardless.
      */
@@ -48,7 +48,7 @@ public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable 
 
     /**
      * Compiles the program and throws an error immediately if the compilation process isn't successful.
-     * Before this method is invoked, {@link IWrappedShader#getProgram()} will return null.
+     * Before this method is invoked, {@link IManagedShader#getProgram()} will return null.
      */
     void compile() throws ShaderCompilationIssue;
 
@@ -86,7 +86,7 @@ public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable 
     boolean isReady();
 
     /**
-     * Set the resolution this shader should be stored at if managed and {@link IWrappedShader#isStatic()} and thus written to disk.
+     * Set the resolution this shader should be stored at if managed and {@link IManagedShader#isStatic()} and thus written to disk.
      * If the shader has already been written to disk, the stored texture will be updated.
      */
     void setResolution(int res);

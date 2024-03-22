@@ -4,10 +4,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.shading.generative.ITexturedShader;
 
 /**
- * Type alias for ShaderProgram for now
+ * A specific style of shader which has at least 1 input texture
  */
 public interface IPostProcessShader extends ITexturedShader {
-    //TODO: Implement cache invalidation for post processing chains
 
-    void invalidate();
 }

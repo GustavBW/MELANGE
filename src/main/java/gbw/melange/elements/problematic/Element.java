@@ -1,4 +1,4 @@
-package gbw.melange.elements;
+package gbw.melange.elements.problematic;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.elementary.*;
@@ -14,7 +14,7 @@ import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
-import jdk.jshell.spi.ExecutionControl;
+import gbw.melange.mesh.IManagedMesh;
 
 //TODO: Move to abstract reference definition pipeline for delayed instantiation?
 /**
@@ -32,15 +32,12 @@ public abstract class Element<T> implements IElement<T> {
     private final IElementRuleSet ruleset = new ElementRuleSet();
     private final IComputedTransforms computed = new ComputedTransforms();
     private final ComputedShading computedShading = new ComputedShading();
-    /**
-     * All vertex parameters (x, y, z) are always within a -1 to 1 space.
-     */
-    private final Mesh mesh;
+    private final IManagedMesh meshWrapper;
 
-    Element(Mesh mesh, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints){
+    protected Element(IManagedMesh meshWrapper, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints){
         this.constraints = new ElementConstraints(constraints);
         this.styling = new ElementStyleDefinition(styling);
-        this.mesh = mesh;
+        this.meshWrapper = meshWrapper;
     }
 
     /**
@@ -81,7 +78,7 @@ public abstract class Element<T> implements IElement<T> {
     /** {@inheritDoc} */
     @Override
     public Mesh getMesh() {
-        return mesh;
+        return meshWrapper.getMesh();
     }
 
     /** {@inheritDoc} */
@@ -93,7 +90,7 @@ public abstract class Element<T> implements IElement<T> {
     @Override
     public void dispose(){
         styling.dispose();
-        mesh.dispose();
+        meshWrapper.dispose();
     }
     /** {@inheritDoc} */
     @Override

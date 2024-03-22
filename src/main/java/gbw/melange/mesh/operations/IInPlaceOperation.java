@@ -1,4 +1,4 @@
-package gbw.melange.common.operations;
+package gbw.melange.mesh.operations;
 
 /**
  * <p>IInPlaceOperation interface.</p>

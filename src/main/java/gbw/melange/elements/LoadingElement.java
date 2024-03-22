@@ -1,12 +1,13 @@
 package gbw.melange.elements;
 
-import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.events.observability.IFallibleBlockingObservable;
+import gbw.melange.elements.problematic.Element;
 import gbw.melange.events.observability.ObservableValue;
+import gbw.melange.mesh.IManagedMesh;
 
 /**
  * <p>LoadingElement class.</p>
@@ -18,11 +19,12 @@ public class LoadingElement<T> extends Element<T> implements ILoadingElement<T> 
 
     private final IContentProvider<T> provider;
 
-    private final IFallibleBlockingObservable<T> content = ObservableValue.blockingFallible(null);
+    private final IFallibleBlockingObservable<T> content;
 
-    LoadingElement(Mesh mesh, IContentProvider<T> provider, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
+    LoadingElement(IManagedMesh mesh, IContentProvider<T> provider, T defaultValue, IReferenceStyleDefinition styling, IReferenceConstraintDefinition constraints) {
         super(mesh, styling, constraints);
         this.provider = provider;
+        this.content = ObservableValue.blockingFallible(defaultValue);
         super.setState(ElementState.LOADING);
     }
 

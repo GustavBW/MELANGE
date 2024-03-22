@@ -1,11 +1,11 @@
 package gbw.melange.elements.styling;
 
-import gbw.melange.common.elementary.styling.BevelConfig;
+import gbw.melange.mesh.operations.BevelConfig;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
-import gbw.melange.shading.IWrappedShader;
-import gbw.melange.shading.WrappedShader;
+import gbw.melange.shading.IManagedShader;
+import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.ArrayList;
@@ -24,14 +24,14 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
     /** Constant <code>NONE</code> */
     public static final IReferenceStyleDefinition NONE = new ReferenceStyleDefinition();
     static {
-        NONE.borderShader(WrappedShader.DEFAULT);
-        NONE.backgroundShader(WrappedShader.DEFAULT);
+        NONE.borderShader(ManagedShader.DEFAULT);
+        NONE.backgroundShader(ManagedShader.DEFAULT);
         NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
         NONE.borderDrawStyle(GLDrawStyle.POINTS);
     }
     public final List<IPostProcessShader> postProcesses = new ArrayList<>();
-    public IWrappedShader backgroundShader = WrappedShader.DEFAULT;
-    public IWrappedShader borderShader = WrappedShader.DEFAULT;
+    public IManagedShader backgroundShader = ManagedShader.DEFAULT;
+    public IManagedShader borderShader = ManagedShader.DEFAULT;
     public GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     public GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
     public BevelConfig bevelConfig = BevelConfig.DEFAULT;
@@ -69,25 +69,25 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader backgroundShader() {
+    public IManagedShader backgroundShader() {
         return backgroundShader;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void backgroundShader(IWrappedShader program) {
+    public void backgroundShader(IManagedShader program) {
         this.backgroundShader = program;
     }
 
     /** {@inheritDoc} */
     @Override
-    public IWrappedShader borderShader() {
+    public IManagedShader borderShader() {
         return borderShader;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void borderShader(IWrappedShader program) {
+    public void borderShader(IManagedShader program) {
         this.borderShader = program;
     }
 

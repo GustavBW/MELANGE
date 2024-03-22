@@ -1,7 +1,8 @@
 package gbw.melange.common.elementary.styling;
 
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.mesh.operations.BevelConfig;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.List;
@@ -16,27 +17,27 @@ public interface IReferenceStyleDefinition {
     /**
      * <p>backgroundShader.</p>
      *
-     * @return a {@link IWrappedShader} object
+     * @return a {@link IManagedShader} object
      */
-    IWrappedShader backgroundShader();
+    IManagedShader<?> backgroundShader();
     /**
      * <p>backgroundShader.</p>
      *
-     * @param program a {@link IWrappedShader} object
+     * @param program a {@link IManagedShader} object
      */
-    void backgroundShader(IWrappedShader program);
+    void backgroundShader(IManagedShader<?> program);
     /**
      * <p>borderShader.</p>
      *
-     * @return a {@link IWrappedShader} object
+     * @return a {@link IManagedShader} object
      */
-    IWrappedShader borderShader();
+    IManagedShader<?> borderShader();
     /**
      * <p>borderShader.</p>
      *
-     * @param program a {@link IWrappedShader} object
+     * @param program a {@link IManagedShader} object
      */
-    void borderShader(IWrappedShader program);
+    void borderShader(IManagedShader<?> program);
     /**
      * <p>backgroundDrawStyle.</p>
      *
@@ -64,13 +65,13 @@ public interface IReferenceStyleDefinition {
     /**
      * <p>borderBevel.</p>
      *
-     * @return a {@link gbw.melange.common.elementary.styling.BevelConfig} object
+     * @return a {@link BevelConfig} object
      */
     BevelConfig borderBevel();
     /**
      * <p>borderBevel.</p>
      *
-     * @param op a {@link gbw.melange.common.elementary.styling.BevelConfig} object
+     * @param op a {@link BevelConfig} object
      */
     void borderBevel(BevelConfig op);
     /**

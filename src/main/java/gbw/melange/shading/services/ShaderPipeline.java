@@ -9,9 +9,9 @@ import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import gbw.melange.shading.generative.TextureShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.generative.partial.VertexShader;
-import gbw.melange.shading.generative.WrappedShader;
+import gbw.melange.shading.WrappedShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class ShaderPipeline implements IShaderPipeline {
         }
 
         if (config.getLoggingAspects().contains(IShadingPipelineConfig.LogLevel.COMPILE_STEP_INFO)){
-            log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::shortName).toList());
+            log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IWrappedShader::getLocalName).toList());
         }
 
         if(cachingEnabled){
@@ -91,32 +91,22 @@ public class ShaderPipeline implements IShaderPipeline {
                 locationOfTexture = cacheUtil.cacheOrUpdateExisting(shader);
 
                 //I just love silent errors. It makes it so easy to produce brittle software with bad error handling.
-                Errors.checkAndThrow("Caching | " + shader.shortName() + " to texture");
+                Errors.checkAndThrow("Caching | " + shader.getLocalName() + " to texture");
 
-                successFullCaches.add(shader.shortName());
+                successFullCaches.add(shader.getLocalName());
             } catch (Exception e){ //Catch all of them hands
-                log.warn("Caching | Failure for " + shader.shortName() + ", skipping.");
+                log.warn("Caching | Failure for " + shader.getLocalName() + ", skipping.");
                 log.warn(e.toString());
                 cachingFailures++;
                 continue;
             }
 
-            log.trace("Caching | Clearing original bindings for " + shader.shortName());
-            ((WrappedShader<?>) shader).clearBindings();
-            ((WrappedShader<?>) shader).replaceProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
-
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
-            shader.bindResource((index, program) -> {
-                log.trace("| " + shader.shortName() + " | binding texture " + asLoadedFromDisk + " bound to " + program + " at index: " + index);
+            log.trace("Caching | Setting cached texture for " + shader.getLocalName());
+            ((WrappedShader<?>) shader).setCachedTextureProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
+            ((WrappedShader<?>) shader).setCachedTexture(asLoadedFromDisk);
 
-                asLoadedFromDisk.bind(index);
-                Errors.checkAndThrow("binding texture " + asLoadedFromDisk + " to shader: " + program + " at index: " + index);
-
-                program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
-                Errors.checkAndThrow("setting shader uniformi for " + program + " at index: " + index + " as param: " + GLShaderAttr.TEXTURE.glValue());
-
-            }, asLoadedFromDisk);
         }
         final int actualHits = cacheUtil.getHits() - hitsPre;
 

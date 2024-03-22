@@ -168,7 +168,7 @@ public class ElementRenderer implements IElementRenderer {
 
         mesh.transform(appliedMatrix);
         mesh.render(borderShader, style.getBorderDrawStyle().glValue);
-        Errors.checkAndThrow("main render pass | border shader:\t" + style.getBorderShader().shortName());
+        Errors.checkAndThrow("main render pass | border shader:\t" + style.getBorderShader().getLocalName());
 
         Gdx.gl.glLineWidth(1f);
         Errors.checkAndThrow("main render pass | resetting line width");
@@ -182,7 +182,7 @@ public class ElementRenderer implements IElementRenderer {
 
         int glErrCausedByBackgroundShader = Gdx.gl.glGetError();
         if(glErrCausedByBackgroundShader != GL30.GL_NO_ERROR){
-            log.warn("OpenGL Error | main render pass | background shader:\t" + style.getBackgroundShader().shortName() + " code: " + glErrCausedByBackgroundShader);
+            log.warn("OpenGL Error | main render pass | background shader:\t" + style.getBackgroundShader().getLocalName() + " code: " + glErrCausedByBackgroundShader);
         }
 
         fbo.end();

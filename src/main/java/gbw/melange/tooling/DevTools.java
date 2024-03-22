@@ -43,6 +43,5 @@ public class DevTools implements OnRender {
             sdir.mainCam().position.set(xTrans, yTrans, zTrans);
             sdir.mainCam().update();
         }
-        //System.out.println("x:  " + xTrans + " y: " + yTrans + " z: " + zTrans);
     }
 }

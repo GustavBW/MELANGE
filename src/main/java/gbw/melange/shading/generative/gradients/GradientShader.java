@@ -3,7 +3,7 @@ package gbw.melange.shading.generative.gradients;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.generative.WrappedShader;
+import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 
@@ -32,7 +32,7 @@ public class GradientShader extends WrappedShader<IGradientShader> implements IG
 
     @Override
     protected IGradientShader copyChild() {
-        return new GradientShader(super.shortName(), getVertex(), getFragment(), isStatic(), bindings);
+        return new GradientShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), bindings);
     }
 
     @Override

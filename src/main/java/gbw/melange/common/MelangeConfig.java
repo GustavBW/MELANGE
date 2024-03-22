@@ -24,6 +24,11 @@ public class MelangeConfig implements IMelangeConfig {
     private IShadingPipelineConfig shadingConfig = new ShadingPipelineConfig();
     private IMeshPipelineConfig meshConfig = new MeshPipelineConfig();
 
+    @Override
+    public String toString(){
+        return "MelangeConfig {cachingEnabled: " + cachingEnabled + ", logLevel: " + logLevel + ", clearGenOnExit: " + clearGeneratedOnExit + ", clearGenOnStart: " + clearGeneratedOnStart + ", shadingConfig: " + shadingConfig + ", meshConfig: " + meshConfig + "}";
+    }
+
     public void resolve(){
 
         if(!logLevel.contains(LogLevel.PIPELINE_STATUS)){
@@ -31,6 +36,8 @@ public class MelangeConfig implements IMelangeConfig {
             shadingConfig.setLoggingAspects(new HashSet<>());
 
         }
+
+        log.debug(this);
     }
 
     @Override

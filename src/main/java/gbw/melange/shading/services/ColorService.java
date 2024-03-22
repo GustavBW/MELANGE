@@ -3,6 +3,7 @@ package gbw.melange.shading.services;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.generative.*;
 import gbw.melange.shading.generative.gradients.GradientFragmentBuilder;

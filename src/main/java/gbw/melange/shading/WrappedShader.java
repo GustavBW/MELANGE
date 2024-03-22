@@ -1,10 +1,12 @@
-package gbw.melange.shading.generative;
+package gbw.melange.shading;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
+import gbw.melange.shading.generative.BlindShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +25,6 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
 
     public static WrappedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false, new ArrayList<>());
 
-
     protected final List<Disposable> combinedDisposables = new ArrayList<>();
     protected final List<ShaderResourceBinding> bindings;
     private final FragmentShader fragmentShader;
@@ -34,7 +35,10 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
      */
     private boolean isStatic;
     private ShaderProgram program;
+    private ShaderProgram whenCachedProgram;
     private boolean failedCompilation = false;
+    private boolean isDrawingFromCache = false;
+    private Texture cachedResult = null;
 
     /**
      * If this texture is rendered to disk for memory purposes, what resolution should it be stored as.
@@ -56,7 +60,6 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
         this.bindings = bindings;
     }
 
-
     private int nextBindingIndex = 0;
     protected int getNextBindingIndex(){
         return nextBindingIndex++;
@@ -65,22 +68,35 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
     /** {@inheritDoc} */
     @Override
     public void applyBindings() {
-        applyChildBindings(program);
-        for (var binding : bindings){
-            binding.bind(getNextBindingIndex(), program);
+        if (cachedResult != null) {
+            int index = getNextBindingIndex();
+            cachedResult.bind(index);
+            whenCachedProgram.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
+        } else {
+            applyChildBindings(program);
+
+            for (ShaderResourceBinding binding : bindings){
+                binding.bind(getNextBindingIndex(), program);
+            }
         }
+
         nextBindingIndex = 0;
     }
     protected abstract void applyChildBindings(ShaderProgram program);
 
+    /**
+     * Used for determining whether to cache this shader or not.
+     */
     @Override
     public ShaderClassification getClassification() {
-        if(getChildClassification().abstractValRep > fragmentShader.getClassification().abstractValRep){
-            return getChildClassification();
+        ShaderClassification childClassification = getChildClassification();
+        if(childClassification.abstractValRep > fragmentShader.getClassification().abstractValRep){
+            return childClassification;
         }
         return fragmentShader.getClassification();
     }
     protected abstract ShaderClassification getChildClassification();
+
     @Override
     public void bindResource(ShaderResourceBinding binding, Disposable... disposables){
         bindings.add(binding);
@@ -108,7 +124,7 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
         try{
             child.compile();
         }catch (Exception partiallyIgnored){
-            log.warn("Compiling a new copy of " + child.shortName() + " failed: " + partiallyIgnored.getMessage());
+            log.warn("Compiling a new copy of " + child.getLocalName() + " failed: " + partiallyIgnored.getMessage());
         }
         return child;
     }
@@ -118,47 +134,50 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
         try{
             child.compile();
         }catch (Exception partiallyIgnored){
-            log.warn("Compiling a new copy of " + child.shortName() + " as: " + newLocalName + " failed: " + partiallyIgnored.getMessage());
+            log.warn("Compiling a new copy of " + child.getLocalName() + " as: " + newLocalName + " failed: " + partiallyIgnored.getMessage());
         }
         return child;
     }
     protected abstract T copyChildAs(String newLocalName);
-
 
     /** {@inheritDoc} */
     @Override
     public String toString(){
         return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader.localName() + "\", fragment shader: \"" + fragmentShader.name() +"\"";
     }
-    /** {@inheritDoc} */
-    @Override
-    public void dispose() {
-        disposeChildSpecificResources();
-        combinedDisposables.forEach(Disposable::dispose);
-        program.dispose();
-    }
+
     protected abstract void disposeChildSpecificResources();
 
-    /**
-     * @return the old program
-     */
-    public void replaceProgram(VertexShader vertex, FragmentShader frag){
-        this.program.dispose();
-        this.program = new ShaderProgram(vertex.code(), frag.code());
+    public void setCachedTextureProgram(VertexShader vertex, FragmentShader frag){
+        ShaderProgram cachedTextureProgram = new ShaderProgram(vertex.code(), frag.code());
+        if(!cachedTextureProgram.isCompiled()){
+            log.warn("Unable to swap to cached texture program because compilation failed");
+            log.debug(cachedTextureProgram.getLog());
+            return;
+        }
+        this.whenCachedProgram = cachedTextureProgram;
     }
-    public void clearBindings(){
-        log.debug("Clearing bindings " + bindings + " for " + this.shortName());
-        bindings.clear();
-        combinedDisposables.forEach(Disposable::dispose);
-        combinedDisposables.clear();
+
+    /**
+     * Setting this to null effectively works as cache invalidation
+     */
+    public void setCachedTexture(Texture texture){
+        if(texture != null && (whenCachedProgram == null || !whenCachedProgram.isCompiled())){
+            log.warn("Tried to set cached texture when either the whenCachedProgram is null or didn't compile. The attempt has been ignored to prevent further issues.");
+            return;
+        }
+
+        this.cachedResult = texture;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ShaderProgram getProgram(){
-        return program;
+        return cachedResult == null ? program : whenCachedProgram;
     }
     /** {@inheritDoc} */
-    public String shortName(){
+    @Override
+    public String getLocalName(){
         return localName;
     }
     /** {@inheritDoc} */
@@ -196,5 +215,19 @@ public abstract class WrappedShader<T extends IWrappedShader<T>> implements IWra
     @Override
     public void setStatic(boolean yesNo) {
         this.isStatic = yesNo;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void dispose() {
+        disposeChildSpecificResources();
+        combinedDisposables.forEach(Disposable::dispose);
+        program.dispose();
+        if(whenCachedProgram != null){
+            whenCachedProgram.dispose();
+        }
+        if(cachedResult != null){
+            cachedResult.dispose();
+        }
     }
 }

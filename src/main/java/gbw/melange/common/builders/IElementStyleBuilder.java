@@ -3,7 +3,7 @@ package gbw.melange.common.builders;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.BevelConfig;
 import gbw.melange.shading.services.Colors;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 /**

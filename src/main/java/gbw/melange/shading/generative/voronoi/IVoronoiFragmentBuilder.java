@@ -1,7 +1,7 @@
 package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.generative.noise.NoiseProvider;

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 public class WelcomeExample {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger();
 
     public static void main(String[] args) throws Exception {
         Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.values()));
@@ -28,7 +28,7 @@ public class WelcomeExample {
             .enableGLDebug(true)
             .setLoggingAspects(logLevel)
             .clearGeneratedOnStart(true)
-            .useCaching(false);
+            .useCaching(true);
 
         MelangeApplication.run(WelcomeExample.class, config);
     }

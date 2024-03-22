@@ -8,6 +8,7 @@ import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.IScreenSpace;
 import gbw.melange.common.elementary.space.ISpaceProvider;
 import gbw.melange.common.navigation.ISpaceNavigator;
+import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
@@ -35,10 +36,10 @@ public class HomeScreen implements IHomeScreen, OnRender {
         voronoiA = new VoronoiFragmentBuilder("HS_Gradient_A", pipeline)
                 .addRandomPoints(40)
                 .setDistanceType(Vec2DistFunc.EUCLIDEAN)
-                .setInterpolationType(InterpolationType.LINEAR)
+                .setInterpolationType(InterpolationType.NONE)
                 .build();
 
-        //voronoiA.setStatic(false);
+        voronoiA.setStatic(true);
 
 
         final double borderWidth = 5;
@@ -87,8 +88,8 @@ public class HomeScreen implements IHomeScreen, OnRender {
         boolean flipThat = false;
 
         for(int i = 0; i + 1 < voronoiA.getPoints().length; i += 2){
-            float xOff = MathUtils.sin((float) acc + i) / 100;
-            float yOff = MathUtils.cos((float) acc + i) / 100;
+            float xOff = MathUtils.sin((float) acc + (i / 3f)) / 100;
+            float yOff = MathUtils.cos((float) acc + (i / 7f)) / 100;
 
             if(flipThat){
                 voronoiA.getPoints()[i] += xOff;
@@ -99,6 +100,10 @@ public class HomeScreen implements IHomeScreen, OnRender {
             }
 
             flipThat = !flipThat;
+        }
+
+        if(acc >= 10){
+            ((WrappedShader<IVoronoiShader>) voronoiA).setCachedTexture(null);
         }
     }
 }

@@ -14,6 +14,9 @@ import gbw.melange.common.MelangeConfig;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
+import gbw.melange.mesh.errors.InvalidMeshIssue;
+import gbw.melange.mesh.errors.MeshProcessingIssue;
+import gbw.melange.mesh.services.MeshPipeline;
 import gbw.melange.shading.errors.Errors;
 import gbw.melange.shading.services.ShaderPipeline;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
@@ -83,6 +86,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private Viewport viewport;
     private SpaceNavigator spaceNavigator;
     private ShaderPipeline shaderPipeline;
+    private MeshPipeline meshPipeline;
 
     @Override
     public void create(){
@@ -112,19 +116,22 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             if (config.getClearGeneratedOnStart()){
                 shaderPipeline.clearCache();
             }
+            shaderPipeline.useCaching(config.getUseCaching());
+            shaderPipeline.compileAndCache();
+
+            meshPipeline = context.getBean(MeshPipeline.class);
+            meshPipeline.beginProcessing();
 
             inputListener = context.getBean(IInputListener.class);
             Gdx.input.setInputProcessor(inputListener);
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
-            shaderPipeline.useCaching(config.getUseCaching());
-            shaderPipeline.compileAndCache();
 
             if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
                 log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
             }
 
-        } catch (ViewConfigurationIssue | ShaderCompilationIssue | IOException e) {
+        } catch (ViewConfigurationIssue | ShaderCompilationIssue | MeshProcessingIssue | InvalidMeshIssue | IOException e) {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);
         }

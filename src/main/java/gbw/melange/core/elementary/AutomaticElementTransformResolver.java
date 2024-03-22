@@ -1,9 +1,8 @@
 package gbw.melange.core.elementary;
 
-import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.contraints.IComputedTransforms;
 import gbw.melange.common.elementary.types.IConstrainedElement;
-import gbw.melange.elements.ElementTransformAccess;
+import gbw.melange.elements.problematic.ElementTransformAccess;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

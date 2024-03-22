@@ -20,7 +20,7 @@ public enum EVertexAttribute {
     COLOR_UNPACKED( 4, "a_color", 2),
     COLOR_PACKED( 4, "a_color", 4),
     NORMAL( 3, "a_normal", 8),
-    TEX_COORDS( 2, "a_texCoords", 16), //UV
+    UV(2, "a_texCoord0", 16), // Primary UV mapping
     //32 doesn't exist??
     BONE_WEIGHT(2, "a_boneWeight", 64),
     TANGENT(3, "a_tangent", 128),

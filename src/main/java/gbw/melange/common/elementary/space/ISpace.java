@@ -40,14 +40,6 @@ public interface ISpace extends Disposable {
      * Create a new element belonging to this Space.
      */
     IElementBuilder<?> createElement();
-    /**
-     * Create a new element belonging to this Space with the declared starting content.
-     */
-    <T> IElementBuilder<T> createElement(T content);
-    /**
-     * Create a new element belonging to this Space. It is not added and drawn immediately, but rather added to a separate loading queue, and a placeholder is drawn instead until the provider resolves.
-     */
-    <T> IElementBuilder<T> createElement(IContentProvider<T> contentProvider);
 
     /**
      * Creates a new {@link gbw.melange.common.elementary.types.ISpacerElement} that represents empty space.
@@ -63,7 +55,7 @@ public interface ISpace extends Disposable {
      */
     <T> void addPureElement(IPureElement<T> element);
     /**
-     * Manual version of {@link gbw.melange.common.elementary.space.ISpace#createElement(IContentProvider)}
+     * Manual version of {@link gbw.melange.common.elementary.space.ISpace#createElement()}
      */
     <T> void addLoadingElement(ILoadingElement<T> element);
 

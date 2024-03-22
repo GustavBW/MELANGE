@@ -21,9 +21,4 @@ public abstract class PostProcessShader extends TextureShader implements IPostPr
         super.setTexture(texture, GLShaderAttr.TEXTURE.glValue());
     }
 
-    @Override
-    public void invalidate(){
-        throw new RuntimeException("Implement this first, how 'bout that");
-    }
-
 }

@@ -2,10 +2,10 @@ package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.VecUtil;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Decorator for {@link WrappedShader} adding specific bindings and methods.
+ * Decorator for {@link ManagedShader} adding specific bindings and methods.
  */
-public class VoronoiShader extends WrappedShader<IVoronoiShader> implements IVoronoiShader{
+public class VoronoiShader extends ManagedShader<IVoronoiShader> implements IVoronoiShader{
 
     private float[] points = new float[0];
     public VoronoiShader(String localName, VertexShader vertex, FragmentShader fragment){

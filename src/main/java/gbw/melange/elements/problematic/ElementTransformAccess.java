@@ -1,8 +1,7 @@
-package gbw.melange.elements;
+package gbw.melange.elements.problematic;
 
 import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.types.IConstrainedElement;
-import gbw.melange.common.elementary.types.IElement;
 
 /**
  * Temporary adapter solution until MELANGE can be modularized for further visibility control </br>

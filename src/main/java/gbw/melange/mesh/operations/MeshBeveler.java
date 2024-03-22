@@ -2,8 +2,6 @@ package gbw.melange.mesh.operations;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
-import gbw.melange.common.elementary.styling.BevelConfig;
-import gbw.melange.common.elementary.styling.IBevelOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +25,7 @@ public class MeshBeveler implements IBevelOperation {
     /**
      * <p>Constructor for MeshBeveler.</p>
      *
-     * @param config a {@link gbw.melange.common.elementary.styling.BevelConfig} object
+     * @param config a {@link BevelConfig} object
      */
     public MeshBeveler(BevelConfig config){
         vertNum = config.subdivs();

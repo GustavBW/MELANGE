@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.IWrappedShader;
 import org.jetbrains.annotations.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +47,7 @@ public class DiskShaderCacheUtil implements Disposable {
      *
      * @return Returns the file handle to the image file which was just generated
      */
-    public FileHandle cacheOrUpdateExisting(@NotNull IWrappedShader shader) throws GdxRuntimeException {
+    public FileHandle cacheOrUpdateExisting(@NotNull IManagedShader shader) throws GdxRuntimeException {
 
         init(); //Just a check
 
@@ -86,7 +86,7 @@ public class DiskShaderCacheUtil implements Disposable {
     }
 
     /**
-     * Sets up folders and structure. Does nothing if called twice and is already checked and called on {@link DiskShaderCacheUtil#cacheOrUpdateExisting(IWrappedShader)}
+     * Sets up folders and structure. Does nothing if called twice and is already checked and called on {@link DiskShaderCacheUtil#cacheOrUpdateExisting(IManagedShader)}
      */
     public void init(){
         // Ensure the cache directory exists
@@ -113,7 +113,7 @@ public class DiskShaderCacheUtil implements Disposable {
         texturesDir.deleteDirectory();
     }
 
-    public FrameBuffer renderToFBO(IWrappedShader shader, int resX, int resY, boolean depth) {
+    public FrameBuffer renderToFBO(IManagedShader shader, int resX, int resY, boolean depth) {
         FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, resX, resY, depth);
         frameBuffer.begin();
 

@@ -2,10 +2,10 @@ package gbw.melange.elements.styling;
 
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
-import gbw.melange.common.elementary.styling.BevelConfig;
+import gbw.melange.mesh.operations.BevelConfig;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.shading.IWrappedShader;
+import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 /**
@@ -17,16 +17,13 @@ import gbw.melange.shading.postprocessing.IPostProcessShader;
 public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
     private final IReferenceStyleDefinition referenceStyling = new ReferenceStyleDefinition();
     private final IElementBuilder<T> parentBuilder;
-    private final int expectedElementId;
     /**
      * <p>Constructor for ElementStyleBuilder.</p>
      *
      * @param parentBuilder a {@link gbw.melange.common.builders.IElementBuilder} object
-     * @param expectedElementId a int
      */
-    public ElementStyleBuilder(IElementBuilder<T> parentBuilder, int expectedElementId){
+    public ElementStyleBuilder(IElementBuilder<T> parentBuilder){
         this.parentBuilder = parentBuilder;
-        this.expectedElementId = expectedElementId;
     }
     /** {@inheritDoc} */
     @Override
@@ -48,20 +45,16 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
         return this;
     }
 
-    private String generateShaderLocalName(String type){
-        return "Element(" + expectedElementId + ") " + type + " shader";
-    }
-
     /** {@inheritDoc} */
     @Override
-    public IElementStyleBuilder<T> setBackgroundColor(IWrappedShader shader) {
+    public IElementStyleBuilder<T> setBackgroundColor(IManagedShader<?> shader) {
         referenceStyling.backgroundShader(shader);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public IElementStyleBuilder<T> setBorderColor(IWrappedShader shader) {
+    public IElementStyleBuilder<T> setBorderColor(IManagedShader<?> shader) {
         referenceStyling.borderShader(shader);
         return this;
     }
@@ -90,7 +83,6 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
     /** {@inheritDoc} */
     @Override
     public IElementStyleBuilder<T> addPostProcess(IPostProcessShader postProcess) {
-
         referenceStyling.postProcesses().add(postProcess);
         return this;
     }

@@ -1,10 +1,10 @@
 package gbw.melange.common.builders;
 
-import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
+import gbw.melange.mesh.IManagedMesh;
 
 /**
  * <p>IElementBuilder interface.</p>
@@ -44,22 +44,15 @@ public interface IElementBuilder<T> extends IBuilder<IElement<T>> {
      */
     IElementBuilder<T> constraintsFrom(IReferenceConstraintDefinition refConDef);
 
-
     /**
      * <p>setMesh.</p>
      *
      * @param mesh a {@link com.badlogic.gdx.graphics.Mesh} object
      * @return a {@link gbw.melange.common.builders.IElementBuilder} object
      */
-    IElementBuilder<T> setMesh(Mesh mesh);
-    /**
-     * <p>contentProvider.</p>
-     *
-     * @param onInit a {@link gbw.melange.common.elementary.IContentProvider} object
-     * @return a {@link gbw.melange.common.builders.IElementBuilder} object
-     */
-    IElementBuilder<T> contentProvider(IContentProvider<T> onInit);
-
+    IElementBuilder<T> setShape(IManagedMesh mesh);
+    IElementBuilder<T> setContent(IContentProvider<T> provider);
+    IElementBuilder<T> setContent(T content);
     /**
      * <p>styling.</p>
      *

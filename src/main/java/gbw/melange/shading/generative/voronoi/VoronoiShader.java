@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.VecUtil;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.generative.WrappedShader;
+import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 
@@ -54,7 +54,7 @@ public class VoronoiShader extends WrappedShader<IVoronoiShader> implements IVor
 
     @Override
     protected IVoronoiShader copyChild() {
-        return new VoronoiShader(super.shortName(), getVertex(), getFragment(), isStatic(), super.bindings);
+        return new VoronoiShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), super.bindings);
     }
 
 }

@@ -1,7 +1,7 @@
 package gbw.melange.common.elementary.styling;
 
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 
 import java.util.List;

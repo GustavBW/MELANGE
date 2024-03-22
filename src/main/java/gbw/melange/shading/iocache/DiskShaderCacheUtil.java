@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 import org.jetbrains.annotations.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +52,7 @@ public class DiskShaderCacheUtil implements Disposable {
         init(); //Just a check
 
         //TODO: Hashcode might depend on code content of shader, assure a swapped out shader returns the same name for consistency
-        final String derivedFileName = shader.shortName() + "@" + shader.hashCode();
+        final String derivedFileName = shader.getLocalName() + "@" + shader.hashCode();
         File existingCacheFile = new File(SHADER_CACHE_PATH + "/" + derivedFileName);
         FrameBuffer resultingFBO;
         FileHandle toReturn;

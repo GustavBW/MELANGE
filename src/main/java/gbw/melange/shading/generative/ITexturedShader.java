@@ -2,6 +2,7 @@ package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
+import gbw.melange.shading.IWrappedShader;
 import gbw.melange.shading.ShaderResourceBinding;
 
 /**

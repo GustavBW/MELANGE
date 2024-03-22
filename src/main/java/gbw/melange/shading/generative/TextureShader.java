@@ -3,6 +3,7 @@ package gbw.melange.shading.generative;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.shading.ShaderResourceBinding;
+import gbw.melange.shading.WrappedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.partial.FragmentShader;
@@ -56,7 +57,7 @@ public class TextureShader extends WrappedShader<ITexturedShader> implements ITe
 
     @Override
     protected ITexturedShader copyChild() {
-        return new TextureShader(super.shortName(), getVertex(), getFragment(), isStatic(), super.bindings);
+        return new TextureShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), super.bindings);
     }
     @Override
     protected ITexturedShader copyChildAs(String newLocalName) {

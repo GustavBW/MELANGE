@@ -7,7 +7,7 @@ import gbw.melange.shading.generative.BlindShader;
 import gbw.melange.shading.generative.ITexturedShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.gradients.IGradientBuilder;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 
 /**
  * Spring-distributed entry point for the melange colors api.

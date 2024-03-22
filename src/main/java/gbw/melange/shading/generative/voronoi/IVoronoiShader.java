@@ -1,7 +1,7 @@
 package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.math.Vector2;
-import gbw.melange.shading.generative.IWrappedShader;
+import gbw.melange.shading.IWrappedShader;
 
 import java.util.List;
 

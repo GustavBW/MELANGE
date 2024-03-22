@@ -3,7 +3,7 @@ package gbw.melange.shading;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 /**
- * Any Bi Consumer taking an index and a shader program.
+ * (int indexToBindTo, ShaderProgram program) -> void
  */
 @FunctionalInterface
 public interface ShaderResourceBinding {

@@ -1,8 +1,7 @@
-package gbw.melange.shading.generative;
+package gbw.melange.shading;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.services.IShaderPipeline;
@@ -53,9 +52,6 @@ public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable 
      */
     void compile() throws ShaderCompilationIssue;
 
-    /**
-     * Deep-copies (I think) a given shader.
-     */
     T copy();
     T copyAs(String newLocalName);
 
@@ -74,13 +70,14 @@ public interface IWrappedShader<T extends IWrappedShader<T>> extends Disposable 
     void setStatic(boolean yesNo);
 
     /**
-     * @return null if not compiled, else a ShaderProgram
+     * Will return null until compiled. If a latest cache result (texture) is present, the program used to draw this cached
+     * texture is returned. Else, the original shader program defined for this shader is.
      */
     ShaderProgram getProgram();
     /**
      * @return a name to help identify the shader
      */
-    String shortName();
+    String getLocalName();
 
     /**
      * True, if the shader program exists and has compiled successfully.

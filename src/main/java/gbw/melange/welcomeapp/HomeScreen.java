@@ -10,6 +10,8 @@ import gbw.melange.mesh.services.Shapes;
 import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.constants.Vec2DistFunc;
+import gbw.melange.shading.generative.checker.ICheckerShader;
+import gbw.melange.shading.generative.noise.IPerlinNoiseShader;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
 import gbw.melange.shading.services.Colors;
 import gbw.melange.shading.services.IShaderPipeline;
@@ -27,48 +29,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 @View(layer = View.HOME_SCREEN_LAYER, focusPolicy = View.FocusPolicy.RETAIN_LATEST)
 public class HomeScreen implements IHomeScreen, OnRender {
     private static final Logger log = LogManager.getLogger();
-    private final IVoronoiShader voronoiA;
+
+    private IPerlinNoiseShader perlinA;
     @Autowired
     public HomeScreen(ISpaceProvider<IScreenSpace> provider, Colors colors, IShaderPipeline pipeline, Shapes shapes) {
         IScreenSpace space = provider.getScreenSpace(this);
 
-        voronoiA = new VoronoiFragmentBuilder("HS_Gradient_A", pipeline)
-                .addRandomPoints(40)
-                .setDistanceType(Vec2DistFunc.EUCLIDEAN)
-                .setInterpolationType(InterpolationType.NONE)
+        perlinA = colors.perlin()
+                .setFrequency(10)
                 .build();
 
-        voronoiA.setStatic(true);
-
-        /*
-        space.createElement("HI")
-            .styling()
-                .setBackgroundColor(colors.fromFragment(FragmentShader.DEBUG_UV))
-                .setBorderColor(colors.constant(Color.WHITE))
-                .apply()
-            .constraints()
-                .setBorderWidth(borderWidth)
-                .apply()
-            .build();
-         */
-
-        /*
-        space.createElement(() -> "HI")
-            .setMesh(MeshTable.CIRCLE_64.getMesh()) //TODO: Introduce rotation. Only thing users are allowed to set
-            .styling()
-                .setBackgroundColor(fragmentShader)
-                .setBorderColor(colors.constant(Color.WHITE))
-                .apply()
-            .constraints()
-                .setBorderWidth(borderWidth)
-                .apply()
-            .build();
-        */
+        perlinA.setStatic(false);
 
         space.createElement()
                 .setShape(shapes.square())
                 .styling()
-                    .setBackgroundColor(voronoiA)
+                    .setBackgroundColor(perlinA)
                     .setBorderColor(colors.constant(Color.WHITE))
                     .setBorderRadius(.1)
                     .apply()
@@ -83,25 +59,7 @@ public class HomeScreen implements IHomeScreen, OnRender {
     @Override
     public void onRender(double deltaT) {
         acc += deltaT;
-        boolean flipThat = false;
 
-        for(int i = 0; i + 1 < voronoiA.getPoints().length; i += 2){
-            float xOff = MathUtils.sin((float) acc + (i / 3f)) / 100;
-            float yOff = MathUtils.cos((float) acc + (i / 7f)) / 100;
-
-            if(flipThat){
-                voronoiA.getPoints()[i] += xOff;
-                voronoiA.getPoints()[i + 1] += yOff;
-            }else{
-                voronoiA.getPoints()[i] -= xOff;
-                voronoiA.getPoints()[i + 1] -= yOff;
-            }
-
-            flipThat = !flipThat;
-        }
-
-        if(acc >= 10){
-            ((ManagedShader<IVoronoiShader>) voronoiA).setCachedTexture(null);
-        }
+        perlinA.setPersistence((int) (MathUtils.sin((float) acc) + 2) * 5);
     }
 }

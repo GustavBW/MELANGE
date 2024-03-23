@@ -18,7 +18,6 @@ public class CheckerShader extends ManagedShader<ICheckerShader> implements IChe
         super(localName, vertex, fragment, isStatic, bindings);
     }
 
-    private double rotationRAD = 0;
     private double rows = 2;
     private double columns = 2;
 
@@ -33,13 +32,7 @@ public class CheckerShader extends ManagedShader<ICheckerShader> implements IChe
     }
 
     @Override
-    public void setRotation(double deg) {
-        this.rotationRAD = Math.toRadians(deg);
-    }
-
-    @Override
     protected void applyChildBindings(ShaderProgram program) {
-        program.setUniformf(GradientShaderAttr.ROTATION.glValue, (float) rotationRAD);
         program.setUniformf(CheckerShaderAttr.COLUMNS.glValue, (float) columns);
         program.setUniformf(CheckerShaderAttr.ROWS.glValue, (float) rows);
     }

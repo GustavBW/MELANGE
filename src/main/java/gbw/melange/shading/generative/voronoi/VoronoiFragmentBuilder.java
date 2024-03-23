@@ -30,7 +30,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
     private final List<Vector2> points = new ArrayList<>(); // Vec2 could be a custom class or a placeholder for 2D points
     private final String localName;
     private final IShaderPipeline pipeline;
-    private Vec2DistFunc distanceType = Vec2DistFunc.EUCLIDEAN_SQUARED;
+    private Vec2DistFunc distanceType = Vec2DistFunc.EUCLIDEAN;
     private InterpolationType interpolationType = InterpolationType.HERMIT;
 
     public VoronoiFragmentBuilder(String localName, IShaderPipeline pipeline) {

@@ -14,15 +14,8 @@ public class GradientShader extends ManagedShader<IGradientShader> implements IG
         super(localName, vertex, fragment, isStatic, bindings);
     }
 
-    private double rotationRAD = 0;
-    @Override
-    public void setRotation(double deg) {
-        this.rotationRAD = Math.toRadians(deg);
-    }
-
     @Override
     protected void applyChildBindings(ShaderProgram program) {
-        program.setUniformf(GradientShaderAttr.ROTATION.glValue, (float) rotationRAD);
     }
 
     @Override

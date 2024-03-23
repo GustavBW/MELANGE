@@ -12,6 +12,5 @@ public interface ICheckerShader extends IManagedShader<ICheckerShader> {
      * Set the amount of rows shown. Partial (non-integer) values show the last row as being "cut-off" allowing for smooth animations.
      */
     void setRows(double count);
-    void setRotation(double deg);
 
 }

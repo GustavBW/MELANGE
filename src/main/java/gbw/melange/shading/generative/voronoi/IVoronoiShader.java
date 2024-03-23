@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface IVoronoiShader extends IManagedShader<IVoronoiShader> {
     float[] getPoints();
-
     void setPoints(List<Vector2> points);
 
 }

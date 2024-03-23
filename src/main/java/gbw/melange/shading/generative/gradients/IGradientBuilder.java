@@ -13,12 +13,6 @@ public interface IGradientBuilder {
 
     IGradientBuilder setInterpolationType(InterpolationType type);
     IGradientShader build();
-    /**
-     * Set the rotation of the gradient. The pivot point is in the middle of the element's mesh.
-     *
-     * @param degrees a double
-     */
-    IGradientBuilder setRotation(double degrees);
 
     /**
      * Add a stop to the gradient. If

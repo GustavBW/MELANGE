@@ -7,8 +7,7 @@ import gbw.melange.shading.generative.gradients.GradientShaderAttr;
 public enum CheckerShaderAttr {
 
     ROWS("u_rows"),
-    COLUMNS("u_columns"),
-    ROTATION(GradientShaderAttr.ROTATION.glValue);
+    COLUMNS("u_columns");
 
     public final String glValue;
 

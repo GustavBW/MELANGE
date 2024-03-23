@@ -1,6 +1,7 @@
 package gbw.melange.shading.generative.gradients;
 
 import com.badlogic.gdx.graphics.Color;
+import gbw.melange.shading.GLSL;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.services.IShaderPipeline;
 import gbw.melange.shading.generative.partial.FragmentShader;
@@ -16,37 +17,15 @@ import java.util.List;
  */
 public class GradientFragmentBuilder implements IGradientBuilder {
     private static final Logger log = LogManager.getLogger();
-    private double rotationDeg = 0;
     private InterpolationType interpolationType = InterpolationType.HERMIT;
     private final List<Color> colors = new ArrayList<>();
     private final List<Double> positions = new ArrayList<>();
     private final String localName;
     private final IShaderPipeline pipeline;
 
-
-    public GradientFragmentBuilder(String localName){
-        this(localName, null);
-    }
-
-    public GradientFragmentBuilder(String localName, double rotationDeg){
-        this(localName, rotationDeg, null);
-    }
-
     public GradientFragmentBuilder(String localName, IShaderPipeline pipeline){
-        this(localName,0, pipeline);
-    }
-
-    public GradientFragmentBuilder(String localName, double rotationDeg, IShaderPipeline pipeline){
-        this.rotationDeg = rotationDeg;
         this.localName = localName;
         this.pipeline = pipeline;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public IGradientBuilder setRotation(double degrees){
-        this.rotationDeg = degrees;
-        return this;
     }
 
     /** {@inheritDoc} */
@@ -67,21 +46,13 @@ public class GradientFragmentBuilder implements IGradientBuilder {
     #endif
     
     varying vec2 v_texCoords;
-    """ +
-    "uniform float "+ GradientShaderAttr.ROTATION +";\n" +
-    "vec2 direction = vec2(cos("+ GradientShaderAttr.ROTATION +"), sin("+ GradientShaderAttr.ROTATION +"));\n" +
-    """
-    
     const vec2 center = vec2(0.5, 0.5);
     const vec2 preRotationDirection = vec2(1.0, 0.0);
     """;
 
     private static final String glslStartMain = """
     void main() {
-        vec2 adjustedCoords = v_texCoords - center;
-        vec2 rotatedCoords = adjustedCoords * mat2(direction.x, -direction.y, direction.y, direction.x);
-        rotatedCoords += center;
-        float progress = dot(rotatedCoords - center, preRotationDirection) + 0.5;
+        float progress = dot(v_texCoords - center, preRotationDirection) + 0.5;
         vec4 color = vec4(color0);
     """;
 
@@ -96,8 +67,7 @@ public class GradientFragmentBuilder implements IGradientBuilder {
         // Constants for color stops
         for (int i = 0; i < colors.size(); i++) {
             Color color = colors.get(i);
-            String colorAsString = color.r +", " + color.g+", "+color.b+", "+color.a;
-            codeBuilder.append("const vec4 color"+i+" = vec4("+colorAsString+");\n")
+            codeBuilder.append("const vec4 color"+i+" = vec4("+ GLSL.toString(color) +");\n")
                   .append("const float position"+i+" = "+positions.get(i)+";\n");
         }
 
@@ -114,7 +84,6 @@ public class GradientFragmentBuilder implements IGradientBuilder {
         if(pipeline != null){
             pipeline.registerForCompilation(wrapped);
         }
-        wrapped.setRotation(rotationDeg);
 
         return wrapped;
     }

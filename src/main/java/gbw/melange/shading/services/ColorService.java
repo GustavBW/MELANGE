@@ -6,10 +6,16 @@ import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.generative.*;
+import gbw.melange.shading.generative.checker.CheckerFragmentBuilder;
+import gbw.melange.shading.generative.checker.ICheckerBuilder;
 import gbw.melange.shading.generative.gradients.GradientFragmentBuilder;
 import gbw.melange.shading.generative.gradients.IGradientBuilder;
+import gbw.melange.shading.generative.noise.IPerlinFragmentBuilder;
+import gbw.melange.shading.generative.noise.PerlinFragmentBuilder;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.generative.voronoi.IVoronoiFragmentBuilder;
+import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +45,7 @@ public class ColorService implements Colors {
     @Override
     public IManagedShader<?> constant(Color color) {
         float r = color.r, g = color.g, b = color.b, a = color.a;
-        IManagedShader<?> wrapped = new BlindShader("CONSTANT_RGBA_"+(nextId++)+"("+r+","+g+","+b+","+a+")", VertexShader.DEFAULT, FragmentShader.constant(color));
+        IManagedShader<?> wrapped = new BlindShader(generateId("CONSTANT_RGBA("+r+","+g+","+b+","+a+")"), VertexShader.DEFAULT, FragmentShader.constant(color));
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }
@@ -53,11 +59,8 @@ public class ColorService implements Colors {
     /** {@inheritDoc} */
     @Override
     public ITexturedShader image(Texture src) {
-        ITexturedShader wrapped = new TextureShader("TEXTURE_"+(nextId++), VertexShader.DEFAULT, FragmentShader.TEXTURE);
-        wrapped.bindResource((index, program) -> {
-            src.bind(index);
-            program.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
-        }, src);
+        ITexturedShader wrapped = new TextureShader(generateId("TEXTURE_"), VertexShader.DEFAULT, FragmentShader.TEXTURE);
+        wrapped.setTexture(src, GLShaderAttr.TEXTURE.glValue());
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }
@@ -65,7 +68,7 @@ public class ColorService implements Colors {
     /** {@inheritDoc} */
     @Override
     public IGradientBuilder linearGradient() {
-        return new GradientFragmentBuilder("GRADIENT_"+(nextId++), pipeline);
+        return new GradientFragmentBuilder(generateId("GRADIENT_"), pipeline);
     }
 
     /** {@inheritDoc} */
@@ -75,13 +78,31 @@ public class ColorService implements Colors {
         return null;
     }
 
+    @Override
+    public ICheckerBuilder checker() {
+        return new CheckerFragmentBuilder(generateId("CHECKER_"), pipeline);
+    }
+
+    @Override
+    public IVoronoiFragmentBuilder voronoi() {
+        return new VoronoiFragmentBuilder(generateId("VORONOI_"), pipeline);
+    }
+
+    @Override
+    public IPerlinFragmentBuilder perlin() {
+        return new PerlinFragmentBuilder(generateId("PERLIN_"), pipeline);
+    }
+
     /** {@inheritDoc} */
     @Override
     public BlindShader fromFragment(FragmentShader fragmentShader) {
-        BlindShader wrapped = new BlindShader("CUSTOM_FRAGMENT_"+(nextId++), VertexShader.DEFAULT, fragmentShader);
+        BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, fragmentShader);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }
 
+    private String generateId(String base){
+        return base + (nextId++);
+    }
 
 }

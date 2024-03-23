@@ -37,7 +37,6 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     private ShaderProgram program;
     private ShaderProgram whenCachedProgram;
     private boolean failedCompilation = false;
-    private boolean isDrawingFromCache = false;
     private Texture cachedResult = null;
 
     /**
@@ -73,6 +72,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
             cachedResult.bind(index);
             whenCachedProgram.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
         } else {
+            //TODO: Bindings persists for a given program. Use some kind of change detection
             applyChildBindings(program);
 
             for (ShaderResourceBinding binding : bindings){

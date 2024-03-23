@@ -12,10 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>GradientFragmentBuilder class.</p>
- *
  * @author GustavBW
- * @version $Id: $Id
  */
 public class GradientFragmentBuilder implements IGradientBuilder {
     private static final Logger log = LogManager.getLogger();
@@ -56,7 +53,7 @@ public class GradientFragmentBuilder implements IGradientBuilder {
     @Override
     public IGradientBuilder setInterpolationType(InterpolationType type){
         if(type == InterpolationType.NONE){
-            log.warn("Improper API Usage: A gradient requires interpolation - that like the whole deal. The attempted value of " + type + " has been ignored.");
+            log.warn("Improper API Usage: A gradient requires interpolation - that's like the whole deal. The attempted value of " + type + " has been ignored.");
             return this;
         }
 
@@ -71,8 +68,8 @@ public class GradientFragmentBuilder implements IGradientBuilder {
     
     varying vec2 v_texCoords;
     """ +
-    "uniform float "+ GradientShaderAttr.ROTATION.glValue +";\n" +
-    "vec2 direction = vec2(cos("+ GradientShaderAttr.ROTATION.glValue +"), sin("+ GradientShaderAttr.ROTATION.glValue +"));\n" +
+    "uniform float "+ GradientShaderAttr.ROTATION +";\n" +
+    "vec2 direction = vec2(cos("+ GradientShaderAttr.ROTATION +"), sin("+ GradientShaderAttr.ROTATION +"));\n" +
     """
     
     const vec2 center = vec2(0.5, 0.5);

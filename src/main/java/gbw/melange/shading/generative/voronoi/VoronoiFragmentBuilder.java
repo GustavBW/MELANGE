@@ -144,8 +144,8 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
         precision mediump float;
     #endif
     """ +
-    "uniform vec2 "+ VoronoiShaderAttr.POINTS.glValue+"["+IVoronoiFragmentBuilder.MAX_NUM_POINTS+"];\n" +
-    "uniform int u_num"+VoronoiShaderAttr.POINTS.glValue+";\n" +
+    "uniform vec2 "+ VoronoiShaderAttr.POINTS+"["+IVoronoiFragmentBuilder.MAX_NUM_POINTS+"];\n" +
+    "uniform int u_num"+VoronoiShaderAttr.POINTS+";\n" +
     """
     varying vec2 v_texCoords;
     """;
@@ -156,8 +156,8 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
         float minDist = 1.0e10;
         float maxDist = 1.0e-10;
     """ +
-    "\tfor (int i = 0; i < u_num"+VoronoiShaderAttr.POINTS.glValue+"; i++) {\n" +
-      "\t\tfloat dist = distance(fragCoord, "+VoronoiShaderAttr.POINTS.glValue+"[i]);\n" +
+    "\tfor (int i = 0; i < u_num"+VoronoiShaderAttr.POINTS+"; i++) {\n" +
+      "\t\tfloat dist = distance(fragCoord, "+VoronoiShaderAttr.POINTS+"[i]);\n" +
     """
             if (dist < minDist) {
                 minDist = dist;

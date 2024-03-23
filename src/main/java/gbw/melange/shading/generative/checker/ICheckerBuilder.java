@@ -9,8 +9,8 @@ public interface ICheckerBuilder {
      * Set the rotation of the checker pattern. The pivot point is in the middle of the element's mesh.
      */
     ICheckerBuilder setRotation(double degrees);
-    ICheckerBuilder setFirstColour(Color color);
-    ICheckerBuilder setSecondColour(Color color);
+    ICheckerBuilder setFirstColor(Color color);
+    ICheckerBuilder setSecondColor(Color color);
     ICheckerBuilder setRows(double count);
     ICheckerBuilder setColumns(double count);
 

@@ -15,10 +15,14 @@ public class ComputedShading {
 
     private final FrameBuffer frameBufferA = new FrameBuffer(Pixmap.Format.RGBA8888, 512, 512, true);
     private final FrameBuffer frameBufferB = new FrameBuffer(Pixmap.Format.RGBA8888, 512, 512, true);
+    private final FrameBuffer frameBufferC = new FrameBuffer(Pixmap.Format.RGBA8888, 512, 512, true);
     FrameBuffer getFrameBufferA(){
         return frameBufferA;
     }
     FrameBuffer getFrameBufferB(){
         return frameBufferB;
+    }
+    FrameBuffer getFrameBufferC(){
+        return frameBufferC;
     }
 }

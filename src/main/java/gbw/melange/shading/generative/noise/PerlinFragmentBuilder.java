@@ -88,7 +88,7 @@ public class PerlinFragmentBuilder implements IPerlinFragmentBuilder{
                 mainLoop;
 
         FragmentShader fragment = new FragmentShader(localName, sb, ShaderClassification.COMPLEX);
-        IPerlinNoiseShader shader = new PerlinNoiseShader(localName, VertexShader.DEFAULT, fragment, true, new ArrayList<>());
+        IPerlinNoiseShader shader = new PerlinNoiseShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(shader);
         }

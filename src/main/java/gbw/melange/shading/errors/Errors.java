@@ -13,7 +13,7 @@ public final class Errors {
      * {@code "| GL Error <errVal> | + <your message>"}
      * </pre>
      */
-    public static void checkAndThrow(String msg){
+    public static void checkAndThrow(String msg){ //Delete body on release build
         int someGlErr = Gdx.gl.glGetError();
         if(someGlErr != GL30.GL_NO_ERROR){
             throw new RuntimeException("| GL Error " + someGlErr + " | " + msg);
@@ -24,7 +24,7 @@ public final class Errors {
      * Invokes the logger and prints the message, prepended error code much like {@link Errors#checkAndThrow(String)},
      * if a gl error is present
      */
-    public static void checkAndLog(Logger logger, String msg){
+    public static void checkAndLog(Logger logger, String msg){ //Delete body on release build
         int someGlErr = Gdx.gl.glGetError();
         if(someGlErr != GL30.GL_NO_ERROR){
             logger.warn("| GL Error " + someGlErr + " | " + msg);

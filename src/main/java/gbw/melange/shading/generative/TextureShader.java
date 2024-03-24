@@ -12,16 +12,17 @@ import gbw.melange.shading.generative.partial.VertexShader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextureShader extends ManagedShader<ITexturedShader> implements ITexturedShader {
-    public static ITexturedShader TEXTURE = new TextureShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE, true, new ArrayList<>());
+public class TextureShader extends GenerativeShader<ITexturedShader> implements ITexturedShader {
+    public static ITexturedShader TEXTURE = new TextureShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE, true);
     public TextureShader(String localName, VertexShader vertex, FragmentShader fragment){
-        this(localName, vertex, fragment, true, new ArrayList<>());
+        this(localName, vertex, fragment, true);
     }
-    public TextureShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings) {
-        super(localName, vertex, fragment, isStatic, bindings);
+    public TextureShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+        super(localName, vertex, fragment, isStatic);
     }
 
     private Texture textureToBind;
+    private boolean hasChanged = true;
     private String glslName = GLShaderAttr.TEXTURE.glValue();
 
     @Override
@@ -29,8 +30,14 @@ public class TextureShader extends ManagedShader<ITexturedShader> implements ITe
         if(this.textureToBind != null){
             textureToBind.dispose();
         }
+        hasChanged = texture != textureToBind;
         this.textureToBind = texture;
         this.glslName = glslName;
+    }
+
+    @Override
+    protected boolean hasChildChanged() {
+        return false;
     }
     @Override
     public Texture getTexture() {
@@ -43,7 +50,9 @@ public class TextureShader extends ManagedShader<ITexturedShader> implements ITe
 
         textureToBind.bind(index);
         program.setUniformi(glslName, index);
+        hasChanged = false;
     }
+
 
     @Override
     protected void disposeChildSpecificResources() {
@@ -57,10 +66,10 @@ public class TextureShader extends ManagedShader<ITexturedShader> implements ITe
 
     @Override
     protected ITexturedShader copyChild() {
-        return new TextureShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), super.bindings);
+        return new TextureShader(super.getLocalName(), getVertex(), getFragment(), isStatic());
     }
     @Override
     protected ITexturedShader copyChildAs(String newLocalName) {
-        return new TextureShader(newLocalName, getVertex(), getFragment(), isStatic(), super.bindings);
+        return new TextureShader(newLocalName, getVertex(), getFragment(), isStatic());
     }
 }

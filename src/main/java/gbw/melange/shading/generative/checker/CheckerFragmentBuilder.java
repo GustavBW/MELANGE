@@ -52,7 +52,7 @@ public class CheckerFragmentBuilder implements ICheckerBuilder {
                 generateMainDrawingCode();
 
         FragmentShader fragment = new FragmentShader(localName, sb, ShaderClassification.COMPLEX, true);
-        ICheckerShader shader = new CheckerShader(localName, VertexShader.DEFAULT, fragment, true, new ArrayList<>());
+        ICheckerShader shader = new CheckerShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(shader);
         }

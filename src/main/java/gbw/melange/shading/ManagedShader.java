@@ -22,11 +22,7 @@ import java.util.List;
  */
 public abstract class ManagedShader<T extends IManagedShader<T>> implements IManagedShader<T> {
     private static final Logger log = LogManager.getLogger();
-
-    public static ManagedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false, new ArrayList<>());
-
-    protected final List<Disposable> combinedDisposables = new ArrayList<>();
-    protected final List<ShaderResourceBinding> bindings;
+    public static ManagedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false);
     private final FragmentShader fragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
@@ -49,14 +45,10 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
         this(localName, vertexShader, fragmentShader, true);
     }
     public ManagedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
-        this(localName, vertex, fragment, isStatic, new ArrayList<>());
-    }
-    public ManagedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings){
+        this.localName = localName;
         this.vertexShader = vertex;
         this.fragmentShader = fragment;
-        this.localName = localName;
         this.isStatic = isStatic;
-        this.bindings = bindings;
     }
 
     private int nextBindingIndex = 0;
@@ -67,22 +59,22 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     /** {@inheritDoc} */
     @Override
     public void applyBindings() {
+
+
         if (cachedResult != null) {
             int index = getNextBindingIndex();
             cachedResult.bind(index);
             whenCachedProgram.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
-        } else {
+
+        } else if(hasChildChanged()) {
             //TODO: Bindings persists for a given program. Use some kind of change detection
             applyChildBindings(program);
-
-            for (ShaderResourceBinding binding : bindings){
-                binding.bind(getNextBindingIndex(), program);
-            }
         }
 
         nextBindingIndex = 0;
     }
     protected abstract void applyChildBindings(ShaderProgram program);
+    protected abstract boolean hasChildChanged();
 
     /**
      * Used for determining whether to cache this shader or not.
@@ -97,14 +89,6 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     }
     protected abstract ShaderClassification getChildClassification();
 
-    @Override
-    public void bindResource(ShaderResourceBinding binding, Disposable... disposables){
-        bindings.add(binding);
-
-        if(disposables == null) return;
-        this.combinedDisposables.addAll(List.of(disposables));
-    }
-
     /** {@inheritDoc} */
     @Override
     public void compile() throws ShaderCompilationIssue {
@@ -114,39 +98,18 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
             throw new ShaderCompilationIssue(
             this + " failed to compile =================================\n" +
                 program.getLog() + "\n" + //The log is a massive text dump
-                "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"
+                "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n" +
+                "VERTEXT: \n\n" + vertexShader.code() + "\n\n FRAGMENT \n\n" + fragmentShader.code()
             );
         }
     }
 
-    public T copy(){
-        T child = copyChild();
-        try{
-            child.compile();
-        }catch (Exception partiallyIgnored){
-            log.warn("Compiling a new copy of " + child.getLocalName() + " failed: " + partiallyIgnored.getMessage());
-        }
-        return child;
-    }
-    protected abstract T copyChild();
-    public T copyAs(String newLocalName){
-        T child = copyChildAs(newLocalName);
-        try{
-            child.compile();
-        }catch (Exception partiallyIgnored){
-            log.warn("Compiling a new copy of " + child.getLocalName() + " as: " + newLocalName + " failed: " + partiallyIgnored.getMessage());
-        }
-        return child;
-    }
-    protected abstract T copyChildAs(String newLocalName);
 
     /** {@inheritDoc} */
     @Override
     public String toString(){
         return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader.localName() + "\", fragment shader: \"" + fragmentShader.name() +"\"";
     }
-
-    protected abstract void disposeChildSpecificResources();
 
     public void setCachedTextureProgram(VertexShader vertex, FragmentShader frag){
         ShaderProgram cachedTextureProgram = new ShaderProgram(vertex.code(), frag.code());
@@ -221,7 +184,6 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     @Override
     public void dispose() {
         disposeChildSpecificResources();
-        combinedDisposables.forEach(Disposable::dispose);
         program.dispose();
         if(whenCachedProgram != null){
             whenCachedProgram.dispose();
@@ -230,4 +192,5 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
             cachedResult.dispose();
         }
     }
+    protected abstract void disposeChildSpecificResources();
 }

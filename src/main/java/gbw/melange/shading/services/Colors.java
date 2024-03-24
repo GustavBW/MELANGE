@@ -13,6 +13,7 @@ import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.gradients.IGradientBuilder;
 import gbw.melange.shading.generative.voronoi.IVoronoiFragmentBuilder;
 import gbw.melange.shading.generative.voronoi.IVoronoiShader;
+import gbw.melange.shading.postprocessing.IBoxBlurShader;
 
 /**
  * Spring-distributed entry point for the melange colors api.
@@ -33,4 +34,7 @@ public interface Colors {
     IPerlinFragmentBuilder perlin();
 
     BlindShader fromFragment(FragmentShader fragmentShader);
+
+    //Maybe break post processes out into separate Effects api - although shader graphs will make that redundant
+    IBoxBlurShader blur(int kernelSize);
 }

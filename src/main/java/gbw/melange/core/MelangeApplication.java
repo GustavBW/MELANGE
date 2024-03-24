@@ -51,6 +51,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         lwjglConfig.setInitialBackgroundColor(new Color(0, 0, 0, 0)); // Set initial background to transparent
         lwjglConfig.setTransparentFramebuffer(true);
         lwjglConfig.setWindowedMode(1000,1000);
+        lwjglConfig.enableGLDebugOutput(config.getEnableGLDebug(), System.out);
+        lwjglConfig.setInitialVisible(true);
         lwjglConfig.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL30,3,3);
         return run(mainClass, lwjglConfig, config);
     }
@@ -145,9 +147,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         Gdx.gl.glEnable(GL30.GL_BLEND); // Enable blending for transparency
         Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
-        if(config.getEnableGLDebug()){
-            Gdx.gl.glEnable(GL43C.GL_DEBUG_OUTPUT);
-        }
         Errors.checkAndThrow("setting blending function to GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA");
 
         IntBuffer buffer = BufferUtils.newIntBuffer(1);

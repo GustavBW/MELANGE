@@ -13,6 +13,7 @@ import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.generative.checker.ICheckerShader;
 import gbw.melange.shading.generative.noise.IPerlinNoiseShader;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
+import gbw.melange.shading.postprocessing.BoxBlurShader;
 import gbw.melange.shading.services.Colors;
 import gbw.melange.shading.services.IShaderPipeline;
 import gbw.melange.shading.generative.voronoi.IVoronoiShader;
@@ -37,6 +38,8 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         perlinA = colors.perlin()
                 .setFrequency(10)
+                .setOctaves(8)
+                .setPersistence(.1)
                 .build();
 
         perlinA.setStatic(false);
@@ -45,8 +48,9 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .setShape(shapes.square())
                 .styling()
                     .setBackgroundColor(perlinA)
-                    .setBorderColor(colors.constant(Color.WHITE))
+                    .setBorderColor(colors.constant(Color.ROYAL))
                     .setBorderRadius(.1)
+                    .addPostProcess(colors.blur(5))
                     .apply()
                 .constraints()
                     .setBorderWidth(5)
@@ -60,6 +64,5 @@ public class HomeScreen implements IHomeScreen, OnRender {
     public void onRender(double deltaT) {
         acc += deltaT;
 
-        perlinA.setPersistence((int) (MathUtils.sin((float) acc) + 2) * 5);
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
+import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.errors.Errors;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.shading.generative.ITexturedShader;
@@ -28,7 +29,7 @@ import java.util.Collection;
  */
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LogManager.getLogger();
-    private final ITexturedShader toScreenTextureShader = TextureShader.TEXTURE.copyAs("MELANGE_ER_FINAL_OTS");
+    private final ITexturedShader toScreenTextureShader = TextureShader.TEXTURE.copyAs("MELANGE_INTERNAL_ER_FINAL_OTS");
 
     /**
      * <p>Constructor for ElementRenderer.</p>
@@ -58,16 +59,27 @@ public class ElementRenderer implements IElementRenderer {
         ComputedTransforms computed = ((ComputedTransforms) element.computed());
         Matrix4 elementMatrix = computed.getMatrix();
         appliedMatrix.idt().mul(parentMatrix).mul(elementMatrix);
+        element.getMesh().transform(appliedMatrix);
 
-        FrameBuffer fboA = ((Element<?>) element).getComputedShading().getFrameBufferA();
-        FrameBuffer fboB = ((Element<?>) element).getComputedShading().getFrameBufferB();
+        FrameBuffer backgroundFboA = ((Element<?>) element).getComputedShading().getFrameBufferA();
+        FrameBuffer backgroundFboB = ((Element<?>) element).getComputedShading().getFrameBufferB();
+        FrameBuffer borderFbo = ((Element<?>) element).getComputedShading().getFrameBufferC();
 
+        backgroundFboA.begin();
+
+        drawBackground(element, appliedMatrix);
+
+        backgroundFboA.end();
+
+        FrameBuffer finalBackgroundFbo = postProcessPass(element, backgroundFboA, backgroundFboB, appliedMatrix);
+
+        borderFbo.begin();
         //The main pass is rendered to the FBO to enable post-process effects
-        mainRenderPass(fboA, element, appliedMatrix);
+        drawBorder(element, appliedMatrix);
 
-        FrameBuffer finalFBO = postProcessPass(element, fboA, fboB, appliedMatrix);
+        borderFbo.end();
 
-        outputToScreen(finalFBO, element, appliedMatrix);
+        outputToScreen(finalBackgroundFbo, borderFbo, element, appliedMatrix);
 
         //TODO: Move this to reactive rule resolution
         computed.update();
@@ -77,80 +89,11 @@ public class ElementRenderer implements IElementRenderer {
         //Content
         //...
     }
-    private static void outputToScreen(FrameBuffer fbo, IElement<?> element, Matrix4 appliedMatrix){
-        // The long way of clearing only some of the screen
-        final double[] bounds = element.computed().getAxisAlignedBounds();
-        final double appWidth = Gdx.graphics.getWidth(), appHeight = Gdx.graphics.getHeight();
-        /*
-        Gdx.gl.glEnable(GL30.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(
-                (int) (bounds[0] * appWidth),
-                (int) (bounds[1] * appHeight),
-                (int) (bounds[2] * appWidth),
-                (int) (bounds[3] * appHeight)
-        );
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glDisable(GL30.GL_SCISSOR_TEST);
-        */
-        Gdx.gl.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
-        fbo.getColorBufferTexture().bind(69);
-
-        ShaderProgram finalShader = TextureShader.TEXTURE.getProgram();
-        finalShader.bind();
-        finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
-        fbo.getColorBufferTexture().bind(69);
-        finalShader.setUniformi("u_texture", 69);
-
-        element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.glValue);
-    }
-
-    private static FrameBuffer postProcessPass(IElement<?> element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
-        if (element.getStylings().getPostProcesses().isEmpty()) return fboA;
-
-        boolean flip = true; // Determine which FBO is the source and which is the destination
-
-        for (IPostProcessShader shader : element.getStylings().getPostProcesses()) {
-            if (flip) {
-                fboB.begin(); // Write to B
-            } else {
-                fboA.begin(); // Write to A
-            }
-
-            // Clear the FBO before rendering to it
-            Gdx.gl.glClearColor(0, 0, 0, 0);
-            Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
-
-            // Bind the shader
-            ShaderProgram shaderProgram = shader.getProgram();
-            shaderProgram.bind();
-            shaderProgram.setUniformMatrix("u_projTrans", appliedMatrix);
-
-            // Bind the texture from the other FBO
-            Texture inputTexture = flip ? fboA.getColorBufferTexture() : fboB.getColorBufferTexture();
-            shader.setTexture(inputTexture, "");
-
-            // Render using the full-screen quad mesh (or appropriate geometry)
-            element.getMesh().render(shaderProgram, GLDrawStyle.TRIANGLES.glValue);
-
-            if (flip) {
-                fboB.end(); // Done writing to B
-            } else {
-                fboA.end(); // Done writing to A
-            }
-
-            flip = !flip; // Swap roles for the next pass
-        }
-        // The final result is in the FBO that is not the source
-        return flip ? fboA : fboB;
-    }
 
 
-    private static void mainRenderPass(FrameBuffer fbo, IElement<?> element, Matrix4 appliedMatrix) {
+    private static void drawBorder(IElement<?> element, Matrix4 appliedMatrix) {
         IElementStyleDefinition style = element.getStylings();
         Mesh mesh = element.getMesh();
-
-        fbo.begin();
 
         //Clear to transparent
         Gdx.gl.glClearColor(0,0,0,0);
@@ -166,12 +109,17 @@ public class ElementRenderer implements IElementRenderer {
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
         Errors.checkAndThrow( "main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
 
-        mesh.transform(appliedMatrix);
         mesh.render(borderShader, style.getBorderDrawStyle().glValue);
         Errors.checkAndThrow("main render pass | border shader:\t" + style.getBorderShader().getLocalName());
 
         Gdx.gl.glLineWidth(1f);
         Errors.checkAndThrow("main render pass | resetting line width");
+
+    }
+
+    private static void drawBackground(IElement<?> element, Matrix4 appliedMatrix) {
+        IElementStyleDefinition style = element.getStylings();
+        Mesh mesh = element.getMesh();
 
         //Background
         ShaderProgram backgroundShader = style.getBackgroundShader().getProgram();
@@ -180,11 +128,87 @@ public class ElementRenderer implements IElementRenderer {
         backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
         mesh.render(backgroundShader, style.getBackgroundDrawStyle().glValue);
 
-        int glErrCausedByBackgroundShader = Gdx.gl.glGetError();
-        if(glErrCausedByBackgroundShader != GL30.GL_NO_ERROR){
-            log.warn("OpenGL Error | main render pass | background shader:\t" + style.getBackgroundShader().getLocalName() + " code: " + glErrCausedByBackgroundShader);
+        Errors.checkAndThrow("OpenGL Error | main render pass | background shader:\t" + style.getBackgroundShader().getLocalName());
+    }
+    private void outputToScreen(FrameBuffer backgroundFbo, FrameBuffer borderFbo, IElement<?> element, Matrix4 appliedMatrix){
+        // The long way of clearing only some of the screen
+        final double[] bounds = element.computed().getAxisAlignedBounds();
+        final double appWidth = Gdx.graphics.getWidth(), appHeight = Gdx.graphics.getHeight();
+        /*
+        Gdx.gl.glEnable(GL30.GL_SCISSOR_TEST);
+        Gdx.gl.glScissor(
+                (int) (bounds[0] * appWidth),
+                (int) (bounds[1] * appHeight),
+                (int) (bounds[2] * appWidth),
+                (int) (bounds[3] * appHeight)
+        );
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glDisable(GL30.GL_SCISSOR_TEST);
+        */
+
+        toScreenTextureShader.setTexture(borderFbo.getColorBufferTexture(), GLShaderAttr.TEXTURE.glValue());
+
+        Gdx.gl.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0); // Bind the default framebuffer
+
+        ShaderProgram finalShader = toScreenTextureShader.getProgram();
+        finalShader.bind();
+        toScreenTextureShader.applyBindings();
+        finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
+
+        element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.glValue);
+
+
+        toScreenTextureShader.setTexture(backgroundFbo.getColorBufferTexture(), GLShaderAttr.TEXTURE.glValue());
+
+        finalShader.bind();
+        toScreenTextureShader.applyBindings();
+        finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
+
+        element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.glValue);
+    }
+
+
+    private static FrameBuffer postProcessPass(IElement<?> element, FrameBuffer fboA, FrameBuffer fboB, Matrix4 appliedMatrix) {
+        boolean flip = true; // Determine which FBO is the source and which is the destination
+        FrameBuffer currentlyWritingTo = fboA;
+        Texture currentInputTexture;
+
+        for (IPostProcessShader shader : element.getStylings().getPostProcesses()) {
+            if (flip) {
+                currentlyWritingTo = fboB;
+                currentInputTexture = fboA.getColorBufferTexture();
+                Errors.checkAndThrow("Error beginning FBO B during post process pass ");
+            } else {
+                currentlyWritingTo = fboA;
+                currentInputTexture = fboB.getColorBufferTexture();
+                Errors.checkAndThrow("Error beginning FBO A during post process pass ");
+            }
+            currentlyWritingTo.begin();
+
+            // Clear the FBO before rendering to it
+            Gdx.gl.glClearColor(0, 0, 0, 0);
+            Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
+
+            // Bind the shader
+            ShaderProgram shaderProgram = shader.getProgram();
+            shaderProgram.bind();
+            Errors.checkAndThrow("Unable to bind post process shader: " + shader.getLocalName());
+            shaderProgram.setUniformMatrix("u_projTrans", appliedMatrix);
+            // Bind the texture from the other FBO
+            shader.setTexture(currentInputTexture);
+            Errors.checkAndThrow("Unable to bind post process input texture: " + currentInputTexture);
+
+            // Render using the full-screen quad mesh (or appropriate geometry)
+            element.getMesh().render(shaderProgram, GLDrawStyle.TRIANGLES.glValue);
+            Errors.checkAndThrow("Error rendering pps " + shader.getLocalName() + " using " + element.getMesh() + " for element " + element.getId());
+
+            currentlyWritingTo.end();
+            flip = !flip; // Swap roles for the next pass
         }
 
-        fbo.end();
+        // The final result is in the FBO that is not the source
+        return currentlyWritingTo;
     }
+
 }

@@ -11,16 +11,21 @@ import gbw.melange.shading.generative.partial.VertexShader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlindShader extends ManagedShader {
+public class BlindShader extends GenerativeShader {
     public BlindShader(String localName, VertexShader vertex, FragmentShader fragment){
-        this(localName, vertex, fragment, true, new ArrayList<>());
+        this(localName, vertex, fragment, true);
     }
-    public BlindShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings) {
-        super(localName, vertex, fragment, isStatic, bindings);
+    public BlindShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+        super(localName, vertex, fragment, isStatic);
     }
 
     @Override
     protected void applyChildBindings(ShaderProgram program) {}
+
+    @Override
+    protected boolean hasChildChanged() {
+        return true;
+    }
 
     @Override
     protected ShaderClassification getChildClassification() {
@@ -29,12 +34,12 @@ public class BlindShader extends ManagedShader {
 
     @Override
     protected IManagedShader<?> copyChild() {
-        return new BlindShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), bindings);
+        return new BlindShader(super.getLocalName(), getVertex(), getFragment(), isStatic());
     }
 
     @Override
     protected IManagedShader<?> copyChildAs(String newLocalName) {
-        return new BlindShader(newLocalName, getVertex(), getFragment(), isStatic(), bindings);
+        return new BlindShader(newLocalName, getVertex(), getFragment(), isStatic());
     }
 
     @Override

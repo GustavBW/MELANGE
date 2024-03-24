@@ -18,22 +18,6 @@ import gbw.melange.shading.generative.partial.VertexShader;
 public interface IManagedShader<T extends IManagedShader<T>> extends Disposable {
 
     /**
-     * Bind a resource to the shader - texture, constants, anything - these will should be applied every render cycle using {@link IManagedShader#applyBindings()}<br/>
-     * Do however also provide a reference to all bound resources that should be disposed when this shader is disposed. <br/>
-     * Duly note that OpenGL has limits to the amount of unique binding indexes for different purposes (textures for instance) possible, so you might want to batch things that require unique indexes and no indexes at all.
-     * @param binding any function taking in the bind index and the program. Example: <br/>
-     *
-     * <pre>
-     *      {@code
-     *      shader.bindResource((int index, ShaderProgram program) -> {
-     *              anything here
- *          }, resource0, resource1...)
- *          }
-     *
-     * </pre>
-     */
-    void bindResource(ShaderResourceBinding binding, Disposable... disposables);
-    /**
      * An IManagedShader can be supplied any amounts of {@link ShaderResourceBinding} to bind various resources and textures to the shader. <br/>
      * Do bind the shader program itself to the gl context ({@link ShaderProgram#bind()}) before invoking this method, or gl gets angry.
      * This method should be called before using the shader for rendering regardless.
@@ -51,9 +35,6 @@ public interface IManagedShader<T extends IManagedShader<T>> extends Disposable 
      * Before this method is invoked, {@link IManagedShader#getProgram()} will return null.
      */
     void compile() throws ShaderCompilationIssue;
-
-    T copy();
-    T copyAs(String newLocalName);
 
     /**
      * Whether this shader is modified during its lifespan or not. If not, it is a candidate for cashing and might be rendered to a texture, which is drawn instead.

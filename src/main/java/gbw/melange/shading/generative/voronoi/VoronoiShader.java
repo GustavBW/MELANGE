@@ -6,6 +6,7 @@ import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.VecUtil;
 import gbw.melange.shading.constants.ShaderClassification;
+import gbw.melange.shading.generative.GenerativeShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 
@@ -15,22 +16,25 @@ import java.util.List;
 /**
  * Decorator for {@link ManagedShader} adding specific bindings and methods.
  */
-public class VoronoiShader extends ManagedShader<IVoronoiShader> implements IVoronoiShader{
+public class VoronoiShader extends GenerativeShader<IVoronoiShader> implements IVoronoiShader{
 
     private float[] points = new float[0];
+    private boolean hasChanged = true;
     public VoronoiShader(String localName, VertexShader vertex, FragmentShader fragment){
-        this(localName, vertex, fragment, true, new ArrayList<>());
+        this(localName, vertex, fragment, true);
     }
-    public VoronoiShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings) {
-        super(localName, vertex, fragment, isStatic, bindings);
+    public VoronoiShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+        super(localName, vertex, fragment, isStatic);
     }
 
     @Override
     public void setPoints(List<Vector2> points) {
+        hasChanged = true;
         this.points = VecUtil.flattenVec2(points);
     }
     @Override
     public float[] getPoints() {
+        hasChanged = true;
         return points;
     }
     @Override
@@ -41,7 +45,14 @@ public class VoronoiShader extends ManagedShader<IVoronoiShader> implements IVor
     protected void applyChildBindings(ShaderProgram program) {
         program.setUniform2fv(VoronoiShaderAttr.POINTS.glValue, points, 0, points.length);
         program.setUniformi("u_num"+VoronoiShaderAttr.POINTS.glValue, points.length);
+        hasChanged = false;
     }
+
+    @Override
+    protected boolean hasChildChanged() {
+        return hasChanged;
+    }
+
     @Override
     protected void disposeChildSpecificResources() {
 
@@ -49,12 +60,12 @@ public class VoronoiShader extends ManagedShader<IVoronoiShader> implements IVor
 
     @Override
     protected IVoronoiShader copyChildAs(String newLocalName) {
-        return new VoronoiShader(newLocalName, getVertex(), getFragment(), isStatic(), super.bindings);
+        return new VoronoiShader(newLocalName, getVertex(), getFragment(), isStatic());
     }
 
     @Override
     protected IVoronoiShader copyChild() {
-        return new VoronoiShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), super.bindings);
+        return new VoronoiShader(super.getLocalName(), getVertex(), getFragment(), isStatic());
     }
 
 }

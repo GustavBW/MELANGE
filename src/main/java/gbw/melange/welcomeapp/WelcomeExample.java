@@ -25,7 +25,7 @@ public class WelcomeExample {
         Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.values()));
 
         IMelangeConfig config = new MelangeConfig()
-            .enableGLDebug(true)
+            .enableGLDebug(false)
             .setLoggingAspects(logLevel)
             .clearGeneratedOnStart(true)
             .useCaching(true);

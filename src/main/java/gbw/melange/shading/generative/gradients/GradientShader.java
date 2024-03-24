@@ -4,18 +4,24 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
+import gbw.melange.shading.generative.GenerativeShader;
 import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 
 import java.util.List;
 
-public class GradientShader extends ManagedShader<IGradientShader> implements IGradientShader {
-    public GradientShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic, List<ShaderResourceBinding> bindings) {
-        super(localName, vertex, fragment, isStatic, bindings);
+public class GradientShader extends GenerativeShader<IGradientShader> implements IGradientShader {
+    public GradientShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+        super(localName, vertex, fragment, isStatic);
     }
 
     @Override
     protected void applyChildBindings(ShaderProgram program) {
+    }
+
+    @Override
+    protected boolean hasChildChanged() {
+        return false;
     }
 
     @Override
@@ -25,12 +31,12 @@ public class GradientShader extends ManagedShader<IGradientShader> implements IG
 
     @Override
     protected IGradientShader copyChild() {
-        return new GradientShader(super.getLocalName(), getVertex(), getFragment(), isStatic(), bindings);
+        return new GradientShader(super.getLocalName(), getVertex(), getFragment(), isStatic());
     }
 
     @Override
     protected IGradientShader copyChildAs(String newLocalName) {
-        return new GradientShader(newLocalName, getVertex(), getFragment(), isStatic(), bindings);
+        return new GradientShader(newLocalName, getVertex(), getFragment(), isStatic());
     }
 
     @Override

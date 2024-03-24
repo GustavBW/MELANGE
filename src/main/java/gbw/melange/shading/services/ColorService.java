@@ -16,6 +16,8 @@ import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 import gbw.melange.shading.generative.voronoi.IVoronoiFragmentBuilder;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
+import gbw.melange.shading.postprocessing.BoxBlurShader;
+import gbw.melange.shading.postprocessing.IBoxBlurShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +101,13 @@ public class ColorService implements Colors {
         BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, fragmentShader);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
+    }
+
+    @Override
+    public IBoxBlurShader blur(int kernelSize) {
+        IBoxBlurShader shader = new BoxBlurShader(generateId("BOX_BLUR_"), kernelSize);
+        pipeline.registerForCompilation(shader);
+        return shader;
     }
 
     private String generateId(String base){

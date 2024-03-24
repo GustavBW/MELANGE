@@ -125,7 +125,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
 
         FragmentShader fragment = new FragmentShader(localName, code, ShaderClassification.COMPLEX, true);
         log.trace("Generated fragment shader henceforth known as: " + localName + "\n " + fragment.code());
-        IVoronoiShader wrapped = new VoronoiShader(localName, VertexShader.DEFAULT, fragment, !points.isEmpty(), new ArrayList<>());
+        IVoronoiShader wrapped = new VoronoiShader(localName, VertexShader.DEFAULT, fragment, !points.isEmpty());
         if (pipeline != null) {
             log.trace(localName + " registered to pipeline " + pipeline);
             pipeline.registerForCompilation(wrapped);

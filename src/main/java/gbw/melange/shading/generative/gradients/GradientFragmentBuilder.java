@@ -80,7 +80,7 @@ public class GradientFragmentBuilder implements IGradientBuilder {
         "}");
 
         FragmentShader fragment = new FragmentShader(localName, codeBuilder.toString());
-        IGradientShader wrapped = new GradientShader(localName, VertexShader.DEFAULT, fragment, true, new ArrayList<>());
+        IGradientShader wrapped = new GradientShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(wrapped);
         }

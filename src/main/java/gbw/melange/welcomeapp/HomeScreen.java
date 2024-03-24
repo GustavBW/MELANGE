@@ -2,6 +2,7 @@ package gbw.melange.welcomeapp;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.hooks.OnRender;
 import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.IScreenSpace;
@@ -42,15 +43,10 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .setPersistence(.1)
                 .build();
 
-        perlinA.setStatic(false);
-
         space.createElement()
-                .setShape(shapes.square())
                 .styling()
                     .setBackgroundColor(perlinA)
-                    .setBorderColor(colors.constant(Color.ROYAL))
-                    .setBorderRadius(.1)
-                    .addPostProcess(colors.blur(5))
+                    .setBorderColor(colors.constant(Color.FIREBRICK))
                     .apply()
                 .constraints()
                     .setBorderWidth(5)

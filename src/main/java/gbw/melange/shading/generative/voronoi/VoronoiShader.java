@@ -49,7 +49,7 @@ public class VoronoiShader extends GenerativeShader<IVoronoiShader> implements I
     }
 
     @Override
-    protected boolean hasChildChanged() {
+    protected boolean hasChildPropertiesChanged() {
         return hasChanged;
     }
 

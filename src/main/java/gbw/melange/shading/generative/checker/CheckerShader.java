@@ -43,7 +43,7 @@ public class CheckerShader extends GenerativeShader<ICheckerShader> implements I
     }
 
     @Override
-    protected boolean hasChildChanged() {
+    protected boolean hasChildPropertiesChanged() {
         return hasChanged;
     }
 

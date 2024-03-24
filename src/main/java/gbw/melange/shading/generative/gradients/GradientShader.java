@@ -20,7 +20,7 @@ public class GradientShader extends GenerativeShader<IGradientShader> implements
     }
 
     @Override
-    protected boolean hasChildChanged() {
+    protected boolean hasChildPropertiesChanged() {
         return false;
     }
 

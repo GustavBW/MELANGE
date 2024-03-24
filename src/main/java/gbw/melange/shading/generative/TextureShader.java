@@ -27,17 +27,14 @@ public class TextureShader extends GenerativeShader<ITexturedShader> implements 
 
     @Override
     public void setTexture(Texture texture, String glslName) {
-        if(this.textureToBind != null){
-            textureToBind.dispose();
-        }
         hasChanged = texture != textureToBind;
         this.textureToBind = texture;
         this.glslName = glslName;
     }
 
     @Override
-    protected boolean hasChildChanged() {
-        return false;
+    protected boolean hasChildPropertiesChanged() {
+        return hasChanged;
     }
     @Override
     public Texture getTexture() {

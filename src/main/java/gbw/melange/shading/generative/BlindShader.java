@@ -23,7 +23,7 @@ public class BlindShader extends GenerativeShader {
     protected void applyChildBindings(ShaderProgram program) {}
 
     @Override
-    protected boolean hasChildChanged() {
+    protected boolean hasChildPropertiesChanged() {
         return true;
     }
 

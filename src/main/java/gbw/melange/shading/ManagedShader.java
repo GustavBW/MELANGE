@@ -2,7 +2,6 @@ package gbw.melange.shading;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
@@ -11,9 +10,6 @@ import gbw.melange.shading.generative.partial.FragmentShader;
 import gbw.melange.shading.generative.partial.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A self contained ShaderProgram, allowing for explicit compilation and error detection.
@@ -32,7 +28,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     private boolean isStatic;
     private ShaderProgram program;
     private ShaderProgram whenCachedProgram;
-    private boolean failedCompilation = false;
+    private boolean failedCompilation = false, hasChanged = true;
     private Texture cachedResult = null;
 
     /**
@@ -59,22 +55,22 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     /** {@inheritDoc} */
     @Override
     public void applyBindings() {
-
+        if(!(hasChanged || hasChildPropertiesChanged())){
+            return;
+        }
 
         if (cachedResult != null) {
             int index = getNextBindingIndex();
             cachedResult.bind(index);
             whenCachedProgram.setUniformi(GLShaderAttr.TEXTURE.glValue(), index);
-
-        } else if(hasChildChanged()) {
-            //TODO: Bindings persists for a given program. Use some kind of change detection
+        } else {
             applyChildBindings(program);
         }
-
+        hasChanged = false;
         nextBindingIndex = 0;
     }
     protected abstract void applyChildBindings(ShaderProgram program);
-    protected abstract boolean hasChildChanged();
+    protected abstract boolean hasChildPropertiesChanged();
 
     /**
      * Used for determining whether to cache this shader or not.
@@ -129,7 +125,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
             log.warn("Tried to set cached texture when either the whenCachedProgram is null or didn't compile. The attempt has been ignored to prevent further issues.");
             return;
         }
-
+        hasChanged = texture != cachedResult;
         this.cachedResult = texture;
     }
 

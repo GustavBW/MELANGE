@@ -145,10 +145,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
         }
 
-        Gdx.gl.glEnable(GL30.GL_BLEND); // Enable blending for transparency
-        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA); // Standard blending mode for premultiplied alpha
-        Errors.checkAndThrow("setting blending function to GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA");
-
         IntBuffer buffer = BufferUtils.newIntBuffer(1);
         Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_IMAGE_UNITS, buffer);
         log.debug("OpenGL Texture unit range: " + buffer.get(0));

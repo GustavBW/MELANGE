@@ -45,7 +45,7 @@ public class BoxBlurShader extends PostProcessShader implements IBoxBlurShader {
     }
 
     @Override
-    protected boolean hasChildChanged() {
+    protected boolean hasChildPropertiesChanged() {
         return hasChanged;
     }
 

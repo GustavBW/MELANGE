@@ -49,7 +49,7 @@ public class PerlinNoiseShader extends GenerativeShader<IPerlinNoiseShader> impl
     }
 
     @Override
-    protected boolean hasChildChanged() {
+    protected boolean hasChildPropertiesChanged() {
         return hasChanged;
     }
 

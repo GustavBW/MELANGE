@@ -26,9 +26,9 @@ public class DevTools implements OnRender {
             enabled[0] = true;
         });
         click.whileKeyHeld(Key.W, () -> zTrans -= .1f);
-        click.whileKeyHeld(Key.A, () -> xTrans += .1f);
+        click.whileKeyHeld(Key.A, () -> xTrans -= .1f);
         click.whileKeyHeld(Key.S, () -> zTrans += .1f);
-        click.whileKeyHeld(Key.D, () -> xTrans -= .1f);
+        click.whileKeyHeld(Key.D, () -> xTrans += .1f);
         click.whileKeyHeld(Key.SPACE, () -> yTrans += .1f);
         click.whileKeyHeld(Key.SHIFT_LEFT, () -> yTrans -= .1f);
     }

@@ -34,13 +34,13 @@ public interface IElementStyleDefinition extends Disposable {
      *
      * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
-    GLDrawStyle getBackgroundDrawStyle(); //TODO: Swap to Enum
+    GLDrawStyle getBackgroundDrawStyle();
     /**
      * <p>getBorderDrawStyle.</p>
      *
      * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
      */
-    GLDrawStyle getBorderDrawStyle();//TODO: Swap to Enum
+    GLDrawStyle getBorderDrawStyle();
 
     /**
      * <p>getBorderBevel.</p>

@@ -11,7 +11,7 @@ import gbw.melange.shading.ShaderResourceBinding;
 public interface ITexturedShader extends IGenerativeShader<ITexturedShader> {
 
     /**
-     * Set what texture to bind on render. This texture will also become managed and disposed when this shader is disposed of.
+     * Set what texture to bind on render. This texture will not become managed and disposed when this shader is disposed of.
      * @param glslName The name of the uniform field of the texture in the underlying fragment shader
      */
     void setTexture(Texture texture, String glslName);

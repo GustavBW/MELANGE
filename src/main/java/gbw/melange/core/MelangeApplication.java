@@ -113,6 +113,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             spaceNavigator = context.getBean(SpaceNavigator.class);
             spaceNavigator.loadFromRegistry(spaceRegistry);
 
+            final long shaderPipelineTimeA = System.currentTimeMillis();
             shaderPipeline = context.getBean(ShaderPipeline.class);
             shaderPipeline.setMainThreadQueue(runOnMainThread);
             if (config.getClearGeneratedOnStart()){
@@ -120,6 +121,9 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             }
             shaderPipeline.useCaching(config.getUseCaching());
             shaderPipeline.compileAndCache();
+            if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
+                log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
+            }
 
             meshPipeline = context.getBean(MeshPipeline.class);
             meshPipeline.beginProcessing();
@@ -127,39 +131,35 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             inputListener = context.getBean(IInputListener.class);
             Gdx.input.setInputProcessor(inputListener);
 
-            final long shaderPipelineTimeA = System.currentTimeMillis();
-
-            if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
-                log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");
-            }
-
         } catch (ViewConfigurationIssue | ShaderCompilationIssue | MeshProcessingIssue | InvalidMeshIssue | IOException e) {
             //Escalation allowed since we're within the boot sequence
             throw new RuntimeException(e);
         }
         ParallelMonitoredExecutionEnvironment.handleThis(discoveryAgent.getOnInitHookImpls());
 
-        final long elementResolvePassTimeA = System.currentTimeMillis();
-        spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
-        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
-            log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
-        }
-
         IntBuffer buffer = BufferUtils.newIntBuffer(1);
         Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_IMAGE_UNITS, buffer);
         log.debug("OpenGL Texture unit range: " + buffer.get(0));
 
         //Following is from: https://gamefromscratch.com/libgdx-tutorial-part-16-cameras/
-        float aspectRatio = (float)Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth();
+        float aspectRatio = (float)Gdx.graphics.getWidth() / (float)Gdx.graphics.getHeight();
 
         testCam = new PerspectiveCamera(90, 1 * aspectRatio, 1);
-        testCam.position.set( 0,0,0);
+        testCam.position.set( 0,0,10);
         testCam.lookAt(0,0,0);
-        viewport = new FitViewport(100, 100, testCam);
-        testCam.near = 1f;
+        testCam.near = .1f;
         testCam.far = 10000;
         testCam.update();
+        viewport = new FitViewport(100, 100, testCam);
         devTools.setSdir(new SuperDicyInternalReferences(testCam, viewport));
+
+        spaceNavigator.getOrderedList().forEach(space -> space.setActiveCamera(testCam));
+
+        final long elementResolvePassTimeA = System.currentTimeMillis();
+        //spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
+        if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
+            log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
+        }
 
         final long totalBootTime = System.currentTimeMillis() - bootTimeA;
         if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
@@ -187,12 +187,16 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         while(runOnMainThread.peek() != null){
             runOnMainThread.poll().run();
         }
+
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+
         frames++;
 
         //Render spaces
-        for(ISpace space : spaceNavigator.getOrderedList()){
+        for(ISpace space : spaceNavigator.getVisibleSpaces()){
             space.render(testCam.combined);
-            Errors.checkAndLog(log, "rendering space " + space + " with Mat4: " + testCam.view);
+            Errors.checkAndLog(log, "rendering space " + space + " with Mat4: " + testCam.combined);
         }
 
         //Hooks

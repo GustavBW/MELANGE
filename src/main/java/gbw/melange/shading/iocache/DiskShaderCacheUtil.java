@@ -47,7 +47,7 @@ public class DiskShaderCacheUtil implements Disposable {
      *
      * @return Returns the file handle to the image file which was just generated
      */
-    public FileHandle cacheOrUpdateExisting(@NotNull IManagedShader shader) throws GdxRuntimeException {
+    public FileHandle cacheOrUpdateExisting(@NotNull IManagedShader<?> shader) throws GdxRuntimeException {
 
         init(); //Just a check
 
@@ -113,7 +113,7 @@ public class DiskShaderCacheUtil implements Disposable {
         texturesDir.deleteDirectory();
     }
 
-    public FrameBuffer renderToFBO(IManagedShader shader, int resX, int resY, boolean depth) {
+    public FrameBuffer renderToFBO(IManagedShader<?> shader, int resX, int resY, boolean depth) {
         FrameBuffer frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, resX, resY, depth);
         frameBuffer.begin();
 
@@ -140,7 +140,7 @@ public class DiskShaderCacheUtil implements Disposable {
      * @param fbo any, not disposed
      * @param fileName without ".png" and preceding path
      */
-    private FileHandle saveFBOtoPNG(FrameBuffer fbo, String fileName) {
+    public FileHandle saveFBOtoPNG(FrameBuffer fbo, String fileName) {
         Pixmap pixmap = getPixmapFromFrameBuffer(fbo);
         FileHandle handle = Gdx.files.local(getExactLocationOf(fileName));
         PixmapIO.writePNG(handle, pixmap);

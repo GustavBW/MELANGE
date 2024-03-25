@@ -7,10 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.contraints.IComputedTransforms;
 
 /**
- * <p>ComputedTransforms class.</p>
- *
  * @author GustavBW
- * @version $Id: $Id
  */
 public class ComputedTransforms implements IComputedTransforms {
     private final Matrix4 matrix = new Matrix4();
@@ -18,16 +15,8 @@ public class ComputedTransforms implements IComputedTransforms {
     private final Vector3 scale = new Vector3();
     private final Quaternion rotation = new Quaternion();
 
-
-
-    /**
-     * <p>Constructor for ComputedTransforms.</p>
-     */
     public ComputedTransforms(){}
 
-    /**
-     * <p>update.</p>
-     */
     public void update(){
         matrix.getTranslation(position);
         matrix.getScale(scale);

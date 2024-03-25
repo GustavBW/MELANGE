@@ -1,6 +1,7 @@
 package gbw.melange.shading.generative.partial;
 
 import com.badlogic.gdx.graphics.Color;
+import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
 
 import java.util.Objects;
@@ -110,10 +111,13 @@ public class FragmentShader {
         #endif
         
         varying vec2 v_texCoords;
-        uniform sampler2D u_texture;
-        
+        """ +
+        "uniform sampler2D "+ GLShaderAttr.TEXTURE.glValue() +";\n" +
+        """
         void main() {
-            gl_FragColor = texture2D(u_texture, v_texCoords);
+        """ +
+            "\tgl_FragColor = texture2D("+ GLShaderAttr.TEXTURE.glValue() +", v_texCoords);\n" +
+        """
         }
     """, ShaderClassification.PURE_SAMPLER);
 

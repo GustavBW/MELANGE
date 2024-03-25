@@ -1,5 +1,6 @@
 package gbw.melange.common.elementary.space;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.annotations.View;
@@ -33,6 +34,7 @@ public interface ISpace extends Disposable {
      * Apply supplied matrix to space and all its elements.
      */
     void render(Matrix4 parentMatrix);
+    void setActiveCamera(Camera camera);
     void resolveConstraints();
     void resolveConstraints(IConstrainedElement cascadeRoot);
 

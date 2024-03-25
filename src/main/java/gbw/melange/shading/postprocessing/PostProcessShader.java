@@ -21,7 +21,7 @@ public abstract class PostProcessShader extends ManagedShader<IPostProcessShader
     private Texture latest = null;
 
     @Override
-    public void setTexture(Texture texture) {
+    public void setInputTexture(Texture texture) {
         this.latest = texture;
     }
     @Override

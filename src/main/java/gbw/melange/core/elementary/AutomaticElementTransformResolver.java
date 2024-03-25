@@ -35,6 +35,8 @@ public class AutomaticElementTransformResolver implements IAETR {
      * <p>resolve.</p>
      */
     public void resolve() {
+        //For each child, check their anchor direction
+        //
         if(roots.isEmpty()) return;
 
         ElementTransformAccess transformAccess = new ElementTransformAccess();
@@ -51,8 +53,8 @@ public class AutomaticElementTransformResolver implements IAETR {
             int row = i / nCols;
             int col = i % nCols;
 
-            double xOffset = (col * rootWidth * 2);
-            double yOffset = (row * rootHeight * 2);
+            double xOffset = (col * rootWidth);
+            double yOffset = (row * rootHeight);
 
             resolveSubTree(transformAccess, roots.get(i), rootWidth, rootHeight, xOffset, yOffset);
         }
@@ -65,9 +67,8 @@ public class AutomaticElementTransformResolver implements IAETR {
         log.debug("Element: " + parent + " resolved to w: " + parentWidth + "\t\th: " + parentHeight + "\t\toffX: " + parentOffsetX + "\t\toffY: " + parentOffsetY);
 
         // Apply translation and scale to the current root of the subtree
-        //transformAccess.setTranslation(parent, parentOffsetX, parentOffsetY, 0);
-        //transformAccess.setScale(parent, parentWidth, parentHeight, 1);
-        //transformAccess.setRotation(parent, Vector3.Z, 1);
+        transformAccess.setScale(parent, parentWidth, parentHeight, 1);
+        transformAccess.setTranslation(parent, parentOffsetX - .5, parentOffsetY -.5, -1);
 
         if (children == null || children.isEmpty()) {
             return;

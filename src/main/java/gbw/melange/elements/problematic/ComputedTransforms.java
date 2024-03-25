@@ -10,7 +10,7 @@ import gbw.melange.common.elementary.contraints.IComputedTransforms;
  * @author GustavBW
  */
 public class ComputedTransforms implements IComputedTransforms {
-    private final Matrix4 matrix = new Matrix4();
+    private final Matrix4 matrix = new Matrix4().translate(new Vector3(0,0,-1));
     private final Vector3 position = new Vector3();
     private final Vector3 scale = new Vector3();
     private final Quaternion rotation = new Quaternion();

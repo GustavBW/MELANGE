@@ -55,6 +55,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     /** {@inheritDoc} */
     @Override
     public void applyBindings() {
+        //TODO: Find out why trying to save resources with this check causes immesurable damage.
         //if(!(hasChanged || hasChildPropertiesChanged())){
         //    return;
         //}

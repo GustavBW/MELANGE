@@ -32,7 +32,6 @@ import java.util.List;
 public class ElementRenderer implements IElementRenderer {
     private static final Logger log = LogManager.getLogger();
     private final ITexturedShader toScreenTextureShader = TextureShader.TEXTURE.copyAs("MELANGE_INTERNAL_ER_FINAL_OTS");
-    DiskShaderCacheUtil tempFileOut = new DiskShaderCacheUtil();
     /**
      * <p>Constructor for ElementRenderer.</p>
      */
@@ -71,9 +70,6 @@ public class ElementRenderer implements IElementRenderer {
         FrameBuffer backgroundFboB = ((Element<?>) element).getComputedShading().getFrameBufferB();
         FrameBuffer borderFbo = ((Element<?>) element).getComputedShading().getFrameBufferC();
 
-        tempFileOut.saveFBOtoPNG(backgroundFboB, "test0B");
-        tempFileOut.saveFBOtoPNG(borderFbo, "test0C");
-
         for(FrameBuffer fbo : List.of(backgroundFboA, backgroundFboB, borderFbo)){
             fbo.begin();
             Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
@@ -81,7 +77,6 @@ public class ElementRenderer implements IElementRenderer {
         }
 
         drawBackground(backgroundFboA, element, appliedMatrix);
-        tempFileOut.saveFBOtoPNG(backgroundFboA, "test0A");
 
         FrameBuffer finalBackgroundFbo = postProcessPass(element, backgroundFboA, backgroundFboB, appliedMatrix);
 

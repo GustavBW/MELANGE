@@ -1,5 +1,6 @@
 package gbw.melange.core.elementary;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.IMelangeConfig;
@@ -37,6 +38,7 @@ public class ScreenSpace implements IScreenSpace {
     private final List<IConstrainedElement> additionOrder = new ArrayList<>();
     private boolean visible = false;
     private final IMelangeConfig config;
+    private Camera camera;
 
     ScreenSpace(IMelangeConfig config){
         this.config = config;
@@ -49,8 +51,14 @@ public class ScreenSpace implements IScreenSpace {
     }
 
     @Override
+    public void setActiveCamera(Camera camera) {
+        this.camera = camera;
+    }
+
+    @Override
     public void show() {
         //TODO: Add viewport size and scale check
+        //TODO: Recalibrate with active camera
         this.visible = true;
     }
 

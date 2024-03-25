@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.*;
 import gbw.melange.shading.generative.checker.CheckerFragmentBuilder;
 import gbw.melange.shading.generative.checker.ICheckerBuilder;
@@ -47,7 +48,11 @@ public class ColorService implements Colors {
     @Override
     public IManagedShader<?> constant(Color color) {
         float r = color.r, g = color.g, b = color.b, a = color.a;
-        IManagedShader<?> wrapped = new BlindShader(generateId("CONSTANT_RGBA("+r+","+g+","+b+","+a+")"), VertexShader.DEFAULT, FragmentShader.constant(color));
+        IManagedShader<?> wrapped = new BlindShader(
+                generateId("CONSTANT_RGBA("+r+","+g+","+b+","+a+")"),
+                VertexShader.DEFAULT,
+                FragmentShader.constant(color),
+                ShaderClassification.SIMPLE, true);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

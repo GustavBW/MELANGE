@@ -30,11 +30,12 @@ public interface ISpace extends Disposable {
     void hide();
 
     void render();
+    void onResize(int w, int h);
+
     /**
      * Apply supplied matrix to space and all its elements.
      */
     void render(Matrix4 parentMatrix);
-    void setActiveCamera(Camera camera);
     void resolveConstraints();
     void resolveConstraints(IConstrainedElement cascadeRoot);
 

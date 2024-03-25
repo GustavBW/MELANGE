@@ -45,12 +45,22 @@ public class HomeScreen implements IHomeScreen, OnRender {
 
         space.createElement()
                 .styling()
-                    .setBackgroundColor(perlinA)
+                    .setBackgroundColor(colors.constant(Color.CORAL))
                     .setBorderColor(colors.constant(Color.FIREBRICK))
                     .apply()
                 .constraints()
                     .setBorderWidth(5)
                     .apply()
+                .build();
+
+        space.createElement()
+                .styling()
+                .setBackgroundColor(perlinA)
+                .setBorderColor(colors.constant(Color.CYAN))
+                .apply()
+                .constraints()
+                .setBorderWidth(5)
+                .apply()
                 .build();
 
     }

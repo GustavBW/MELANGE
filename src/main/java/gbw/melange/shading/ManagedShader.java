@@ -55,9 +55,9 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     /** {@inheritDoc} */
     @Override
     public void applyBindings() {
-        if(!(hasChanged || hasChildPropertiesChanged())){
-            return;
-        }
+        //if(!(hasChanged || hasChildPropertiesChanged())){
+        //    return;
+        //}
 
         if (cachedResult != null) {
             int index = getNextBindingIndex();

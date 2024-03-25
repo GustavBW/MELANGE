@@ -145,7 +145,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         float aspectRatio = (float)Gdx.graphics.getWidth() / (float)Gdx.graphics.getHeight();
 
         testCam = new PerspectiveCamera(90, 1 * aspectRatio, 1);
-        testCam.position.set( 0,0,10);
+        testCam.position.set( 0,0,1);
         testCam.lookAt(0,0,0);
         testCam.near = .1f;
         testCam.far = 10000;
@@ -153,10 +153,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
         viewport = new FitViewport(100, 100, testCam);
         devTools.setSdir(new SuperDicyInternalReferences(testCam, viewport));
 
-        spaceNavigator.getOrderedList().forEach(space -> space.setActiveCamera(testCam));
-
         final long elementResolvePassTimeA = System.currentTimeMillis();
-        //spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
+        spaceNavigator.getOrderedList().forEach(ISpace::resolveConstraints);
         if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)) {
             log.info("Space constraints resolution: " + (System.currentTimeMillis() - elementResolvePassTimeA) + "ms");
         }
@@ -207,6 +205,8 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
     public void resize(int width, int height) {
         viewport.update(width, height);
+        testCam.update();
+        spaceNavigator.getVisibleSpaces().forEach(space -> space.onResize(width, height));
     }
 
     @Override

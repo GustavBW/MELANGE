@@ -56,6 +56,10 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     @Override
     public void applyBindings() {
         //TODO: Find out why trying to save resources with this check causes immesurable damage.
+        //Found out. Its because GL is stateful as hell.
+        //Also there is several options for handling this, but a fundemental issue is dedicated units
+        // like texture units. Pooling available units and rebind only when the pool is empty
+        // might be an option. But then again, the user might want to do something
         //if(!(hasChanged || hasChildPropertiesChanged())){
         //    return;
         //}

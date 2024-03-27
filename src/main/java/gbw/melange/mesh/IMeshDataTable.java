@@ -41,4 +41,6 @@ public interface IMeshDataTable {
      * @return true if the extraction can progress without issue
      */
     boolean checkExtraction(EVertexAttribute key, int expectedOutputLength, String transformingTo);
+
+    IMeshDataTable copy();
 }

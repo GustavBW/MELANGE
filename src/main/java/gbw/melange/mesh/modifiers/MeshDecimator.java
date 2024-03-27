@@ -1,4 +1,4 @@
-package gbw.melange.mesh.operations;
+package gbw.melange.mesh.modifiers;
 
 /**
  * <p>MeshDecimator class.</p>

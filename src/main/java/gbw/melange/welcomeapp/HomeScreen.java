@@ -47,6 +47,7 @@ public class HomeScreen implements IHomeScreen, OnRender {
                 .styling()
                     .setBackgroundColor(colors.constant(Color.CORAL))
                     .setBorderColor(colors.constant(Color.FIREBRICK))
+                    .setBorderRadius(.1)
                     .apply()
                 .constraints()
                     .setBorderWidth(5)

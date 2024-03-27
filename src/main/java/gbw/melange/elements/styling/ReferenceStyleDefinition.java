@@ -1,6 +1,6 @@
 package gbw.melange.elements.styling;
 
-import gbw.melange.mesh.operations.BevelConfig;
+import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.common.gl.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;

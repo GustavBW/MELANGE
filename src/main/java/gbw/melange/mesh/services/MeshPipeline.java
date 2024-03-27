@@ -1,12 +1,14 @@
 package gbw.melange.mesh.services;
 
 import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.mesh.ManagedMesh;
 import gbw.melange.mesh.errors.InvalidMeshIssue;
 import gbw.melange.mesh.errors.MeshProcessingIssue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +31,22 @@ public class MeshPipeline implements IMeshPipeline {
 
     @Override
     public void beginProcessing() throws MeshProcessingIssue, InvalidMeshIssue {
-        log.warn("Procedural mesh processing not implemented.");
+        while(unProcessed.peek() != null){
+            IManagedMesh mesh = unProcessed.poll();
+            if(mesh == null || !mesh.isModifiable()){
+                throw new InvalidMeshIssue("Unable to process " + mesh + " as its unmodifiable.");
+            }
+            executor.submit(() -> {
+                try {
+                    process(mesh);
+                } catch (MeshProcessingIssue e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    }
+
+    private static void process(IManagedMesh mesh) throws MeshProcessingIssue {
+        mesh.applyModifiers(false, false);
     }
 }

@@ -2,7 +2,7 @@ package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.common.gl.GLDrawStyle;
-import gbw.melange.mesh.operations.BevelConfig;
+import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 

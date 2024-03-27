@@ -55,6 +55,8 @@ public class ElementBuilder<T> implements IElementBuilder<T> {
     public IElement<T> build() {
         //TODO: Based on <T>, find the matching content renderer
 
+        //TODO: Register specified mesh operations
+
         if(contentProvider != null){
             ILoadingElement<T> element = new LoadingElement<>(
                     baseMesh,

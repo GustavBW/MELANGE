@@ -66,7 +66,6 @@ public class FragmentShader {
         return new FragmentShader("CONSTANT_RGBA_FRAGMENT("+r+","+g+","+b+","+a+")",code, ShaderClassification.SIMPLE);
     }
 
-    /** Constant <code>DEFAULT</code> */
     public static final FragmentShader DEFAULT = new FragmentShader("MELANGE_DEFAULT_FRAGMENT",
     """
         #ifdef GL_ES
@@ -86,7 +85,6 @@ public class FragmentShader {
             gl_FragColor = gradientColor;
         }
     """, ShaderClassification.COMPLEX);
-    /** Constant <code>DEBUG_UV</code> */
     public static final FragmentShader DEBUG_UV = new FragmentShader("MELANGE_DEBUG_UV_FRAGMENT",
         """
         #ifdef GL_ES
@@ -100,10 +98,8 @@ public class FragmentShader {
         }
     """, ShaderClassification.COMPLEX, false); //Set to complex and not static to make sure it updates every frame as this is for debugging
 
-    /** Constant <code>TRANSPARENT</code> */
     public static final FragmentShader TRANSPARENT = FragmentShader.constant(new Color(0,0,0,0));
 
-    /** Constant <code>TEXTURE</code> */
     public static final FragmentShader TEXTURE = new FragmentShader("MELANGE_TEXTURE_FRAGMENT",
     """
         #ifdef GL_ES

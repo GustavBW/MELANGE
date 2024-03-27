@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.Function;
-
+//Doesn't currently support write operations, although that'd probably be nice
 public class MeshDataTable implements IMeshDataTable {
     private static final Logger log = LogManager.getLogger();
 
@@ -102,7 +102,6 @@ public class MeshDataTable implements IMeshDataTable {
         }
         return faces;
     }
-
     private static final Function<Vector3, List<Face>> faceListProvider = k -> new ArrayList<>();
     @Override
     public List<Face> calculateFaces(Map<Vector3, List<Face>> allFacesOfVert) {
@@ -114,7 +113,6 @@ public class MeshDataTable implements IMeshDataTable {
         }
         return faces;
     }
-
     @Override
     public List<Vector3> extractVector3(EVertexAttribute key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
@@ -156,7 +154,6 @@ public class MeshDataTable implements IMeshDataTable {
         }
         return vectors;
     }
-
     @Override
     public List<Vector4> extractVector4(EVertexAttribute key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
@@ -220,6 +217,21 @@ public class MeshDataTable implements IMeshDataTable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public IMeshDataTable copy() {
+        LinkedHashMap<EVertexAttribute, float[]> copy = new LinkedHashMap<>();
+        for(EVertexAttribute key : vertexDataTable.keySet()){
+            float[] original = vertexDataTable.get(key);
+            final float[] entryCopy = new float[original.length];
+            System.arraycopy(original, 0, entryCopy, 0, original.length);
+            copy.put(key, entryCopy);
+        }
+        final short[] indiciesCopy = new short[indicies.length];
+        System.arraycopy(this.indicies, 0, indiciesCopy, 0, this.indicies.length);
+
+        return MeshDataTable.from(copy, this.vertexCount, indiciesCopy);
     }
 
 }

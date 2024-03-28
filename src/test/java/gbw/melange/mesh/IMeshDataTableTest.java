@@ -3,6 +3,9 @@ package gbw.melange.mesh;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Vector3;
 import gbw.melange.mesh.constants.EVertexAttribute;
+import gbw.melange.mesh.formatting.Face;
+import gbw.melange.mesh.formatting.MeshDataTable;
+import gbw.melange.mesh.formatting.Ref;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -19,7 +22,7 @@ class IMeshDataTableTest {
     void calculateFaces() {
         // Setup
         MeshDataTable table = createSampleMeshDataTable(); // Implement this method to set up a MeshDataTable instance with predefined data
-        Map<Vector3, List<Face>> allFacesOfVert = new HashMap<>();
+        Map<Ref.Vec3, List<Face>> allFacesOfVert = new HashMap<>();
 
         // Action
         List<Face> faces = table.calculateFaces(allFacesOfVert);
@@ -44,15 +47,15 @@ class IMeshDataTableTest {
         MeshDataTable table = createSampleMeshDataTable(); // This should include EVertexAttribute.POSITION data
 
         // Action
-        List<Vector3> vectors = table.extractVector3(EVertexAttribute.POSITION, 4); // Define expectedOutputLength based on your setup
+        List<Ref.Vec3> vectors = table.extractVector3(EVertexAttribute.POSITION, 4); // Define expectedOutputLength based on your setup
 
         // Assertion
         assertNotNull(vectors);
         assertFalse(vectors.isEmpty());
         // Validate the contents of vectors. For example, check the first vector's values:
-        assertEquals(-1, vectors.get(0).x, 0.001);
-        assertEquals(-1, vectors.get(0).y, 0.001);
-        assertEquals(0, vectors.get(0).z, 0.001);
+        assertEquals(-1, vectors.get(0).x(), 0.001);
+        assertEquals(-1, vectors.get(0).y(), 0.001);
+        assertEquals(0, vectors.get(0).z(), 0.001);
         // Extend this to check more vectors as needed
     }
 

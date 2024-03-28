@@ -1,4 +1,4 @@
-package gbw.melange.mesh;
+package gbw.melange.mesh.formatting;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
@@ -89,22 +89,22 @@ public class MeshDataTable implements IMeshDataTable {
 
     @Override
     public List<Face> calculateFaces() {
-        List<Vector3> positionData = extractVector3(EVertexAttribute.POSITION, vertexCount);
+        List<Ref.Vec3> positionData = extractVector3(EVertexAttribute.POSITION, vertexCount);
         List<Face> faces = new ArrayList<>();
         for (int i = 0; i < indicies.length; i += 3) {
             // Ensure there are at least 3 indices left to form a face
             if (i + 2 < indicies.length) {
-                Vector3 v1 = positionData.get(indicies[i] & 0xFFFF); // & 0xFFFF converts short to unsigned
-                Vector3 v2 = positionData.get(indicies[i + 1] & 0xFFFF);
-                Vector3 v3 = positionData.get(indicies[i + 2] & 0xFFFF);
+                Ref.Vec3 v1 = positionData.get(indicies[i] & 0xFFFF); // & 0xFFFF converts short to unsigned
+                Ref.Vec3 v2 = positionData.get(indicies[i + 1] & 0xFFFF);
+                Ref.Vec3 v3 = positionData.get(indicies[i + 2] & 0xFFFF);
                 faces.add(new Face(v1, v2, v3));
             }
         }
         return faces;
     }
-    private static final Function<Vector3, List<Face>> faceListProvider = k -> new ArrayList<>();
+    private static final Function<Ref.Vec3, List<Face>> faceListProvider = k -> new ArrayList<>();
     @Override
-    public List<Face> calculateFaces(Map<Vector3, List<Face>> allFacesOfVert) {
+    public List<Face> calculateFaces(Map<Ref.Vec3, List<Face>> allFacesOfVert) {
         List<Face> faces = calculateFaces();
         for (Face face : faces){
             allFacesOfVert.computeIfAbsent(face.v0(), faceListProvider).add(face);
@@ -114,7 +114,7 @@ public class MeshDataTable implements IMeshDataTable {
         return faces;
     }
     @Override
-    public List<Vector3> extractVector3(EVertexAttribute key, int expectedOutputLength) {
+    public List<Ref.Vec3> extractVector3(EVertexAttribute key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
             if (!checkExtraction(key, expectedOutputLength, "Vector3")) {
                 return new ArrayList<>();
@@ -122,25 +122,17 @@ public class MeshDataTable implements IMeshDataTable {
         }
 
         float[] data = vertexDataTable.get(key);
-        List<Vector3> vectors = new ArrayList<>();
-        int maxSafeIndex = (data.length / 3) * 3;
+        List<Ref.Vec3> vectors = new ArrayList<>();
 
         // First iteration: Guaranteed not to go out of bounds
-        for (int i = 0; i < maxSafeIndex; i += 3) {
-            vectors.add(new Vector3(data[i], data[i + 1], data[i + 2]));
-        }
-
-        if (maxSafeIndex < data.length) {
-            float x = data[maxSafeIndex];
-            float y = maxSafeIndex + 1 < data.length ? data[maxSafeIndex + 1] : 0f;
-            float z = 0f; // The third component is always zero because we're out of bounds
-            vectors.add(new Vector3(x, y, z));
+        for (int i = 0; i < data.length; i += 3) {
+            vectors.add(new Ref.Vec3(data, i, 3));
         }
 
         return vectors;
     }
     @Override
-    public List<Vector2> extractVector2(EVertexAttribute key, int expectedOutputLength) {
+    public List<Ref.Vec2> extractVector2(EVertexAttribute key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
             if (!checkExtraction(key, expectedOutputLength, "Vector2")) {
                 return new ArrayList<>();
@@ -148,14 +140,15 @@ public class MeshDataTable implements IMeshDataTable {
         }
 
         float[] data = vertexDataTable.get(key);
-        List<Vector2> vectors = new ArrayList<>();
+        List<Ref.Vec2> vectors = new ArrayList<>();
         for (int i = 0; i < data.length; i += 2) {
-            vectors.add(new Vector2(data[i], data[i + 1]));
+            vectors.add(new Ref.Vec2(data, i, 2));
         }
+
         return vectors;
     }
     @Override
-    public List<Vector4> extractVector4(EVertexAttribute key, int expectedOutputLength) {
+    public List<Ref.Vec4> extractVector4(EVertexAttribute key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
             if (!checkExtraction(key, expectedOutputLength, "Vector4")) {
                 return new ArrayList<>();
@@ -163,9 +156,9 @@ public class MeshDataTable implements IMeshDataTable {
         }
 
         float[] data = vertexDataTable.get(key);
-        List<Vector4> vectors = new ArrayList<>();
+        List<Ref.Vec4> vectors = new ArrayList<>();
         for (int i = 0; i < data.length; i += 4) {
-            vectors.add(new Vector4(data[i], data[i + 1], data[i + 2], data[i + 3]));
+            vectors.add(new Ref.Vec4(data, i, 4));
         }
         return vectors;
     }

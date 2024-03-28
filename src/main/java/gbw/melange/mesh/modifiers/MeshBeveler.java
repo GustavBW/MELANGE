@@ -1,6 +1,6 @@
 package gbw.melange.mesh.modifiers;
 
-import gbw.melange.mesh.IMeshDataTable;
+import gbw.melange.mesh.formatting.IMeshDataTable;
 
 /**
  * @author GustavBW

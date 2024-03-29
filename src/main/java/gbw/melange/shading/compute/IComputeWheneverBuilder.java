@@ -1,8 +1,13 @@
 package gbw.melange.shading.compute;
 
-public interface IComputeWheneverBuilder<T> extends IComputeSpecBuilder<T> {
+import java.util.function.Consumer;
 
-    ExecutionHandle<T> request();
+public interface IComputeWheneverBuilder<T,R> extends IComputeSpecBuilder<T,R> {
+
+    ExecutionHandle<T> build();
+
+    void onResult(Consumer<T> function);
+    void onError(Runnable function);
 
 
 }

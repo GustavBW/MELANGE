@@ -4,17 +4,17 @@ public class ComputeService implements GPUCompute {
 
 
     @Override
-    public <T> IComputeNowBuilder<T> now() {
+    public <T,R> IComputeNowBuilder<T,R> now() {
         return null;
     }
 
     @Override
-    public <T> IComputeSpecBuilder<T> whenever() {
+    public <T,R> IComputeWheneverBuilder<T,R> whenever() {
         return null;
     }
 
     @Override
-    public <T> IComputeLaterBuilder<T> later() {
+    public <T,R> IComputeLaterBuilder<T,R> later() {
         return null;
     }
 }

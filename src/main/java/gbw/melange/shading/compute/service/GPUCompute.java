@@ -1,4 +1,8 @@
-package gbw.melange.shading.compute;
+package gbw.melange.shading.compute.service;
+
+import gbw.melange.shading.compute.IComputeLaterBuilder;
+import gbw.melange.shading.compute.IComputeNowBuilder;
+import gbw.melange.shading.compute.IComputeWheneverBuilder;
 
 /**
  * Schedule jobs to be run on the GPU

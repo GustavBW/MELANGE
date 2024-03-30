@@ -1,4 +1,4 @@
-package gbw.melange.shading.compute;
+package gbw.melange.shading.compute.service;
 
 import gbw.melange.shading.compute.capture.ICaptureMethod;
 

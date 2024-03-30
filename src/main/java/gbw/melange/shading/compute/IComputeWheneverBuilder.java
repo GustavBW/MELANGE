@@ -1,5 +1,7 @@
 package gbw.melange.shading.compute;
 
+import gbw.melange.shading.compute.service.IComputeSpecBuilder;
+
 import java.util.function.Consumer;
 
 public interface IComputeWheneverBuilder<T,R> extends IComputeSpecBuilder<T,R> {

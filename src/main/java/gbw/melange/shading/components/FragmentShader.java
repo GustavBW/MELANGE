@@ -101,4 +101,9 @@ public class FragmentShader extends ShaderComponent implements IShader {
         """
         }
     """, ShaderClassification.PURE_SAMPLER);
+
+    @Override
+    public void applyBindings() {
+
+    }
 }

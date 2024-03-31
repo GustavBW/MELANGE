@@ -12,7 +12,5 @@ public interface IGenerativeShader<T extends IManagedShader<T>> extends IManaged
     T copy();
     T copyAs(String newLocalName);
 
-    //TODO: Add optional vertex shader stuff
-    void setVertexShader(VertexShader vertex);
 
 }

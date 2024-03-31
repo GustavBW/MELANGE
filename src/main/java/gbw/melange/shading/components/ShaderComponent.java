@@ -1,9 +1,13 @@
 package gbw.melange.shading.components;
 
+import com.badlogic.gdx.utils.ObjectIntMap;
+import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.shading.constants.GLShaderType;
 import gbw.melange.shading.errors.Error;
 import org.lwjgl.opengl.GL30;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class ShaderComponent implements IShader {
@@ -11,18 +15,16 @@ public abstract class ShaderComponent implements IShader {
     private final GLShaderType type;
     private final String localName;
     private final String code;
+
     private int assignedHandle = -1;
     private boolean isCompiled = false;
     private Error lastError = null;
-
 
     protected ShaderComponent(GLShaderType type, String localName, String code){
         this.type = type;
         this.localName = localName;
         this.code = code;
     }
-
-
     @Override
     public int getHandle() {
         return assignedHandle;
@@ -79,4 +81,5 @@ public abstract class ShaderComponent implements IShader {
     public String toString() {
         return "Shader{type:"+type+",localName:"+localName+"}";
     }
+
 }

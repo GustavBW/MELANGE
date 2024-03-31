@@ -15,4 +15,6 @@ public interface IShader {
      */
     Error compile(); //GoLang moment
 
+    void applyBindings();
+
 }

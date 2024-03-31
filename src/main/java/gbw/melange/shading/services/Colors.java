@@ -7,12 +7,10 @@ import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.generative.BlindShader;
 import gbw.melange.shading.generative.ITexturedShader;
 import gbw.melange.shading.generative.checker.ICheckerBuilder;
-import gbw.melange.shading.generative.checker.ICheckerShader;
 import gbw.melange.shading.generative.noise.IPerlinFragmentBuilder;
-import gbw.melange.shading.generative.partial.FragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.generative.gradients.IGradientBuilder;
 import gbw.melange.shading.generative.voronoi.IVoronoiFragmentBuilder;
-import gbw.melange.shading.generative.voronoi.IVoronoiShader;
 import gbw.melange.shading.postprocessing.IBoxBlurShader;
 
 /**

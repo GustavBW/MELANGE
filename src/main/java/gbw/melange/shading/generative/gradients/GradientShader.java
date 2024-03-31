@@ -1,14 +1,10 @@
 package gbw.melange.shading.generative.gradients;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
-
-import java.util.List;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 
 public class GradientShader extends GenerativeShader<IGradientShader> implements IGradientShader {
     public GradientShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {

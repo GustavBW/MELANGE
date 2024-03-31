@@ -1,11 +1,9 @@
 package gbw.melange.shading.generative.noise;
 
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 import gbw.melange.shading.services.IShaderPipeline;
-
-import java.util.ArrayList;
 
 public class PerlinFragmentBuilder implements IPerlinFragmentBuilder{
     private int octaves = 3;

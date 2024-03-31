@@ -1,15 +1,9 @@
 package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import gbw.melange.shading.IManagedShader;
-import gbw.melange.shading.ShaderResourceBinding;
-import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
-
-import java.util.ArrayList;
-import java.util.List;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 
 public class BlindShader extends GenerativeShader<BlindShader> {
     public BlindShader(String localName, VertexShader vertex, FragmentShader fragment){

@@ -2,8 +2,8 @@ package gbw.melange.shading.generative;
 
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

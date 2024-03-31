@@ -11,8 +11,8 @@ import gbw.melange.shading.constants.Vec2DistFunc;
 import gbw.melange.shading.services.IShaderPipeline;
 import gbw.melange.shading.generative.noise.NoiseProvider;
 import gbw.melange.shading.generative.noise.PerlinNoise;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

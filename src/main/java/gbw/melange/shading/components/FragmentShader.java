@@ -1,23 +1,18 @@
-package gbw.melange.shading.generative.partial;
+package gbw.melange.shading.components;
 
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.shading.constants.GLShaderType;
 import gbw.melange.shading.constants.ShaderClassification;
 
-import java.util.Objects;
-
 /**
- * String alias for now
- *
  * @author GustavBW
- * @version $Id: $Id
  */
-public class FragmentShader {
+public class FragmentShader extends ShaderComponent implements IShader {
 
-    private final String code;
-    private final String localName;
-    private ShaderClassification classification;
-    private final boolean isStatic;
+    private final ShaderClassification classification;
+    private boolean isStatic;
+
 
     public FragmentShader(String localName, String code) {
         this(localName, code, ShaderClassification.COMPLEX);
@@ -26,27 +21,17 @@ public class FragmentShader {
         this(localName, code, classification, true);
     }
     public FragmentShader(String localName, String code, ShaderClassification classification, boolean isStatic){
-        this.code = code;
-        this.localName = localName;
+        super(GLShaderType.FRAGMENT, localName, code);
         this.classification = classification;
         this.isStatic = isStatic;
     }
 
-    public String code() {
-        return code;
-    }
 
-    public String name(){
-        return localName;
-    }
     public ShaderClassification getClassification(){
         return classification;
     }
     public boolean isStatic(){
         return isStatic;
-    }
-    public void setClassification(ShaderClassification classification){
-        this.classification = classification;
     }
 
     /**
@@ -116,28 +101,4 @@ public class FragmentShader {
         """
         }
     """, ShaderClassification.PURE_SAMPLER);
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (FragmentShader) obj;
-        return Objects.equals(this.code, that.code);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int hashCode() {
-        return Objects.hash(code);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String toString() {
-        return "FragmentShader[" +
-                "code=" + code + ']';
-    }
-
-
 }

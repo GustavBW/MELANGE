@@ -125,7 +125,7 @@ public class DiskShaderCacheUtil implements Disposable {
 
         shader.getProgram().bind();
         shader.applyBindings();
-        shader.getProgram().setUniformMatrix(GLShaderAttr.MATRIX.glValue(), unitMatrix);
+        shader.getProgram().setUniformMatrix(GLShaderAttr.PROJECTION_MATRIX.glValue(), unitMatrix);
 
         screenQuad.render(shader.getProgram(), GL30.GL_TRIANGLES);
 

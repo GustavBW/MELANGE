@@ -7,7 +7,6 @@ import gbw.melange.shading.constants.GLShaderType;
  */
 public final class VertexShader extends ShaderComponent implements IShader {
 
-
     public VertexShader(String localName, String code) {
         super(GLShaderType.VERTEX, localName, code);
     }
@@ -28,4 +27,8 @@ public final class VertexShader extends ShaderComponent implements IShader {
                 }
             """);
 
+    @Override
+    public void applyBindings() {
+
+    }
 }

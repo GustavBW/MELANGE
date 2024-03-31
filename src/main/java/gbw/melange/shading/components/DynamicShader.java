@@ -2,13 +2,21 @@ package gbw.melange.shading.components;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Matrix4;
+import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.shading.errors.DynamicRelinkingError;
 import gbw.melange.shading.errors.Error;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.system.MemoryStack;
 
+import java.nio.IntBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class DynamicShader {
 
+    protected final Map<String,Integer> locations = new HashMap<>();
     public record ProgramHandle(int value){} //Typealias.
     private final ProgramHandle programHandle;
     private VertexShader vertex = null;
@@ -41,6 +49,7 @@ public class DynamicShader {
 
         return Error.NONE;
     }
+
 
     /**
      * See {@link DynamicShader#setVertex(VertexShader, boolean)}
@@ -86,14 +95,58 @@ public class DynamicShader {
      */
     public void render(Mesh mesh, Matrix4 appliedMatrix){
         GL30.glUseProgram(programHandle.value());
+        GL30.glUniformMatrix4fv(locations.get(GLShaderAttr.PROJECTION_MATRIX.glValue()), false, appliedMatrix.val);
+
         renderFuncPointer.accept(mesh, appliedMatrix);
         unbindAll();
     }
 
+    /**
+     *
+     * @param toBeAttached
+     * @throws DynamicRelinkingError if the linking step fails
+     */
     private void attachAndReLink(IShader toBeAttached){
         GL30.glAttachShader(programHandle.value(), toBeAttached.getHandle());
         GL30.glLinkProgram(programHandle.value());
+
+        // Check link status
+        if (GL30.glGetProgrami(programHandle.value(), GL30.GL_LINK_STATUS) == GL30.GL_FALSE) {
+            // Linking failed, retrieve and throw detailed error message
+            String errMsgToEndAllErrMsg = "Linking failed for: + " + this + " when : " + toBeAttached + " was introduced. \n" +
+                    "present: fragment " + (fragment != null ? fragment.name() : "none") +
+                    ", vertex: " + (vertex != null ? vertex.name() : "none") +
+                    ", geometry: " + (geometry != null ? geometry.name() : "none") + "\n" +
+                    "Log begin __________________________________________________\n" +
+                    GL30.glGetProgramInfoLog(programHandle.value()) +
+                    "Log end ______________________________________________________";
+
+            throw new DynamicRelinkingError(errMsgToEndAllErrMsg);
+        }
+
+        reloadLocations();
     }
+
+    /**
+     * When the program is relinked, the known locations is lost or will be invalid.
+     */
+    private void reloadLocations() {
+        locations.clear(); // Clear existing entries in the map
+        int programId = programHandle.value();
+
+        // Query the number of active uniforms
+        int uniformCount = GL30.glGetProgrami(programId, GL30.GL_ACTIVE_UNIFORMS);
+
+        for (int i = 0; i < uniformCount; i++) {
+            // Retrieve the uniform name directly
+            String uniformName = GL30.glGetActiveUniform(programId, i, dummyA, dummyB);
+
+            // Query the location of the uniform
+            int location = GL30.glGetUniformLocation(programId, uniformName);
+            locations.put(uniformName, location);
+        }
+    }
+    private static final IntBuffer dummyA = BufferUtils.createIntBuffer(1), dummyB = BufferUtils.createIntBuffer(1);
 
     private void handleRemoval(IShader shader, boolean delete){
         if(shader == null) return;
@@ -119,7 +172,7 @@ public class DynamicShader {
         res += geometry == null ? 0 : 2;
         res += fragment == null ? 0 : 4;
 
-        renderFuncPointer = switch (res){
+        renderFuncPointer = switch (res) {
             case 1 -> this::compRenderV;
             case 2 -> this::compRenderG;
             case 3 -> this::renderVG;
@@ -140,6 +193,8 @@ public class DynamicShader {
         GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     private void compRenderV(Mesh mesh, Matrix4 appliedMatrix){
+
+
 
     }
     private void compRenderG(Mesh mesh, Matrix4 appliedMatrix){

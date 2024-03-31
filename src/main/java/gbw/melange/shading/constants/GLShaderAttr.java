@@ -1,5 +1,8 @@
 package gbw.melange.shading.constants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>GLShaderAttr class.</p>
  *
@@ -8,7 +11,7 @@ package gbw.melange.shading.constants;
  */
 public enum GLShaderAttr {
     POSITION("a_position"),
-    MATRIX("u_projTrans"),
+    PROJECTION_MATRIX("u_projTrans"),
     COLOR("a_color"),
     TEXTURE("u_texture"),
     VERTEX_COORDS("v_texCoords"),
@@ -32,4 +35,6 @@ public enum GLShaderAttr {
     public String glValue() {
         return name;
     }
+
+    private static final Map<String,Integer> locations = new HashMap<>();
 }

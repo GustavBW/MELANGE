@@ -107,7 +107,7 @@ public class ElementRenderer implements IElementRenderer {
         ShaderProgram borderShader = style.getBorderShader().getProgram();
         borderShader.bind();
         style.getBorderShader().applyBindings();
-        borderShader.setUniformMatrix("u_projTrans", appliedMatrix);
+        borderShader.setUniformMatrix(GLShaderAttr.PROJECTION_MATRIX.glValue(), appliedMatrix);
 
         Gdx.gl.glLineWidth((float) element.getConstraints().getBorderWidth());
         Errors.checkAndThrow( "main render pass | setting line width to:\t" + element.getConstraints().getBorderWidth());
@@ -132,7 +132,7 @@ public class ElementRenderer implements IElementRenderer {
         backgroundShader.bind();
 
         style.getBackgroundShader().applyBindings();
-        backgroundShader.setUniformMatrix("u_projTrans", appliedMatrix);
+        backgroundShader.setUniformMatrix(GLShaderAttr.PROJECTION_MATRIX.glValue(), appliedMatrix);
 
         mesh.render(backgroundShader, style.getBackgroundDrawStyle().glValue);
 
@@ -152,14 +152,14 @@ public class ElementRenderer implements IElementRenderer {
         ShaderProgram finalShader = toScreenTextureShader.getProgram();
         finalShader.bind();
         toScreenTextureShader.applyBindings();
-        finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
+        finalShader.setUniformMatrix(GLShaderAttr.PROJECTION_MATRIX.glValue(), appliedMatrix);
 
         element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.glValue);
 
         toScreenTextureShader.setTexture(backgroundFbo.getColorBufferTexture(), GLShaderAttr.TEXTURE.glValue());
 
         toScreenTextureShader.applyBindings();
-        finalShader.setUniformMatrix("u_projTrans", appliedMatrix);
+        finalShader.setUniformMatrix(GLShaderAttr.PROJECTION_MATRIX.glValue(), appliedMatrix);
 
         element.getMesh().render(finalShader, GLDrawStyle.TRIANGLES.glValue);
     }
@@ -187,7 +187,7 @@ public class ElementRenderer implements IElementRenderer {
             ShaderProgram shaderProgram = shader.getProgram();
             shaderProgram.bind();
             Errors.checkAndThrow("Unable to bind post process shader: " + shader.getLocalName());
-            shaderProgram.setUniformMatrix("u_projTrans", appliedMatrix);
+            shaderProgram.setUniformMatrix(GLShaderAttr.PROJECTION_MATRIX.glValue(), appliedMatrix);
             // Bind the texture from the other FBO
             shader.applyBindings();
             Errors.checkAndThrow("Unable to bind post process input texture: " + currentInputTexture);

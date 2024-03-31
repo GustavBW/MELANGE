@@ -109,7 +109,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     /** {@inheritDoc} */
     @Override
     public String toString(){
-        return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader.localName() + "\", fragment shader: \"" + fragmentShader.name() +"\"";
+        return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader + "\", fragment shader: \"" + fragmentShader.name() +"\"";
     }
 
     public void setCachedTextureProgram(VertexShader vertex, FragmentShader frag){

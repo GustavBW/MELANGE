@@ -1,16 +1,11 @@
 package gbw.melange.shading.postprocessing;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.generative.TextureShader;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
-
-import java.util.List;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 
 public abstract class PostProcessShader extends ManagedShader<IPostProcessShader> implements IPostProcessShader {
 

@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.GLSL;
 import gbw.melange.shading.constants.InterpolationType;
 import gbw.melange.shading.services.IShaderPipeline;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

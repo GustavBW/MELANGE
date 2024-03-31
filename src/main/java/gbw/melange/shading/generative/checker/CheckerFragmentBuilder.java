@@ -3,11 +3,9 @@ package gbw.melange.shading.generative.checker;
 import com.badlogic.gdx.graphics.Color;
 import gbw.melange.shading.GLSL;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 import gbw.melange.shading.services.IShaderPipeline;
-
-import java.util.ArrayList;
 
 public class CheckerFragmentBuilder implements ICheckerBuilder {
 

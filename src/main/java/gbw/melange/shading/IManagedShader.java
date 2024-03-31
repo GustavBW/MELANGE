@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.Disposable;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.services.IShaderPipeline;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 
 /**
  * Represents a fully self-contained (besides from u_projTrans if applicable), uncompiled, shader program. <br/>

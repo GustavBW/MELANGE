@@ -1,18 +1,10 @@
 package gbw.melange.shading.generative.checker;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
-import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.ShaderResourceBinding;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.generative.gradients.GradientShader;
-import gbw.melange.shading.generative.gradients.GradientShaderAttr;
-import gbw.melange.shading.generative.gradients.IGradientShader;
-import gbw.melange.shading.generative.partial.FragmentShader;
-import gbw.melange.shading.generative.partial.VertexShader;
-
-import java.util.List;
+import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.VertexShader;
 
 public class CheckerShader extends GenerativeShader<ICheckerShader> implements ICheckerShader {
     public CheckerShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {

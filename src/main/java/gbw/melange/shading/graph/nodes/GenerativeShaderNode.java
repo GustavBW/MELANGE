@@ -23,12 +23,13 @@ public class GenerativeShaderNode implements IShaderNode {
     private final GraphIOCache ioCache;
     private final GraphNodeParams params;
 
-    public GenerativeShaderNode(GraphIOCache ioCache){
-        this(ioCache, GraphNodeParams.DEFAULT);
+    public GenerativeShaderNode(GraphIOCache ioCache, IGenerativeShader<?> shader){
+        this(ioCache, shader, GraphNodeParams.DEFAULT);
     }
-    public GenerativeShaderNode(GraphIOCache ioCache, GraphNodeParams params){
+    public GenerativeShaderNode(GraphIOCache ioCache, IGenerativeShader<?> shader, GraphNodeParams params){
         this.ioCache = ioCache;
         this.params = params;
+        this.shader = shader;
     }
 
     public Texture getLatest(){
@@ -45,7 +46,7 @@ public class GenerativeShaderNode implements IShaderNode {
         //chain cache entry update
         ioCache.updateEntry(this, finalFBO);
         //next update... etc etc
-
+        next.update(renderBasis);
     }
 
     public FrameBuffer drawToFBO(FrameBuffer buffer, Mesh renderBasis){
@@ -61,5 +62,10 @@ public class GenerativeShaderNode implements IShaderNode {
         buffer.end();
 
         return buffer;
+    }
+
+    @Override
+    public String toString(){
+        return "GenerativeNode_"+shader.getLocalName()+"_"+this.hashCode();
     }
 }

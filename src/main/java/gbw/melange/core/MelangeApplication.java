@@ -119,7 +119,6 @@ public class MelangeApplication<T> extends ApplicationAdapter {
             if (config.getClearGeneratedOnStart()){
                 shaderPipeline.clearCache();
             }
-            shaderPipeline.useCaching(config.getUseCaching());
             shaderPipeline.compileAndCache();
             if(config.getLoggingAspects().contains(IMelangeConfig.LogLevel.BOOT_SEQ_INFO)){
                 log.info("Shader pipeline time: " + (System.currentTimeMillis() - shaderPipelineTimeA) + "ms");

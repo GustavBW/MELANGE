@@ -58,7 +58,7 @@ public class ShaderPipeline implements IShaderPipeline {
             log.info("Compile step complete without issues for: " + recentlyCompiled.stream().map(IManagedShader::getLocalName).toList());
         }
 
-        if(cachingEnabled){
+        if(config.getUseCaching()){
             cacheAllStatic(recentlyCompiled);
         }
     }
@@ -122,11 +122,6 @@ public class ShaderPipeline implements IShaderPipeline {
         if(shader.isReady()) return;
 
         unCompiled.add(shader);
-    }
-
-    @Override
-    public void useCaching(boolean yesNo) {
-        this.cachingEnabled = yesNo;
     }
 
     @Override

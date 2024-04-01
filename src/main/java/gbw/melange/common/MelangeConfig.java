@@ -43,6 +43,7 @@ public class MelangeConfig implements IMelangeConfig {
     @Override
     public IMelangeConfig useCaching(boolean yesNo){
        this.cachingEnabled = yesNo;
+       shadingConfig.useCaching(yesNo);
        return this;
     }
     @Override
@@ -68,11 +69,6 @@ public class MelangeConfig implements IMelangeConfig {
         return this;
     }
 
-    @Bean
-    @Override
-    public IShadingPipelineConfig getShadingConfig() {
-        return shadingConfig;
-    }
 
     @Override
     public IMelangeConfig setMeshConfig(IMeshPipelineConfig meshConfig) {
@@ -82,15 +78,11 @@ public class MelangeConfig implements IMelangeConfig {
         return this;
     }
 
-    @Bean
-    @Override
-    public IMeshPipelineConfig getMeshConfig() {
-        return meshConfig;
-    }
 
     @Override
     public IMelangeConfig clearGeneratedContentOnExit(boolean yesNo){
         this.clearGeneratedOnExit = yesNo;
+        shadingConfig.clearGeneratedContentOnExit(yesNo);
         return this;
     }
     @Override
@@ -101,6 +93,7 @@ public class MelangeConfig implements IMelangeConfig {
     @Override
     public IMelangeConfig clearGeneratedOnStart(boolean yesNo){
         this.clearGeneratedOnStart = yesNo;
+        shadingConfig.clearGeneratedOnStart(yesNo);
         return this;
     }
     @Override
@@ -116,6 +109,18 @@ public class MelangeConfig implements IMelangeConfig {
     @Override
     public boolean getEnableGLDebug(){
         return glDebugEnabled;
+    }
+
+    @Bean
+    @Override
+    public IShadingPipelineConfig getShadingConfig() {
+        return shadingConfig;
+    }
+
+    @Bean
+    @Override
+    public IMeshPipelineConfig getMeshConfig() {
+        return meshConfig;
     }
 
 }

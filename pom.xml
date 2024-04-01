@@ -33,6 +33,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
     <dependencies>
         <dependency>
+            <groupId>com.github.GustavBW</groupId>
+            <artifactId>melange-shading</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>
             <version>${gdx.version}</version>
@@ -107,6 +113,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <build>
         <pluginManagement>

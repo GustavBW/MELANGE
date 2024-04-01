@@ -14,15 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>ElementStyleDefinition class.</p>
- *
  * @author GustavBW
- * @version $Id: $Id
  */
 public class ElementStyleDefinition implements IElementStyleDefinition {
 
-    private IManagedShader backgroundShader = ManagedShader.DEFAULT;
-    private IManagedShader borderShader = ManagedShader.DEFAULT;
+    private IManagedShader<?> backgroundShader = ManagedShader.DEFAULT;
+    private IManagedShader<?> borderShader = ManagedShader.DEFAULT;
     private Texture backgroundImage = new Texture(Gdx.files.internal("assets/system/fallback/errors/stderr.jpg"));
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
@@ -45,13 +42,13 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public IManagedShader getBackgroundShader() {
+    public IManagedShader<?> getBackgroundShader() {
         return backgroundShader;
     }
 
     /** {@inheritDoc} */
     @Override
-    public IManagedShader getBorderShader() {
+    public IManagedShader<?> getBorderShader() {
         return borderShader;
     }
 

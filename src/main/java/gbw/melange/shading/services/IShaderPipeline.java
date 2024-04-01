@@ -28,12 +28,6 @@ public interface IShaderPipeline extends Disposable {
     void registerForCompilation(IManagedShader<?> shader);
 
     /**
-     * Whether subsequent compile steps should attempt to statically cache shaders as textures to be drawn instead.
-     * This should increase render performance drastically.
-     */
-    void useCaching(boolean yesNo);
-
-    /**
      * Clears all content in the dedicated output folder.
      * Shouldn't necessarily break anything, but is essentially a manual cache invalidation method.
      */

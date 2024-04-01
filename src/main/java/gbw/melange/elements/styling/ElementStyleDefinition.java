@@ -3,7 +3,7 @@ package gbw.melange.elements.styling;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.mesh.modifiers.BevelConfig;
-import gbw.melange.common.gl.GLDrawStyle;
+import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.shading.IManagedShader;

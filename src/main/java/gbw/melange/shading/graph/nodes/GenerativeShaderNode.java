@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import gbw.melange.common.gl.GLDrawStyle;
+import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.shading.generative.IGenerativeShader;
 import gbw.melange.shading.iocache.GraphIOCache;
 

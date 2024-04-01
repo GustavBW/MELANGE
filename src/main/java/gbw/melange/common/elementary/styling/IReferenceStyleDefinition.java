@@ -1,6 +1,6 @@
 package gbw.melange.common.elementary.styling;
 
-import gbw.melange.common.gl.GLDrawStyle;
+import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
@@ -41,25 +41,25 @@ public interface IReferenceStyleDefinition {
     /**
      * <p>backgroundDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
+     * @return a {@link GLDrawStyle} object
      */
     GLDrawStyle backgroundDrawStyle();
     /**
      * <p>backgroundDrawStyle.</p>
      *
-     * @param style a {@link gbw.melange.common.gl.GLDrawStyle} object
+     * @param style a {@link GLDrawStyle} object
      */
     void backgroundDrawStyle(GLDrawStyle style);
     /**
      * <p>borderDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
+     * @return a {@link GLDrawStyle} object
      */
     GLDrawStyle borderDrawStyle();
     /**
      * <p>borderDrawStyle.</p>
      *
-     * @param style a {@link gbw.melange.common.gl.GLDrawStyle} object
+     * @param style a {@link GLDrawStyle} object
      */
     void borderDrawStyle(GLDrawStyle style);
     /**

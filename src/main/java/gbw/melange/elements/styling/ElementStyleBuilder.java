@@ -4,7 +4,7 @@ import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
-import gbw.melange.common.gl.GLDrawStyle;
+import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
 

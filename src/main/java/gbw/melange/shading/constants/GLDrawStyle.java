@@ -1,4 +1,4 @@
-package gbw.melange.common.gl;
+package gbw.melange.shading.constants;
 
 
 import com.badlogic.gdx.graphics.GL30;

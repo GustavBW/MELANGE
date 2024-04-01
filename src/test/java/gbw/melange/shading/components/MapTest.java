@@ -15,14 +15,14 @@ public class MapTest {
         ObjectIntMap<String> libgdxMap = new ObjectIntMap<>();
 
         double hashMapTimeA = System.nanoTime();
-        insertUniqueElements(hashMap, 1_000_000);
+        insertUniqueElements(hashMap, 10_000_000);
         final double hashMapUniqueInsertTime = System.nanoTime() - hashMapTimeA;
 
         double libgdxMapTimeA = System.nanoTime();
-        insertUniqueElements(libgdxMap, 1_000_000);
+        insertUniqueElements(libgdxMap, 10_000_000);
         final double libgdxUniqueInsertTime = System.nanoTime() - libgdxMapTimeA;
 
-        System.out.println("Test: Insert 1m unique elements");
+        System.out.println("Test: Insert 10m unique elements");
         System.out.println("\t Java HashMap: " + hashMapUniqueInsertTime);
         System.out.println("\t Libgdx Map: " + libgdxUniqueInsertTime);
         System.out.println("\t %-diff: " + (hashMapUniqueInsertTime / libgdxUniqueInsertTime));
@@ -37,7 +37,7 @@ public class MapTest {
         lookUpElements(libgdxMap, libgdxKeyset);
         final double libgdxLookUpTime = System.nanoTime() - libgdxMapTimeA;
 
-        System.out.println("Test: Lookup 1m unique elements");
+        System.out.println("Test: Lookup 10m unique elements");
         System.out.println("\t Java HashMap: " + hashMapLookUpTime);
         System.out.println("\t Libgdx Map: " + libgdxLookUpTime);
         System.out.println("\t %-diff: " + (hashMapLookUpTime / libgdxLookUpTime));
@@ -51,7 +51,7 @@ public class MapTest {
         retrieveElements(libgdxMap, libgdxKeyset);
         final double libgdxRetrieveTime = System.nanoTime() - libgdxMapTimeA;
 
-        System.out.println("Test: Retrieve 1m unique elements");
+        System.out.println("Test: Retrieve 10m unique elements");
         System.out.println("\t Java HashMap: " + hashMapRetrieveTime);
         System.out.println("\t Libgdx Map: " + libgdxRetrieveTime);
         System.out.println("\t %-diff: " + (hashMapRetrieveTime / libgdxRetrieveTime));

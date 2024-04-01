@@ -1,6 +1,6 @@
 package gbw.melange.common.builders;
 
-import gbw.melange.common.gl.GLDrawStyle;
+import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.shading.services.Colors;
 import gbw.melange.shading.IManagedShader;

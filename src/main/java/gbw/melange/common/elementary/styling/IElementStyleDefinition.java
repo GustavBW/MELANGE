@@ -1,7 +1,7 @@
 package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.common.gl.GLDrawStyle;
+import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.shading.IManagedShader;
 import gbw.melange.shading.postprocessing.IPostProcessShader;
@@ -32,13 +32,13 @@ public interface IElementStyleDefinition extends Disposable {
     /**
      * <p>getBackgroundDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
+     * @return a {@link GLDrawStyle} object
      */
     GLDrawStyle getBackgroundDrawStyle();
     /**
      * <p>getBorderDrawStyle.</p>
      *
-     * @return a {@link gbw.melange.common.gl.GLDrawStyle} object
+     * @return a {@link GLDrawStyle} object
      */
     GLDrawStyle getBorderDrawStyle();
 

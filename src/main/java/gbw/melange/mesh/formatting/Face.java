@@ -1,6 +1,4 @@
 package gbw.melange.mesh.formatting;
 
-import com.badlogic.gdx.math.Vector3;
-
-public record Face(Ref.Vec3 v0, Ref.Vec3 v1, Ref.Vec3 v2) {
+public record Face(IRefAccVec3 v0, IRefAccVec3 v1, IRefAccVec3 v2) {
 }

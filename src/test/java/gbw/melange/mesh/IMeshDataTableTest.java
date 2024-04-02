@@ -1,11 +1,11 @@
 package gbw.melange.mesh;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.math.Vector3;
 import gbw.melange.mesh.constants.EVertexAttribute;
 import gbw.melange.mesh.formatting.Face;
+import gbw.melange.mesh.formatting.IRefAccVec3;
 import gbw.melange.mesh.formatting.MeshDataTable;
-import gbw.melange.mesh.formatting.Ref;
+import gbw.melange.mesh.formatting.RefAccVec3;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -22,7 +22,7 @@ class IMeshDataTableTest {
     void calculateFaces() {
         // Setup
         MeshDataTable table = createSampleMeshDataTable(); // Implement this method to set up a MeshDataTable instance with predefined data
-        Map<Ref.Vec3, List<Face>> allFacesOfVert = new HashMap<>();
+        Map<IRefAccVec3, List<Face>> allFacesOfVert = new HashMap<>();
 
         // Action
         List<Face> faces = table.calculateFaces(allFacesOfVert);
@@ -47,7 +47,7 @@ class IMeshDataTableTest {
         MeshDataTable table = createSampleMeshDataTable(); // This should include EVertexAttribute.POSITION data
 
         // Action
-        List<Ref.Vec3> vectors = table.extractVector3(EVertexAttribute.POSITION, 4); // Define expectedOutputLength based on your setup
+        List<IRefAccVec3> vectors = table.extractVector3(EVertexAttribute.POSITION, 4); // Define expectedOutputLength based on your setup
 
         // Assertion
         assertNotNull(vectors);

@@ -2,6 +2,7 @@ package gbw.melange.mesh.formatting;
 
 import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.mesh.constants.VertAttr;
+import gbw.melange.mesh.constants.IVertAttr;
 import gbw.melange.shading.errors.Error;
 
 import java.util.List;
@@ -28,13 +29,13 @@ public interface IMeshDataTable {
      *     <li>If too much data is provided, the remainder is ignored.</li>
      *     <li>If the startIndex is not 0, and no data is already available for the attribute, an error is returned.</li>
      * </ul>
-     * For a less stringent method see {@link IMeshDataTable#addOrReplaceAttribute(VertAttr, int, float[], float)}
+     * For a less stringent method see {@link IMeshDataTable#addOrReplaceAttribute(IVertAttr, int, float[], float)}
      * @param attr What attribute to alter the data of, or set new data for
      * @param data The actual float values to insert.
      * @param startIndex Where to start IN TERMS OF VERTEX NUMBER which is dependent on the {@link VertAttr#compCount()}
      * @return an {@link Error} if any, or {@link Error#NONE}
      */
-    Error addOrReplaceAttribute(VertAttr attr, int startIndex, float[] data);
+    Error addOrReplaceAttribute(IVertAttr attr, int startIndex, float[] data);
 
     /**
      * Add a new attribute to the mesh. If this attribute already exists, replace the current data.
@@ -45,13 +46,13 @@ public interface IMeshDataTable {
      *     <li>If the startIndex is not 0, and no data is already available for the attribute,
      *     the prior indexes are filled with the fill value.</li>
      * </ul>
-     * For a more stringent method see {@link IMeshDataTable#addOrReplaceAttribute(VertAttr, int, float[])}.
+     * For a more stringent method see {@link IMeshDataTable#addOrReplaceAttribute(IVertAttr, int, float[])}.
      * @param attr What attribute to alter the data of, or set new data for
      * @param data The actual float values to insert.
      * @param startIndex Where to start IN TERMS OF VERTEX NUMBER which is dependent on the {@link VertAttr#compCount()}
      * @return an {@link Error} if any, or {@link Error#NONE}
      */
-    Error addOrReplaceAttribute(VertAttr attr, int startIndex, float[] data, float fillValue);
+    Error addOrReplaceAttribute(IVertAttr attr, int startIndex, float[] data, float fillValue);
 
     /**
      * See {@link IMeshDataTable#calculateFaces(Map)} but without the generated lookup table
@@ -65,21 +66,21 @@ public interface IMeshDataTable {
     List<Face> calculateFaces(Map<IRefAccVec3, List<Face>> allFacesOfVert);
 
     /**
-     * Same as {@link IMeshDataTable#extractVector3(VertAttr, int)} but with 2 component vectors.
+     * Same as {@link IMeshDataTable#extractVector3(IVertAttr, int)} but with 2 component vectors.
      */
-    List<IRefAccVec2> extractVector2(VertAttr key, int expectedOutputLength);
+    List<IRefAccVec2> extractVector2(IVertAttr key, int expectedOutputLength);
     /**
      * Extract all data for a given vertex attribute as 3 component vectors.
      *
      * @param key                  To extract as Vector3's
      * @param expectedOutputLength -1 to ignore, or actual value for additional error checking.
      */
-    List<IRefAccVec3> extractVector3(VertAttr key, int expectedOutputLength);
+    List<IRefAccVec3> extractVector3(IVertAttr key, int expectedOutputLength);
 
     /**
-     * Same as {@link IMeshDataTable#extractVector3(VertAttr, int)} but with 4 component vectors.
+     * Same as {@link IMeshDataTable#extractVector3(IVertAttr, int)} but with 4 component vectors.
      */
-    List<IRefAccVec4> extractVector4(VertAttr key, int expectedOutputLength);
+    List<IRefAccVec4> extractVector4(IVertAttr key, int expectedOutputLength);
 
     /**
      * Reduce the current segmentation to a flat float array and create a mesh using this and
@@ -90,7 +91,7 @@ public interface IMeshDataTable {
     /**
      * @return true if the extraction can progress without issue
      */
-    boolean checkExtraction(VertAttr key, int expectedOutputLength, String transformingTo);
+    boolean checkExtraction(IVertAttr key, int expectedOutputLength, String transformingTo);
 
     /**
      * Copy the current internal storage into a new IMeshDataTable.

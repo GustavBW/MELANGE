@@ -19,46 +19,46 @@ import java.util.Set;
  */
 public class KnownAttributes {
 
-    public static final VertAttr POSITION = new VertAttr( 3, "a_position", 1);
-    public static final VertAttr COLOR_UNPACKED = new VertAttr( 4, "a_color", 2);
-    public static final VertAttr COLOR_PACKED = new VertAttr( 4, "a_color", 4);
-    public static final VertAttr NORMAL = new VertAttr( 3, "a_normal", 8);
-    public static final VertAttr UV = new VertAttr(2, "a_texCoord0", 16); // Primary UV mapping
+    public static final IVertAttr POSITION = new VertAttr( 3, "a_position", 1);
+    public static final IVertAttr COLOR_UNPACKED = new VertAttr( 4, "a_color", 2);
+    public static final IVertAttr COLOR_PACKED = new VertAttr( 4, "a_color", 4);
+    public static final IVertAttr NORMAL = new VertAttr( 3, "a_normal", 8);
+    public static final IVertAttr UV = new VertAttr(2, "a_texCoord0", 16); // Primary UV mapping
     //32 doesn't exist??
-    public static final VertAttr BONE_WEIGHT = new VertAttr(2, "a_boneWeight", 64);
-    public static final VertAttr TANGENT = new VertAttr(3, "a_tangent", 128);
-    public static final VertAttr BI_NORMAL = new VertAttr( 3, "a_binormal", 256);
+    public static final IVertAttr BONE_WEIGHT = new VertAttr(2, "a_boneWeight", 64);
+    public static final IVertAttr TANGENT = new VertAttr(3, "a_tangent", 128);
+    public static final IVertAttr BI_NORMAL = new VertAttr( 3, "a_binormal", 256);
 
-    private static VertAttr[] values = null;
-    public static VertAttr[] values() {
+    private static IVertAttr[] values = null;
+    public static IVertAttr[] values() {
         if(values != null) {
             return values;
         }
-        List<VertAttr> attrs = new ArrayList<>();
+        List<IVertAttr> attrs = new ArrayList<>();
         Field[] fields = KnownAttributes.class.getDeclaredFields();
 
         for (Field field : fields) {
             if (Modifier.isStatic(field.getModifiers()) && field.getType().equals(VertAttr.class)) {
                 try {
-                    attrs.add((VertAttr) field.get(null)); // Access the static field value
+                    attrs.add((IVertAttr) field.get(null)); // Access the static field value
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        values = attrs.toArray(new VertAttr[0]);
+        values = attrs.toArray(new IVertAttr[0]);
         return values;
     }
 
     private static final Logger log = LogManager.getLogger();
 
 
-    public static List<VertAttr> convert(VertexAttributes attrs){
-        List<VertAttr> attributes = new ArrayList<>();
+    public static List<IVertAttr> convert(VertexAttributes attrs){
+        List<IVertAttr> attributes = new ArrayList<>();
         for (VertexAttribute attr : attrs) {
             boolean found = false;
-            for (VertAttr eAttr : KnownAttributes.values()) {
+            for (IVertAttr eAttr : KnownAttributes.values()) {
                 if (eAttr.equals(attr)) {
                     attributes.add(eAttr);
                     found = true; // Break inner loop once a match is found
@@ -66,15 +66,15 @@ public class KnownAttributes {
                 }
             }
             if(!found){
-                log.warn("Unable to map VertAttr " + stringRepOf(attr) + " to any known KnownAttributes.");
+                log.warn("Unable to map IVertAttr " + stringRepOf(attr) + " to any known KnownAttributes.");
             }
         }
         return attributes;
     }
-    public static VertexAttribute[] convert(Set<VertAttr> attrs){
+    public static VertexAttribute[] convert(Set<IVertAttr> attrs){
         VertexAttribute[] out = new VertexAttribute[attrs.size()];
         int index = 0;
-        for(VertAttr current : attrs){
+        for(IVertAttr current : attrs){
             VertexAttribute converted = new VertexAttribute(current.usage(), current.compCount(), current.alias());
             out[index] = converted;
             index++;
@@ -82,10 +82,10 @@ public class KnownAttributes {
         return out;
     }
 
-    public static VertexAttribute[] convert(List<VertAttr> attrs){
+    public static VertexAttribute[] convert(List<IVertAttr> attrs){
         VertexAttribute[] out = new VertexAttribute[attrs.size()];
         for(int i = 0; i < out.length; i++){
-            VertAttr current = attrs.get(i);
+            IVertAttr current = attrs.get(i);
             VertexAttribute converted = new VertexAttribute(current.usage(), current.compCount(), current.alias());
             out[i] = converted;
         }
@@ -93,12 +93,12 @@ public class KnownAttributes {
     }
 
     public static String stringRepOf(VertexAttribute va){
-        return "VertAttr{alias: "+ va.alias + ", usage: " + va.usage + ", compNum: " + va.numComponents + ", type: " + va.type + "}";
+        return "IVertAttr{alias: "+ va.alias + ", usage: " + va.usage + ", compNum: " + va.numComponents + ", type: " + va.type + "}";
     }
 
 
 
-    public static boolean compare(VertexAttribute vAttr, VertAttr evAttr){
+    public static boolean compare(VertexAttribute vAttr, IVertAttr evAttr){
         return evAttr.equals(vAttr);
     }
 

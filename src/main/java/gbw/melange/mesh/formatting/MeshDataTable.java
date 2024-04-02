@@ -3,8 +3,8 @@ package gbw.melange.mesh.formatting;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import gbw.melange.mesh.constants.IVertAttr;
 import gbw.melange.mesh.constants.KnownAttributes;
-import gbw.melange.mesh.constants.VertAttr;
 import gbw.melange.shading.errors.Error;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,22 +17,22 @@ import java.util.function.Function;
 public class MeshDataTable implements IMeshDataTable {
     private static final Logger log = LogManager.getLogger();
 
-    private final LinkedHashMap<VertAttr, float[]> vertexDataTable;
+    private final LinkedHashMap<IVertAttr, float[]> vertexDataTable;
     //Whenever something is extracted, a reference is stored to the extracted list
     //So that, on modification, the list given to the outside, is updated simultaneously
-    private record AttrTypeKeyPair<T extends IRefAccVec>(VertAttr attr, Class<T> clazz){}
+    private record AttrTypeKeyPair<T extends IRefAccVec>(IVertAttr attr, Class<T> clazz){}
     private final Map<AttrTypeKeyPair<?>, WeakReference<List<? extends IRefAccVec>>> latestRetrievals = new HashMap<>();
     private short[] indicies;
     private int vertexCount;
 
-    private MeshDataTable(LinkedHashMap<VertAttr, float[]> dataTable, int vertexCount, short[] indicies){
+    private MeshDataTable(LinkedHashMap<IVertAttr, float[]> dataTable, int vertexCount, short[] indicies){
         this.indicies = indicies;
         this.vertexCount = vertexCount;
         this.vertexDataTable = dataTable;
     }
 
     @Override
-    public List<IRefAccVec2> extractVector2(VertAttr key, int expectedOutputLength) {
+    public List<IRefAccVec2> extractVector2(IVertAttr key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
             if (!checkExtraction(key, expectedOutputLength, "Vector3")) {
                 return new ArrayList<>();
@@ -43,7 +43,7 @@ public class MeshDataTable implements IMeshDataTable {
         return retrieve0(IRefAccVec::createVec2, combinedKey, 2);
     }
     @Override
-    public List<IRefAccVec3> extractVector3(VertAttr key, int expectedOutputLength) {
+    public List<IRefAccVec3> extractVector3(IVertAttr key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
             if (!checkExtraction(key, expectedOutputLength, "Vector3")) {
                 return new ArrayList<>();
@@ -54,7 +54,7 @@ public class MeshDataTable implements IMeshDataTable {
         return retrieve0(IRefAccVec::createVec3, combinedKey, 3);
     }
     @Override
-    public List<IRefAccVec4> extractVector4(VertAttr key, int expectedOutputLength) {
+    public List<IRefAccVec4> extractVector4(IVertAttr key, int expectedOutputLength) {
         if (expectedOutputLength != -1) {
             if (!checkExtraction(key, expectedOutputLength, "Vector3")) {
                 return new ArrayList<>();
@@ -67,11 +67,13 @@ public class MeshDataTable implements IMeshDataTable {
 
     @Override
     public void add(IMeshDataTable other) {
+        
+
         throw new RuntimeException("How 'bout u implement this first.");
     }
 
     @Override
-    public Error addOrReplaceAttribute(VertAttr attr, int startIndex, float[] data) {
+    public Error addOrReplaceAttribute(IVertAttr attr, int startIndex, float[] data) {
         final float[] existingData = vertexDataTable.get(attr);
         final int componentCount = attr.compCount();
 
@@ -112,7 +114,7 @@ public class MeshDataTable implements IMeshDataTable {
     }
 
     @Override
-    public Error addOrReplaceAttribute(VertAttr attr, int startIndex, float[] data, float fillValue) {
+    public Error addOrReplaceAttribute(IVertAttr attr, int startIndex, float[] data, float fillValue) {
         final float[] existingData = vertexDataTable.get(attr);
         final int componentCount = attr.compCount();
         int actualStartIndex = startIndex * componentCount;
@@ -190,9 +192,9 @@ public class MeshDataTable implements IMeshDataTable {
     @Override
     public Mesh convertToMesh() {
         // First, calculate the total size of a single vertex by summing the component counts
-        Set<VertAttr> keyset = vertexDataTable.keySet();
+        Set<IVertAttr> keyset = vertexDataTable.keySet();
         int vertexSizeInFloats = 0;
-        for(VertAttr attr : keyset){
+        for(IVertAttr attr : keyset){
             vertexSizeInFloats += attr.compCount();
         }
 
@@ -201,7 +203,7 @@ public class MeshDataTable implements IMeshDataTable {
 
         // Iterate through each attribute, adding its data to the correct position in the vertices array
         int currentOffset = 0;
-        for (Map.Entry<VertAttr, float[]> entry : vertexDataTable.entrySet()) {
+        for (Map.Entry<IVertAttr, float[]> entry : vertexDataTable.entrySet()) {
             float[] attributeData = entry.getValue();
             int componentCount = entry.getKey().compCount();
 
@@ -223,7 +225,7 @@ public class MeshDataTable implements IMeshDataTable {
     }
 
     @Override
-    public boolean checkExtraction(VertAttr key, int expectedOutputLength, String transformingTo) {
+    public boolean checkExtraction(IVertAttr key, int expectedOutputLength, String transformingTo) {
         if (!vertexDataTable.containsKey(key)) {
             MeshDataTable.log.debug("Tried to extract " + key + " from " + vertexDataTable + " as " + transformingTo + ", but no entry was present");
             return false;
@@ -238,8 +240,8 @@ public class MeshDataTable implements IMeshDataTable {
 
     @Override
     public IMeshDataTable copy() {
-        LinkedHashMap<VertAttr, float[]> copy = new LinkedHashMap<>();
-        for(VertAttr key : vertexDataTable.keySet()){
+        LinkedHashMap<IVertAttr, float[]> copy = new LinkedHashMap<>();
+        for(IVertAttr key : vertexDataTable.keySet()){
             float[] original = vertexDataTable.get(key);
             final float[] entryCopy = new float[original.length];
             System.arraycopy(original, 0, entryCopy, 0, original.length);
@@ -265,24 +267,24 @@ public class MeshDataTable implements IMeshDataTable {
         mesh.getIndices(indices);
 
         VertexAttributes attrs = mesh.getVertexAttributes();
-        List<VertAttr> mappedAttr = KnownAttributes.convert(attrs);
+        List<IVertAttr> mappedAttr = KnownAttributes.convert(attrs);
 
         if(mappedAttr.size() != attrs.size()){
             log.warn("Unable to map vertex attributes");
             return from(new LinkedHashMap<>(), 0, new short[0]);
         }
 
-        Map<VertAttr, Integer> totalAttrOffset = new HashMap<>();
+        Map<IVertAttr, Integer> totalAttrOffset = new HashMap<>();
         int totalOffsetOfPrevious = 0;
-        for(VertAttr attr : mappedAttr){
+        for(IVertAttr attr : mappedAttr){
             totalAttrOffset.put(attr, totalOffsetOfPrevious);
             totalOffsetOfPrevious += attr.compCount();
         }
 
         //Insertion Ordered
-        final LinkedHashMap<VertAttr, float[]> vertexDataTable = new LinkedHashMap<>();
+        final LinkedHashMap<IVertAttr, float[]> vertexDataTable = new LinkedHashMap<>();
         // Assuming `totalAttrOffset` and `mappedAttr` are correctly populated
-        for(VertAttr attr : mappedAttr){
+        for(IVertAttr attr : mappedAttr){
             // Initialize the array to hold data for all vertices of this attribute
             float[] data = new float[mesh.getNumVertices() * attr.compCount()];
             vertexDataTable.put(attr, data);
@@ -294,7 +296,7 @@ public class MeshDataTable implements IMeshDataTable {
         for (int vertexIndex = 0; vertexIndex < mesh.getNumVertices(); vertexIndex++) {
             // Calculate the starting index for this vertex's data
             int baseIndex = vertexIndex * vertexSize;
-            for (VertAttr attr : mappedAttr) {
+            for (IVertAttr attr : mappedAttr) {
                 if (attr.compCount() <= 0) continue;
 
                 // Get the array where we'll store this attribute's data
@@ -308,7 +310,7 @@ public class MeshDataTable implements IMeshDataTable {
 
         return from(vertexDataTable, mesh.getNumVertices(), indices);
     }
-    public static MeshDataTable from(LinkedHashMap<VertAttr, float[]> dataTable, int vertexCount, short[] indicies){
+    public static MeshDataTable from(LinkedHashMap<IVertAttr, float[]> dataTable, int vertexCount, short[] indicies){
         return new MeshDataTable(dataTable, vertexCount, indicies);
     }
 

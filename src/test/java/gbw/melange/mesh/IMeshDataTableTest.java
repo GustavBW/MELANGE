@@ -1,8 +1,8 @@
 package gbw.melange.mesh;
 
 import com.badlogic.gdx.graphics.Mesh;
+import gbw.melange.mesh.constants.IVertAttr;
 import gbw.melange.mesh.constants.KnownAttributes;
-import gbw.melange.mesh.constants.VertAttr;
 import gbw.melange.mesh.formatting.Face;
 import gbw.melange.mesh.formatting.IRefAccVec3;
 import gbw.melange.mesh.formatting.MeshDataTable;
@@ -101,7 +101,7 @@ class IMeshDataTableTest {
      * @return
      */
     private MeshDataTable createSampleMeshDataTable() {
-        LinkedHashMap<VertAttr, float[]> vertexDataTable = new LinkedHashMap<>();
+        LinkedHashMap<IVertAttr, float[]> vertexDataTable = new LinkedHashMap<>();
 
         // Assuming positions, UVs, and normals are interlaced in the `vertices` array
         vertexDataTable.put(KnownAttributes.POSITION, new float[]{

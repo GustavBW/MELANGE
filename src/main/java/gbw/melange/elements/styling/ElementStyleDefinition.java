@@ -20,7 +20,6 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
 
     private IManagedShader<?> backgroundShader = ManagedShader.DEFAULT;
     private IManagedShader<?> borderShader = ManagedShader.DEFAULT;
-    private Texture backgroundImage = new Texture(Gdx.files.internal("assets/system/fallback/errors/stderr.jpg"));
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
     private BevelConfig bevelConfig = BevelConfig.DEFAULT;

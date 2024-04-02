@@ -12,16 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>ReferenceStyleDefinition class.</p>
- *
  * @author GustavBW
- * @version $Id: $Id
  */
 public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 
-    /** Constant <code>DEFAULT</code> */
     public static final IReferenceStyleDefinition DEFAULT = new ReferenceStyleDefinition();
-    /** Constant <code>NONE</code> */
     public static final IReferenceStyleDefinition NONE = new ReferenceStyleDefinition();
     static {
         NONE.borderShader(ManagedShader.DEFAULT);
@@ -29,12 +24,12 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
         NONE.backgroundDrawStyle(GLDrawStyle.POINTS);
         NONE.borderDrawStyle(GLDrawStyle.POINTS);
     }
-    public final List<IPostProcessShader> postProcesses = new ArrayList<>();
-    public IManagedShader backgroundShader = ManagedShader.DEFAULT;
-    public IManagedShader borderShader = ManagedShader.DEFAULT;
-    public GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
-    public GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
-    public BevelConfig bevelConfig = BevelConfig.DEFAULT;
+    private final List<IPostProcessShader> postProcesses = new ArrayList<>();
+    private IManagedShader<?> backgroundShader = ManagedShader.DEFAULT;
+    private IManagedShader<?> borderShader = ManagedShader.DEFAULT;
+    private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
+    private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
+    private BevelConfig bevelConfig = BevelConfig.DEFAULT;
 
     /**
      * <p>Constructor for ReferenceStyleDefinition.</p>
@@ -69,25 +64,25 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public IManagedShader backgroundShader() {
+    public IManagedShader<?> backgroundShader() {
         return backgroundShader;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void backgroundShader(IManagedShader program) {
+    public void backgroundShader(IManagedShader<?> program) {
         this.backgroundShader = program;
     }
 
     /** {@inheritDoc} */
     @Override
-    public IManagedShader borderShader() {
+    public IManagedShader<?> borderShader() {
         return borderShader;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void borderShader(IManagedShader program) {
+    public void borderShader(IManagedShader<?> program) {
         this.borderShader = program;
     }
 

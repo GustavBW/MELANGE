@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import gbw.melange.mesh.constants.EVertexAttribute;
+import gbw.melange.shading.errors.Error;
+import jdk.jshell.spi.ExecutionControl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +63,61 @@ public class MeshDataTable implements IMeshDataTable {
 
         AttrTypeKeyPair<IRefAccVec4> combinedKey = new AttrTypeKeyPair<>(key, IRefAccVec4.class);
         return retrieve0(IRefAccVec::createVec4, combinedKey, 4);
+    }
+
+    @Override
+    public void add(IMeshDataTable other) {
+        throw new RuntimeException("How 'bout u implement this first.");
+    }
+
+    @Override
+    public Error addOrReplaceAttribute(EVertexAttribute attr, int startIndex, float[] data) {
+        // Check if the attribute exists and calculate the required size of the data array
+        final int componentCount = attr.componentCount();
+        final int requiredSize = vertexCount * componentCount;
+
+        // Existing data check
+        final float[] existingData = vertexDataTable.get(attr);
+
+        if (startIndex != 0 && existingData == null) {
+            log.error("Start index is not 0 and no existing data found for the attribute: " + attr);
+            return new Error("Unable to insert new data from index " + startIndex + " as there is no prior data.");
+        }
+
+        if (data.length + startIndex * componentCount < requiredSize) {
+            log.error("Insufficient amount of values provided for the attribute: " + attr);
+            return new Error("Unable to insert new data from index " + startIndex +
+                    " as there is too little provided data. Provided data.length: " + data.length +
+                    " amount required: " + (existingData.length - startIndex));
+        }
+
+        if (data.length + startIndex * componentCount > requiredSize) {
+            log.debug("Excess data provided for the attribute: " + attr + ". The remainder will be ignored.");
+        }
+
+        if(existingData == null || existingData.length == 0){
+            vertexDataTable.put(attr, data);
+            return Error.NONE;
+        }
+
+        if(startIndex < 0 || startIndex > existingData.length - 1){
+            return new Error("Invalid start index. Kindly be within bounds");
+        }
+
+        // Calculate the number of elements to copy taking into account the startIndex and ensuring no out of bounds
+        int numElementsToCopy = Math.min(data.length, existingData.length - startIndex * attr.componentCount());
+
+        //copy data from 0 into existingData from startIndex while the amount of entries copied is less than len(existing) - startIndex
+        System.arraycopy(data, 0, existingData, startIndex * attr.componentCount(), numElementsToCopy);
+
+        return Error.NONE;
+    }
+
+    @Override
+    public Error addOrReplaceAttribute(EVertexAttribute attr, int startIndex, float[] data, float fillValue) {
+
+
+        return Error.NONE;
     }
 
     @Override

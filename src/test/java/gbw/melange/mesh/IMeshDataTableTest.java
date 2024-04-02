@@ -1,11 +1,11 @@
 package gbw.melange.mesh;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.mesh.constants.EVertexAttribute;
+import gbw.melange.mesh.constants.KnownAttributes;
+import gbw.melange.mesh.constants.VertAttr;
 import gbw.melange.mesh.formatting.Face;
 import gbw.melange.mesh.formatting.IRefAccVec3;
 import gbw.melange.mesh.formatting.MeshDataTable;
-import gbw.melange.mesh.formatting.RefAccVec3;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -44,10 +44,10 @@ class IMeshDataTableTest {
     @Test
     void extractVector3() {
         // Setup
-        MeshDataTable table = createSampleMeshDataTable(); // This should include EVertexAttribute.POSITION data
+        MeshDataTable table = createSampleMeshDataTable(); // This should include KnownAttributes.POSITION data
 
         // Action
-        List<IRefAccVec3> vectors = table.extractVector3(EVertexAttribute.POSITION, 4); // Define expectedOutputLength based on your setup
+        List<IRefAccVec3> vectors = table.extractVector3(KnownAttributes.POSITION, 4); // Define expectedOutputLength based on your setup
 
         // Assertion
         assertNotNull(vectors);
@@ -89,11 +89,11 @@ class IMeshDataTableTest {
         MeshDataTable table = createSampleMeshDataTable(); // Include specific attribute data
 
         // Action & Assertion for success
-        assertTrue(table.checkExtraction(EVertexAttribute.POSITION, 4, "Vector3"));
+        assertTrue(table.checkExtraction(KnownAttributes.POSITION, 4, "Vector3"));
 
         // Setup for a scenario where extraction should fail (e.g., incorrect expectedLength)
         // Action & Assertion for failure
-        assertFalse(table.checkExtraction(EVertexAttribute.POSITION, 5, "Vector3"));
+        assertFalse(table.checkExtraction(KnownAttributes.POSITION, 5, "Vector3"));
     }
 
     /**
@@ -101,22 +101,22 @@ class IMeshDataTableTest {
      * @return
      */
     private MeshDataTable createSampleMeshDataTable() {
-        LinkedHashMap<EVertexAttribute, float[]> vertexDataTable = new LinkedHashMap<>();
+        LinkedHashMap<VertAttr, float[]> vertexDataTable = new LinkedHashMap<>();
 
         // Assuming positions, UVs, and normals are interlaced in the `vertices` array
-        vertexDataTable.put(EVertexAttribute.POSITION, new float[]{
+        vertexDataTable.put(KnownAttributes.POSITION, new float[]{
                 -1.0f, -1.0f, 0.0f,
                 1.0f, -1.0f, 0.0f,
                 1.0f, 1.0f, 0.0f,
                 -1.0f, 1.0f, 0.0f
         });
-        vertexDataTable.put(EVertexAttribute.UV, new float[]{
+        vertexDataTable.put(KnownAttributes.UV, new float[]{
                 0.0f, 0.0f,
                 1.0f, 0.0f,
                 1.0f, 1.0f,
                 0.0f, 1.0f
         });
-        vertexDataTable.put(EVertexAttribute.NORMAL, new float[]{
+        vertexDataTable.put(KnownAttributes.NORMAL, new float[]{
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,

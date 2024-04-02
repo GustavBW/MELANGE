@@ -3,6 +3,7 @@ package gbw.melange.mesh.formatting;
 import org.jetbrains.annotations.Contract;
 /**
  * Wrapper for modifying flat float array buffers, but in a way that is easier to reason about.
+ * A window into a specific section of the buffer - like a Slice, but Java happened.
  * Aka: Reference Access Vector
  */
 public interface IRefAccVec {

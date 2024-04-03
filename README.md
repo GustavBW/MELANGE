@@ -21,7 +21,8 @@ Cool stuff for free:
  - Not to mention the benefits of not having to deal with "undefined" AND null at the same time.
 
 ## Established Packages of Note
-### melange.shading
+### melange.shading 
+##### EXTRACTED, see melange-shading
 Contains an entire managed shader templating framework which end goal is establishing and resolving shader graphs as seen from 3D design programs like Blender.
 Currently it contains many types of managed, animatable, procedurally generative shaders (voronoi, perlin noise, gradients, & checker) as well as images.  
 Additionally, it contains the shader pipeline and user entry point (known as "Colors"), that abstracts 99% of what is actually going on away from the user.  
@@ -29,6 +30,7 @@ The package is entirely self-contained (no references to the rest of MELANGE) an
 Performance is obtained through caching the latest results as a texture on disk, and using this until invalidation. When I figure out how to duplicate an OpenGL context, this will be spun off as a parallel, self-contained process.
 
 ### melange.mesh
+##### EXTRACTED, see melange-mesh
 Yet to be further expanded, but currently contains lossless mapping utilities from raw vertex data to more processable, extractable formats as well as caching functionality much like melange.shading.
 Much like its counterpart, melange.shading, it contains the user entry point (knows as "Shapes") which facilitates further functionality.
 The ultimate end-goal is to facilitate generative, procedural modifications like beveling, decimation, voxel-remeshing and the like (also as seen from Blender) which is akind to launching a space program to facilitate a css border radius, but this is too early for compromises.
@@ -44,6 +46,6 @@ This package is also entirely self-contained with the intention of being able to
 * melange.tooling, contains some dev tooling which will be expanded on shortly. However, as it depends on the rest of melange in a bootstrapped-compiler type of situation, it also serves as testing ground for the coherency of it all. Also, when modularized (which is still the plan) it can easily be excluded on a release build.
 
 
-*multiplatform, it has come to my attention that desktop seems to be the only place where the Lwjgl Backends MELANGE currently uses, are kept up to date. This even places vast restrictions on the version of Java that can be used for a release build. The exact impact of this lack of maintenance and support is not known, but "multiplatform" will remain in qoutes until then.
+*multiplatform, it has come to my attention that desktop (Windows & Linux) seems to be the only place where the Lwjgl Backends MELANGE currently uses, are kept up to a date that facilitates features and the OpenGL version that is currently required. This even potentially places restrictions on the version of Java that can be used for a release build. The exact impact of this lack of feature support is not known, but I see but 2 paths: Either reduce the feature set and language level used for Melange, or investigate what platforms to officially drop support for. Given that I don't intend to release instant legacy code (as much as is possible for Java), the former is most likely the path not chosen.
 
 

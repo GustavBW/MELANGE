@@ -3,7 +3,6 @@ package gbw.melange.common.errors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
-import gbw.melange.shading.errors.Error;
 import org.apache.logging.log4j.Logger;
 
 public final class Errors {
@@ -39,7 +38,7 @@ public final class Errors {
     }
     @FunctionalInterface
     public interface ErrorProvider{
-        gbw.melange.shading.errors.Error run();
+        Error run();
     }
 
     /**
@@ -56,8 +55,8 @@ public final class Errors {
     }
 
     public static void escalate(ErrorProvider func){
-        gbw.melange.shading.errors.Error err = func.run();
-        if(err != gbw.melange.shading.errors.Error.NONE){
+        Error err = func.run();
+        if(err != Error.NONE){
             throw new RuntimeException(err.msg());
         }
     }
@@ -66,11 +65,11 @@ public final class Errors {
      * Deescalate anything that throws and return the message as a String instead
      * @param func void func no args but throws
      */
-    public static <R extends Throwable> gbw.melange.shading.errors.Error deescalate(ThrowingRunn<R> func){
+    public static <R extends Throwable> Error deescalate(ThrowingRunn<R> func){
         try{
             func.apply();
         }catch (Throwable r){
-            return new gbw.melange.shading.errors.Error(r.getMessage());
+            return new Error(r.getMessage());
         }
         return Error.NONE;
     }

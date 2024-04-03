@@ -14,14 +14,7 @@ public enum Button {
      }
 
      public static Button valueOf(char c){
-          return switch (c) {
-               case 0 -> LEFT;
-               case 1 -> RIGHT;
-               case 2 -> MIDDLE;
-               case 3 -> BACK;
-               case 4 -> FORWARD;
-               default -> UNKNOWN;
-          };
+          return valueOf((int) c);
      }
      public static Button valueOf(int i){
           return switch (i) {

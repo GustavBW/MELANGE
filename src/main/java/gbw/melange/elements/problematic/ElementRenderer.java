@@ -11,7 +11,7 @@ import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
 import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.errors.Errors;
+import gbw.melange.common.errors.Errors;
 import gbw.melange.shading.constants.GLDrawStyle;
 import gbw.melange.shading.generative.ITexturedShader;
 import gbw.melange.shading.generative.TextureShader;

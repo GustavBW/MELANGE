@@ -17,7 +17,7 @@ import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.mesh.errors.InvalidMeshIssue;
 import gbw.melange.mesh.errors.MeshProcessingIssue;
 import gbw.melange.mesh.services.MeshPipeline;
-import gbw.melange.shading.errors.Errors;
+import gbw.melange.common.errors.Errors;
 import gbw.melange.shading.services.ShaderPipeline;
 import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.ViewConfigurationIssue;
@@ -115,7 +115,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
             final long shaderPipelineTimeA = System.currentTimeMillis();
             shaderPipeline = context.getBean(ShaderPipeline.class);
-            shaderPipeline.setMainThreadQueue(runOnMainThread);
+            shaderPipeline.setContextHavingThreadQueue(runOnMainThread);
             if (config.getClearGeneratedOnStart()){
                 shaderPipeline.clearCache();
             }

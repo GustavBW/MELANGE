@@ -30,7 +30,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <log4j.version>2.23.0</log4j.version>
         <slf4j.version>2.0.12</slf4j.version>
         <shading.version>pre-atomization</shading.version>
-        <mesh.version>main-SNAPSHOT</mesh.version>
+        <mesh.version>0.6.9-stable</mesh.version>
     </properties>
 
     <dependencies>

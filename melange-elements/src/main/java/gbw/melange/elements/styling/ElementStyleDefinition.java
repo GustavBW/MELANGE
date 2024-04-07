@@ -1,5 +1,6 @@
 package gbw.melange.elements.styling;
 
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.common.shading.constants.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
@@ -20,7 +21,7 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
     private IManagedShader<?> borderShader = ManagedShader.DEFAULT;
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
-    private BevelConfig bevelConfig = BevelConfig.DEFAULT;
+    private IBevelConfig bevelConfig = BevelConfig.DEFAULT;
     private final List<IPostProcessShader> postProcesses = new ArrayList<>();
 
     /**
@@ -63,7 +64,7 @@ public class ElementStyleDefinition implements IElementStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public BevelConfig getBorderBevel() {
+    public IBevelConfig getBorderBevel() {
         return bevelConfig;
     }
 

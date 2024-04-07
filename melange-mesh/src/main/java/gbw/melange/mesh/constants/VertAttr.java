@@ -21,9 +21,9 @@ public final class VertAttr<T extends IFloatSlice> implements IVertAttr<T> {
     private final Class<T> repressentativeClass;
     private final SliceProvider<T> provider;
 
-    @SuppressWarnings("unchecked")
+
     public VertAttr(int compCount, String alias, int usage) {
-        this(compCount, alias, usage, (Class<T>) IFloatSlice.class, (SliceProvider<T>) IFloatSlice.create);
+        this(compCount, alias, usage, (Class<T>) IFloatSlice.class, (SliceProvider<T>) SliceProviders.create);
     }
 
     public VertAttr(int compCount, String alias, int usage, Class<T> clazz, SliceProvider<T> provider){

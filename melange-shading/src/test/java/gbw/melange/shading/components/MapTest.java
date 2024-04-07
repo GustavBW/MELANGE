@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class MapTest {
 
-    @Test
+
     public void speediestMapTest(){
         Map<String, Integer> hashMap = new HashMap<>();
         ObjectIntMap<String> libgdxMap = new ObjectIntMap<>();

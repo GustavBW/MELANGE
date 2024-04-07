@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.components.IFragmentShader;
 import gbw.melange.common.shading.generative.IBlindShader;
 import gbw.melange.common.shading.generative.ITexturedShader;
 import gbw.melange.common.shading.services.Colors;
@@ -106,8 +107,8 @@ public class ColorService implements Colors {
 
     /** {@inheritDoc} */
     @Override
-    public IBlindShader fromFragment(FragmentShader IFragmentShader) {
-        BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, IFragmentShader);
+    public IBlindShader fromFragment(IFragmentShader fragmentShader) {
+        BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, fragmentShader);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

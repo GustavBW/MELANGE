@@ -3,6 +3,8 @@ package gbw.melange.shading;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.components.IFragmentShader;
+import gbw.melange.common.shading.components.IVertexShader;
 import gbw.melange.common.shading.constants.GLShaderAttr;
 import gbw.melange.common.shading.constants.ShaderClassification;
 import gbw.melange.common.shading.errors.ShaderCompilationIssue;
@@ -19,9 +21,9 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class ManagedShader<T extends IManagedShader<T>> implements IManagedShader<T> {
     private static final Logger log = LogManager.getLogger();
-    public static ManagedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, IFragmentShader.DEFAULT, false);
-    private final FragmentShader IFragmentShader;
-    private final VertexShader vertexShader;
+    public static ManagedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, FragmentShader.DEFAULT, false);
+    private final IFragmentShader fragmentShader;
+    private final IVertexShader vertexShader;
     private final String localName; //Debugging
     /**
      * Whether parameters of this shader changes during runtime (not static) or not (is static)
@@ -38,13 +40,13 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
      */
     private int desiredResolution = 500;
 
-    public ManagedShader(String localName, VertexShader vertexShader, FragmentShader IFragmentShader) {
-        this(localName, vertexShader, IFragmentShader, true);
+    public ManagedShader(String localName, IVertexShader vertexShader, IFragmentShader fragmentShader) {
+        this(localName, vertexShader, fragmentShader, true);
     }
-    public ManagedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
+    public ManagedShader(String localName, IVertexShader vertex, IFragmentShader fragment, boolean isStatic){
         this.localName = localName;
         this.vertexShader = vertex;
-        this.IFragmentShader = fragment;
+        this.fragmentShader = fragment;
         this.isStatic = isStatic;
     }
 
@@ -84,24 +86,24 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     @Override
     public ShaderClassification getClassification() {
         ShaderClassification childClassification = getChildClassification();
-        if(childClassification.abstractValRep > IFragmentShader.getClassification().abstractValRep){
+        if(childClassification.abstractValRep > fragmentShader.getClassification().abstractValRep){
             return childClassification;
         }
-        return IFragmentShader.getClassification();
+        return fragmentShader.getClassification();
     }
     protected abstract ShaderClassification getChildClassification();
 
     /** {@inheritDoc} */
     @Override
     public void compile() throws ShaderCompilationIssue {
-        this.program = new ShaderProgram(vertexShader.code(), IFragmentShader.code());
+        this.program = new ShaderProgram(vertexShader.code(), fragmentShader.code());
         failedCompilation = !program.isCompiled();
         if(failedCompilation){ //According to a certain source, compilation is synchronous on instantiation.
             throw new ShaderCompilationIssue(
             this + " failed to compile =================================\n" +
                 program.getLog() + "\n" + //The log is a massive text dump
                 "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n" +
-                "VERTEXT: \n\n" + vertexShader.code() + "\n\n FRAGMENT \n\n" + IFragmentShader.code()
+                "VERTEXT: \n\n" + vertexShader.code() + "\n\n FRAGMENT \n\n" + fragmentShader.code()
             );
         }
     }
@@ -110,7 +112,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     /** {@inheritDoc} */
     @Override
     public String toString(){
-        return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader + "\", fragment shader: \"" + IFragmentShader.name() +"\"";
+        return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader + "\", fragment shader: \"" + fragmentShader.name() +"\"";
     }
 
     public void setCachedTextureProgram(VertexShader vertex, FragmentShader frag){
@@ -162,19 +164,19 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     }
 
     @Override
-    public FragmentShader getFragment() {
-        return IFragmentShader;
+    public IFragmentShader getFragment() {
+        return fragmentShader;
     }
 
     @Override
-    public VertexShader getVertex() {
+    public IVertexShader getVertex() {
         return vertexShader;
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isStatic(){
-        return isStatic && IFragmentShader.isStatic();
+        return isStatic && fragmentShader.isStatic();
     }
 
     @Override

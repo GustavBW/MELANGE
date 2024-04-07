@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.shading.postprocess.IPostProcessShader;
 import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.common.shading.constants.GLShaderAttr;
 import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 

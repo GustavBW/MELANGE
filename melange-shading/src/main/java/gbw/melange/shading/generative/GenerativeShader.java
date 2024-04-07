@@ -1,17 +1,17 @@
 package gbw.melange.shading.generative;
 
+import gbw.melange.common.shading.components.IFragmentShader;
+import gbw.melange.common.shading.components.IVertexShader;
 import gbw.melange.common.shading.generative.IGenerativeShader;
 import gbw.melange.common.shading.IManagedShader;
 import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.components.FragmentShader;
-import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 public abstract class GenerativeShader<T extends IManagedShader<T>> extends ManagedShader<T> implements IGenerativeShader<T> {
     private static final Logger log = LogManager.getLogger();
-    public GenerativeShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public GenerativeShader(String localName, IVertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

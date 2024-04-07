@@ -1,6 +1,7 @@
 package gbw.melange.common.shading.components;
 
 import gbw.melange.common.errors.Error;
+import gbw.melange.common.shading.constants.ShaderClassification;
 
 public interface IShaderComponent {
 
@@ -9,6 +10,8 @@ public interface IShaderComponent {
      */
     int getHandle();
     boolean isCompiled();
+    ShaderClassification getClassification();
+    boolean isStatic();
 
     /**
      * @return An error containing the shader compilation log on error. Else {@link Error#NONE}

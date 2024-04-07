@@ -6,6 +6,7 @@ import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
 import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
 import gbw.melange.common.mesh.constants.IVertAttr;
 import gbw.melange.mesh.constants.KnownAttributes;
+import gbw.melange.mesh.constants.SliceProviders;
 import gbw.melange.mesh.constants.VertAttr;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,7 +134,7 @@ class MeshDataTableTest {
                 KnownAttributes.POSITION.alias(),
                 KnownAttributes.POSITION.usage(),
                 IFloatSlice.class,
-                IFloatSlice.create
+                SliceProviders.create
         );
         List<IFloatSlice> changedRepRes = table.extract(changedRepClass);
         assertNotNull(changedRepRes, "The fallback should still be an empty list");

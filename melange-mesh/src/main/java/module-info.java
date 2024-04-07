@@ -10,6 +10,7 @@ module melange.mesh {
 
     exports gbw.melange.mesh.constants;
     exports gbw.melange.mesh.modifiers;
+    exports gbw.melange.mesh;
 
     provides gbw.melange.common.mesh.services.IMeshPipelineConfig with gbw.melange.mesh.services.MeshPipelineConfig;
 }

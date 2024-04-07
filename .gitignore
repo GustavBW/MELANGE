@@ -10,6 +10,7 @@
 /melange-mesh/target
 /melange-shading/target
 /melange-events/target
+/melange-elements/target
 ## Melange Specific
 /assets/system/generated/*
 

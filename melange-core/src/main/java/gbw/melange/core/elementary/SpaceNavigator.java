@@ -1,5 +1,6 @@
 package gbw.melange.core.elementary;
 
+import gbw.melange.common.annotations.View;
 import gbw.melange.common.elementary.space.ISpace;
 import gbw.melange.common.elementary.space.SpaceLayerEntry;
 import gbw.melange.common.navigation.ISpaceNavigator;
@@ -61,8 +62,8 @@ public class SpaceNavigator implements ISpaceNavigator {
         //Shove to the back to have be rendered last, and thus on top.
         SpaceLayerEntry metadata = spaceMetadata.get(space);
         switch (metadata.focusPolicy()){
-            case FocusPolicy.OPAQUE -> onScreenCurrently.clear();
-            case FocusPolicy.RETAIN_LATEST -> {
+            case View.FocusPolicy.OPAQUE -> onScreenCurrently.clear();
+            case View.FocusPolicy.RETAIN_LATEST -> {
                 if (!onScreenCurrently.isEmpty()){
                     //Grab the topmost, clear all, and put that back in
                     ISpace formerTopMost = onScreenCurrently.getLast();
@@ -70,7 +71,7 @@ public class SpaceNavigator implements ISpaceNavigator {
                     onScreenCurrently.add(formerTopMost);
                 }
             }
-            case FocusPolicy.RETAIN_ALL -> {} //Intentional NOOP
+            case View.FocusPolicy.RETAIN_ALL -> {} //Intentional NOOP
             default -> {
                 log.warn("Unknown focus policy: " + metadata.focusPolicy() + " update ISpaceNavigator handling method");
             }

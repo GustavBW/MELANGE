@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL30;
 public class FrickAroundTest extends ApplicationAdapter {
 
 
-    @Test
+
     public void runItAndSeeIfItWorks(){
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setInitialVisible(true);

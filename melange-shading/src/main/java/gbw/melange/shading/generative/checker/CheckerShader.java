@@ -3,13 +3,13 @@ package gbw.melange.shading.generative.checker;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.shading.generative.checker.CheckerShaderAttr;
 import gbw.melange.common.shading.generative.checker.ICheckerShader;
-import gbw.melange.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.components.FragmentShader;
-import gbw.melange.shading.components.VertexShader;
+import gbw.melange.common.shading.components.IFragmentShader;
+import gbw.melange.common.shading.components.IVertexShader;
 
 public class CheckerShader extends GenerativeShader<ICheckerShader> implements ICheckerShader {
-    public CheckerShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public CheckerShader(String localName, IVertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

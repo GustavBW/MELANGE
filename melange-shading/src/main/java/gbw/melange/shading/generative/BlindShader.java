@@ -1,19 +1,21 @@
 package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import gbw.melange.common.shading.components.IFragmentShader;
+import gbw.melange.common.shading.components.IVertexShader;
 import gbw.melange.common.shading.constants.ShaderClassification;
 import gbw.melange.common.shading.generative.IBlindShader;
 import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 
 public class BlindShader extends GenerativeShader<IBlindShader> implements IBlindShader {
-    public BlindShader(String localName, VertexShader vertex, FragmentShader fragment){
+    public BlindShader(String localName, IVertexShader vertex, IFragmentShader fragment){
         this(localName, vertex, fragment, true);
     }
-    public BlindShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public BlindShader(String localName, IVertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         this(localName, vertex, fragment, ShaderClassification.COMPLEX, isStatic);
     }
-    public BlindShader(String localName, VertexShader vertex, FragmentShader fragment, ShaderClassification classification, boolean isStatic) {
+    public BlindShader(String localName, IVertexShader vertex, IFragmentShader fragment, ShaderClassification classification, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
         this.classification = classification;
     }

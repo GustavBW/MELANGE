@@ -3,13 +3,13 @@ package gbw.melange.shading.generative.noise;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.shading.generative.noise.IPerlinNoiseShader;
 import gbw.melange.common.shading.generative.noise.PerlinShaderAttr;
-import gbw.melange.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.components.FragmentShader;
-import gbw.melange.shading.components.VertexShader;
+import gbw.melange.common.shading.components.IFragmentShader;
+import gbw.melange.common.shading.components.IVertexShader;
 
 public class PerlinNoiseShader extends GenerativeShader<IPerlinNoiseShader> implements IPerlinNoiseShader {
-    public PerlinNoiseShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public PerlinNoiseShader(String localName, IVertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

@@ -3,6 +3,7 @@ package gbw.melange.shading.components;
 
 import gbw.melange.common.shading.components.IVertexShader;
 import gbw.melange.common.shading.constants.GLShaderType;
+import gbw.melange.common.shading.constants.ShaderClassification;
 
 /**
  * String alias for now
@@ -17,6 +18,17 @@ public final class VertexShader extends ShaderComponent implements IVertexShader
     public void unbindAny(){
 
     }
+
+    @Override
+    public ShaderClassification getClassification() {
+        return ShaderClassification.COMPLEX;
+    }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
     @Override
     public void applyBindings() {
 

@@ -2,14 +2,16 @@ package gbw.melange.shading.services;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.shading.IManagedShader;
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.errors.ShaderCompilationIssue;
+import gbw.melange.common.shading.services.IShaderPipeline;
+import gbw.melange.common.shading.services.IShadingPipelineConfig;
 import gbw.melange.shading.ManagedShader;
-import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.errors.ShaderCompilationIssue;
 import gbw.melange.common.errors.Errors;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import gbw.melange.shading.generative.TextureShader;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -105,7 +107,7 @@ public class ShaderPipeline implements IShaderPipeline {
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
             log.trace("Caching | Setting cached texture for " + shader.getLocalName());
-            ((ManagedShader<?>) shader).setCachedTextureProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
+            ((ManagedShader<?>) shader).setCachedTextureProgram(VertexShader.DEFAULT, IFragmentShader.TEXTURE);
             ((ManagedShader<?>) shader).setCachedTexture(asLoadedFromDisk);
 
         }

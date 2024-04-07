@@ -1,11 +1,14 @@
 package gbw.melange.shading.generative.checker;
 
 import com.badlogic.gdx.graphics.Color;
+import gbw.melange.common.shading.generative.checker.CheckerShaderAttr;
+import gbw.melange.common.shading.generative.checker.ICheckerBuilder;
+import gbw.melange.common.shading.generative.checker.ICheckerShader;
 import gbw.melange.shading.GLSL;
-import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.common.shading.constants.ShaderClassification;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
-import gbw.melange.shading.services.IShaderPipeline;
+import gbw.melange.common.shading.services.IShaderPipeline;
 
 public class CheckerFragmentBuilder implements ICheckerBuilder {
 
@@ -49,7 +52,7 @@ public class CheckerFragmentBuilder implements ICheckerBuilder {
         String sb = generateOpeningStatement() +
                 generateMainDrawingCode();
 
-        FragmentShader fragment = new FragmentShader(localName, sb, ShaderClassification.COMPLEX, true);
+        IFragmentShader fragment = new IFragmentShader(localName, sb, ShaderClassification.COMPLEX, true);
         ICheckerShader shader = new CheckerShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(shader);

@@ -3,11 +3,15 @@ package gbw.melange.mesh.formatting;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
-import gbw.melange.mesh.constants.IVertAttr;
+import gbw.melange.common.mesh.formatting.Face;
+import gbw.melange.common.mesh.formatting.IMeshDataTable;
+import gbw.melange.common.mesh.formatting.MultiTypeTableChecker;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
+import gbw.melange.common.mesh.constants.IVertAttr;
 import gbw.melange.mesh.constants.KnownAttributes;
 import gbw.melange.common.errors.Error;
-import gbw.melange.mesh.formatting.providers.SliceProvider;
-import gbw.melange.mesh.formatting.slicing.*;
+import gbw.melange.common.mesh.formatting.providers.SliceProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

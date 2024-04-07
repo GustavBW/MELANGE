@@ -1,6 +1,6 @@
 package gbw.melange.mesh.formatting;
 
-import gbw.melange.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

@@ -1,11 +1,14 @@
 package gbw.melange.shading.generative.noise;
 
-import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.common.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.generative.noise.IPerlinFragmentBuilder;
+import gbw.melange.common.shading.generative.noise.IPerlinNoiseShader;
+import gbw.melange.common.shading.generative.noise.PerlinShaderAttr;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
-import gbw.melange.shading.services.IShaderPipeline;
+import gbw.melange.common.shading.services.IShaderPipeline;
 
-public class PerlinFragmentBuilder implements IPerlinFragmentBuilder{
+public class PerlinFragmentBuilder implements IPerlinFragmentBuilder {
     private int octaves = 3;
     private int seed = 1;
     private double frequency = 5;
@@ -85,7 +88,7 @@ public class PerlinFragmentBuilder implements IPerlinFragmentBuilder{
                 perlinEntryPoint +
                 mainLoop;
 
-        FragmentShader fragment = new FragmentShader(localName, sb, ShaderClassification.COMPLEX);
+        IFragmentShader fragment = new IFragmentShader(localName, sb, ShaderClassification.COMPLEX);
         IPerlinNoiseShader shader = new PerlinNoiseShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(shader);

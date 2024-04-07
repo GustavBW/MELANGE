@@ -2,14 +2,15 @@ package gbw.melange.shading.postprocessing;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import gbw.melange.common.shading.postprocess.IPostProcessShader;
 import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
 
 public abstract class PostProcessShader extends ManagedShader<IPostProcessShader> implements IPostProcessShader {
 
-    public PostProcessShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public PostProcessShader(String localName, VertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

@@ -2,17 +2,18 @@ package gbw.melange.shading.generative;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.common.shading.generative.ITexturedShader;
+import gbw.melange.common.shading.constants.GLShaderAttr;
+import gbw.melange.common.shading.constants.ShaderClassification;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
 
 public class TextureShader extends GenerativeShader<ITexturedShader> implements ITexturedShader {
-    public static ITexturedShader TEXTURE = new TextureShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, FragmentShader.TEXTURE, true);
-    public TextureShader(String localName, VertexShader vertex, FragmentShader fragment){
+    public static ITexturedShader TEXTURE = new TextureShader("MELANGE_TEXTURE_SHADER", VertexShader.DEFAULT, IFragmentShader.TEXTURE, true);
+    public TextureShader(String localName, VertexShader vertex, IFragmentShader fragment){
         this(localName, vertex, fragment, true);
     }
-    public TextureShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public TextureShader(String localName, VertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

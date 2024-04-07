@@ -1,11 +1,10 @@
 package gbw.melange.mesh;
 
-import com.badlogic.gdx.graphics.Mesh;
 import gbw.melange.common.errors.Error;
-import gbw.melange.mesh.constants.IVertAttr;
+import gbw.melange.common.mesh.constants.IVertAttr;
 import gbw.melange.mesh.constants.KnownAttributes;
-import gbw.melange.mesh.formatting.Face;
-import gbw.melange.mesh.formatting.slicing.ISliceVec3;
+import gbw.melange.common.mesh.formatting.Face;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
 import gbw.melange.mesh.formatting.MeshDataTable;
 import org.junit.jupiter.api.Test;
 

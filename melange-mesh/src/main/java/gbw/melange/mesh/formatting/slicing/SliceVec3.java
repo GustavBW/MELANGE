@@ -1,5 +1,8 @@
 package gbw.melange.mesh.formatting.slicing;
 
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
+
 /**
  * @author GustavBW
  */

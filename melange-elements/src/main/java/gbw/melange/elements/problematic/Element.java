@@ -14,7 +14,7 @@ import gbw.melange.elements.rules.ElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.elements.rules.ElementRuleSet;
 import gbw.melange.elements.styling.ElementStyleDefinition;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 
 //TODO: Move to abstract reference definition pipeline for delayed instantiation?
 /**

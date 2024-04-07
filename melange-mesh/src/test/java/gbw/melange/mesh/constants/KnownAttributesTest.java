@@ -2,6 +2,7 @@ package gbw.melange.mesh.constants;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import gbw.melange.common.mesh.constants.IVertAttr;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

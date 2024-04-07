@@ -3,10 +3,15 @@ package gbw.melange.shading.components;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.math.Matrix4;
-import gbw.melange.shading.constants.GLDrawStyle;
-import gbw.melange.shading.constants.GLShaderAttr;
 import gbw.melange.common.errors.Error;
-import gbw.melange.shading.errors.DynamicRelinkingError;
+import gbw.melange.common.shading.components.IAtomicShader;
+import gbw.melange.common.shading.components.IGeometryShader;
+import gbw.melange.common.shading.components.IShaderComponent;
+import gbw.melange.common.shading.components.IVertexShader;
+import gbw.melange.common.shading.components.IFragmentShader;
+import gbw.melange.common.shading.constants.GLDrawStyle;
+import gbw.melange.common.shading.constants.GLShaderAttr;
+import gbw.melange.common.shading.errors.DynamicRelinkingError;
 import org.jetbrains.annotations.Contract;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL30;
@@ -23,9 +28,9 @@ public class AtomicShader implements IAtomicShader {
     protected final Map<String,Integer> locations = new HashMap<>();
     public record ProgramHandle(int value){} //Typealias.
     private final ProgramHandle programHandle;
-    private VertexShader vertex = null;
-    private FragmentShader fragment = null;
-    private GeometryShader geometry = null;
+    private IVertexShader vertex = null;
+    private IFragmentShader fragment = null;
+    private IGeometryShader geometry = null;
     //Add tesselation and tesselation control
     private BiConsumer<Mesh, Matrix4> renderFuncPointer = this::renderNONE;
 
@@ -34,7 +39,7 @@ public class AtomicShader implements IAtomicShader {
     }
 
     @Override
-    public Error setVertex(VertexShader vertex, boolean deleteExisting) {
+    public Error setVertex(IVertexShader vertex, boolean deleteExisting) {
         Error preFlightErr = replacementPreFlightCheck(vertex);
         if(preFlightErr != Error.NONE){
             return preFlightErr;
@@ -50,7 +55,7 @@ public class AtomicShader implements IAtomicShader {
     }
 
     @Override
-    public Error setFragment(FragmentShader fragment, boolean deleteExisting) {
+    public Error setFragment(IFragmentShader fragment, boolean deleteExisting) {
         Error preFlightErr = replacementPreFlightCheck(fragment);
         if(preFlightErr != Error.NONE){
             return preFlightErr;
@@ -66,7 +71,7 @@ public class AtomicShader implements IAtomicShader {
     }
 
     @Override
-    public Error setGeometry(GeometryShader geometry, boolean deleteExisting) {
+    public Error setGeometry(IGeometryShader geometry, boolean deleteExisting) {
         Error preFlightErr = replacementPreFlightCheck(geometry);
         if(preFlightErr != Error.NONE){
             return preFlightErr;
@@ -87,7 +92,7 @@ public class AtomicShader implements IAtomicShader {
      * @param toBeAttached the shader to attach
      * @throws DynamicRelinkingError if the linking step fails
      */
-    private void attachAndReLink(IShader toBeAttached){
+    private void attachAndReLink(IShaderComponent toBeAttached){
         GL30.glAttachShader(programHandle.value(), toBeAttached.getHandle());
         GL30.glLinkProgram(programHandle.value());
 
@@ -129,7 +134,7 @@ public class AtomicShader implements IAtomicShader {
     //Mem alloc moved to class loader
     private static final IntBuffer dummyA = BufferUtils.createIntBuffer(1), dummyB = BufferUtils.createIntBuffer(1);
 
-    private void handleRemoval(IShader shader, boolean delete){
+    private void handleRemoval(IShaderComponent shader, boolean delete){
         if(shader == null) return;
 
         GL30.glDetachShader(programHandle.value(), shader.getHandle());
@@ -138,7 +143,7 @@ public class AtomicShader implements IAtomicShader {
         }
     }
     @Contract(pure = true)
-    private static Error replacementPreFlightCheck(IShader shader){
+    private static Error replacementPreFlightCheck(IShaderComponent shader){
         if(shader == null) return Error.ON_NULL;
 
         if(!shader.isCompiled()) {

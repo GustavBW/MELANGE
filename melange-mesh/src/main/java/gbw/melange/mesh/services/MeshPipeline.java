@@ -1,14 +1,13 @@
 package gbw.melange.mesh.services;
 
-import gbw.melange.mesh.IManagedMesh;
-import gbw.melange.mesh.ManagedMesh;
-import gbw.melange.mesh.errors.InvalidMeshIssue;
-import gbw.melange.mesh.errors.MeshProcessingIssue;
+import gbw.melange.common.mesh.IManagedMesh;
+import gbw.melange.common.mesh.errors.InvalidMeshIssue;
+import gbw.melange.common.mesh.errors.MeshProcessingIssue;
+import gbw.melange.common.mesh.services.IMeshPipeline;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -16,7 +15,7 @@ import java.util.concurrent.Executors;
 
 
 /**
- * Exact same setup as the {@link gbw.melange.shading.services.IShaderPipeline}
+ * Exact same setup as the {@link gbw.melange.common.shading.services.IShaderPipeline}
  */
 @Service
 public class MeshPipeline implements IMeshPipeline {

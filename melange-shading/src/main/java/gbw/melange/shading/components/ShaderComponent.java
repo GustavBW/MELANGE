@@ -1,12 +1,13 @@
 package gbw.melange.shading.components;
 
-import gbw.melange.shading.constants.GLShaderType;
 import gbw.melange.common.errors.Error;
+import gbw.melange.common.shading.components.IShaderComponent;
+import gbw.melange.common.shading.constants.GLShaderType;
 import org.lwjgl.opengl.GL30;
 
 import java.util.Objects;
 
-public abstract class ShaderComponent implements IShader {
+public abstract class ShaderComponent implements IShaderComponent {
 
     private final GLShaderType type;
     private final String localName;
@@ -50,11 +51,12 @@ public abstract class ShaderComponent implements IShader {
         isCompiled = true;
         return null;
     }
-
+    @Override
     public String code() {
         return code;
     }
 
+    @Override
     public String name(){
         return localName;
     }

@@ -1,5 +1,7 @@
 package gbw.melange.shading.generative.noise;
 
+import gbw.melange.common.shading.generative.noise.NoiseProvider;
+
 /**
  * <p>A Perlin noise generation utility. Construct the PerlinNoise object with
  * the specified parameters and make a call to the {@link #getHeight(double, double)}

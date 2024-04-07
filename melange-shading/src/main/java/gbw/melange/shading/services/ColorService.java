@@ -3,22 +3,26 @@ package gbw.melange.shading.services;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import gbw.melange.shading.IManagedShader;
-import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.generative.IBlindShader;
+import gbw.melange.common.shading.generative.ITexturedShader;
+import gbw.melange.common.shading.services.Colors;
+import gbw.melange.common.shading.constants.GLShaderAttr;
+import gbw.melange.common.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.services.IShaderPipeline;
 import gbw.melange.shading.generative.*;
 import gbw.melange.shading.generative.checker.CheckerFragmentBuilder;
-import gbw.melange.shading.generative.checker.ICheckerBuilder;
+import gbw.melange.common.shading.generative.checker.ICheckerBuilder;
 import gbw.melange.shading.generative.gradients.GradientFragmentBuilder;
-import gbw.melange.shading.generative.gradients.IGradientBuilder;
-import gbw.melange.shading.generative.noise.IPerlinFragmentBuilder;
+import gbw.melange.common.shading.generative.gradients.IGradientBuilder;
+import gbw.melange.common.shading.generative.noise.IPerlinFragmentBuilder;
 import gbw.melange.shading.generative.noise.PerlinFragmentBuilder;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
-import gbw.melange.shading.generative.voronoi.IVoronoiFragmentBuilder;
+import gbw.melange.common.shading.generative.voronoi.IVoronoiFragmentBuilder;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
 import gbw.melange.shading.postprocessing.BoxBlurShader;
-import gbw.melange.shading.postprocessing.IBoxBlurShader;
+import gbw.melange.common.shading.postprocess.IBoxBlurShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +55,7 @@ public class ColorService implements Colors {
         IManagedShader<?> wrapped = new BlindShader(
                 generateId("CONSTANT_RGBA("+r+","+g+","+b+","+a+")"),
                 VertexShader.DEFAULT,
-                FragmentShader.constant(color),
+                IFragmentShader.constant(color),
                 ShaderClassification.SIMPLE, true);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
@@ -66,7 +70,7 @@ public class ColorService implements Colors {
     /** {@inheritDoc} */
     @Override
     public ITexturedShader image(Texture src) {
-        ITexturedShader wrapped = new TextureShader(generateId("TEXTURE_"), VertexShader.DEFAULT, FragmentShader.TEXTURE);
+        ITexturedShader wrapped = new TextureShader(generateId("TEXTURE_"), VertexShader.DEFAULT, IFragmentShader.TEXTURE);
         wrapped.setTexture(src, GLShaderAttr.TEXTURE.glValue());
         pipeline.registerForCompilation(wrapped);
         return wrapped;
@@ -102,8 +106,8 @@ public class ColorService implements Colors {
 
     /** {@inheritDoc} */
     @Override
-    public BlindShader fromFragment(FragmentShader fragmentShader) {
-        BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, fragmentShader);
+    public IBlindShader fromFragment(IFragmentShader IFragmentShader) {
+        BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, IFragmentShader);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
     }

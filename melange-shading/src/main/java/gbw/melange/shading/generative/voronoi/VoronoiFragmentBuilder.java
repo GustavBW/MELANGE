@@ -4,14 +4,17 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.math.Vector2;
+import gbw.melange.common.shading.generative.voronoi.IVoronoiFragmentBuilder;
+import gbw.melange.common.shading.generative.voronoi.IVoronoiShader;
+import gbw.melange.common.shading.generative.voronoi.VoronoiShaderAttr;
 import gbw.melange.shading.*;
-import gbw.melange.shading.constants.InterpolationType;
-import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.constants.Vec2DistFunc;
-import gbw.melange.shading.services.IShaderPipeline;
-import gbw.melange.shading.generative.noise.NoiseProvider;
+import gbw.melange.common.shading.constants.InterpolationType;
+import gbw.melange.common.shading.constants.ShaderClassification;
+import gbw.melange.common.shading.constants.Vec2DistFunc;
+import gbw.melange.common.shading.services.IShaderPipeline;
+import gbw.melange.common.shading.generative.noise.NoiseProvider;
 import gbw.melange.shading.generative.noise.PerlinNoise;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -123,7 +126,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
                 generateColorInterpolationFunction(interpolationType) +
                 glslMainLoop;
 
-        FragmentShader fragment = new FragmentShader(localName, code, ShaderClassification.COMPLEX, true);
+        IFragmentShader fragment = new IFragmentShader(localName, code, ShaderClassification.COMPLEX, true);
         log.trace("Generated fragment shader henceforth known as: " + localName + "\n " + fragment.code());
         IVoronoiShader wrapped = new VoronoiShader(localName, VertexShader.DEFAULT, fragment, !points.isEmpty());
         if (pipeline != null) {

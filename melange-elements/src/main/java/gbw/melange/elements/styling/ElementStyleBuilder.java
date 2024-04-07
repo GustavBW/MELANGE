@@ -4,9 +4,9 @@ import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
-import gbw.melange.shading.constants.GLDrawStyle;
-import gbw.melange.shading.IManagedShader;
-import gbw.melange.shading.postprocessing.IPostProcessShader;
+import gbw.melange.common.shading.constants.GLDrawStyle;
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.postprocess.IPostProcessShader;
 
 /**
  * <p>ElementStyleBuilder class.</p>

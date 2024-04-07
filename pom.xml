@@ -14,7 +14,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <module>melange-core</module>
         <module>melange-elements</module>
         <module>melange-dev</module>
-        <module>melange-misc</module>
         <module>melange-events</module>
         <module>melange-mesh</module>
         <module>melange-shading</module>

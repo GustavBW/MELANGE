@@ -2,11 +2,13 @@ package gbw.melange.shading.generative.voronoi;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import gbw.melange.common.shading.generative.voronoi.IVoronoiShader;
+import gbw.melange.common.shading.generative.voronoi.VoronoiShaderAttr;
 import gbw.melange.shading.ManagedShader;
 import gbw.melange.shading.VecUtil;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
 
 import java.util.List;
@@ -18,10 +20,10 @@ public class VoronoiShader extends GenerativeShader<IVoronoiShader> implements I
 
     private float[] points = new float[0];
     private boolean hasChanged = true;
-    public VoronoiShader(String localName, VertexShader vertex, FragmentShader fragment){
+    public VoronoiShader(String localName, VertexShader vertex, IFragmentShader fragment){
         this(localName, vertex, fragment, true);
     }
-    public VoronoiShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
+    public VoronoiShader(String localName, VertexShader vertex, IFragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

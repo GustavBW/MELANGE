@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.types.IPureElement;
 import gbw.melange.common.events.observability.IPrestineBlockingObservable;
 import gbw.melange.elements.problematic.Element;
 import gbw.melange.events.observability.ObservableValue;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 
 /**
  * A "PureElement" is static for all intends and purposes. No special handling is required during boot for this element to work correctly.

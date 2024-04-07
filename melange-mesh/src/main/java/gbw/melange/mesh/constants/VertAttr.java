@@ -1,9 +1,9 @@
 package gbw.melange.mesh.constants;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
-import gbw.melange.mesh.formatting.providers.SliceProvider;
-import gbw.melange.mesh.formatting.providers.TriArgProvider;
-import gbw.melange.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.constants.IVertAttr;
+import gbw.melange.common.mesh.formatting.providers.SliceProvider;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

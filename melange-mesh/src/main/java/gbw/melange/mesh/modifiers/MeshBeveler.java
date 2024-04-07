@@ -1,6 +1,9 @@
 package gbw.melange.mesh.modifiers;
 
-import gbw.melange.mesh.formatting.IMeshDataTable;
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
+import gbw.melange.common.mesh.modifiers.IBevelModifier;
+import gbw.melange.common.mesh.modifiers.MeshModifier;
+import gbw.melange.common.mesh.formatting.IMeshDataTable;
 
 /**
  * @author GustavBW
@@ -12,7 +15,7 @@ public class MeshBeveler implements IBevelModifier {
     private int vertNum;
     private double angleThreshDeg;
     private double absRelDist;
-    public MeshBeveler(BevelConfig config){
+    public MeshBeveler(IBevelConfig config){
         vertNum = config.subdivs();
         angleThreshDeg = config.angleThreshold();
         absRelDist = config.absoluteRelativeDistance();

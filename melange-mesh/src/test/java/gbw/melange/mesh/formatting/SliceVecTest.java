@@ -1,7 +1,7 @@
 package gbw.melange.mesh.formatting;
 
-import gbw.melange.mesh.formatting.slicing.IFloatSlice;
-import gbw.melange.mesh.formatting.slicing.ISliceVec2;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

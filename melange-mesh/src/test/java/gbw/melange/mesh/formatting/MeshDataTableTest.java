@@ -1,9 +1,12 @@
 package gbw.melange.mesh.formatting;
 
-import gbw.melange.mesh.constants.IVertAttr;
+import gbw.melange.common.mesh.formatting.IMeshDataTable;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
+import gbw.melange.common.mesh.constants.IVertAttr;
 import gbw.melange.mesh.constants.KnownAttributes;
 import gbw.melange.mesh.constants.VertAttr;
-import gbw.melange.mesh.formatting.slicing.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

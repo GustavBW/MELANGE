@@ -2,10 +2,11 @@ package gbw.melange.mesh.constants;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
-import gbw.melange.mesh.formatting.slicing.IFloatSlice;
-import gbw.melange.mesh.formatting.slicing.ISliceVec2;
-import gbw.melange.mesh.formatting.slicing.ISliceVec3;
-import gbw.melange.mesh.formatting.slicing.ISliceVec4;
+import gbw.melange.common.mesh.constants.IVertAttr;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec4;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

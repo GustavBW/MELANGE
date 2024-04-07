@@ -2,12 +2,13 @@ package gbw.melange.mesh;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Vector3;
-import gbw.melange.mesh.errors.MeshProcessingIssue;
-import gbw.melange.mesh.errors.UnmodifiableMeshIssue;
-import gbw.melange.mesh.formatting.Face;
-import gbw.melange.mesh.formatting.IMeshDataTable;
+import gbw.melange.common.mesh.IManagedMesh;
+import gbw.melange.common.mesh.errors.MeshProcessingIssue;
+import gbw.melange.common.mesh.errors.UnmodifiableMeshIssue;
+import gbw.melange.common.mesh.formatting.Face;
+import gbw.melange.common.mesh.formatting.IMeshDataTable;
 import gbw.melange.mesh.formatting.MeshDataTable;
-import gbw.melange.mesh.modifiers.MeshModifier;
+import gbw.melange.common.mesh.modifiers.MeshModifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

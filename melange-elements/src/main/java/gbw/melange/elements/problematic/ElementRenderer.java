@@ -10,12 +10,11 @@ import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.IElementRenderer;
-import gbw.melange.shading.constants.GLShaderAttr;
+import gbw.melange.common.shading.constants.GLShaderAttr;
 import gbw.melange.common.errors.Errors;
-import gbw.melange.shading.constants.GLDrawStyle;
-import gbw.melange.shading.generative.ITexturedShader;
-import gbw.melange.shading.generative.TextureShader;
-import gbw.melange.shading.postprocessing.IPostProcessShader;
+import gbw.melange.common.shading.constants.GLDrawStyle;
+import gbw.melange.common.shading.generative.ITexturedShader;
+import gbw.melange.common.shading.postprocess.IPostProcessShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

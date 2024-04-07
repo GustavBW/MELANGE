@@ -1,7 +1,7 @@
 package gbw.melange.elements;
 
 import gbw.melange.mesh.ManagedMesh;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 import gbw.melange.mesh.constants.MeshTable;
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementConstraintBuilder;

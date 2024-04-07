@@ -1,10 +1,12 @@
 package gbw.melange.shading.generative.gradients;
 
 import com.badlogic.gdx.graphics.Color;
+import gbw.melange.common.shading.generative.gradients.IGradientBuilder;
+import gbw.melange.common.shading.generative.gradients.IGradientShader;
 import gbw.melange.shading.GLSL;
-import gbw.melange.shading.constants.InterpolationType;
-import gbw.melange.shading.services.IShaderPipeline;
-import gbw.melange.shading.components.FragmentShader;
+import gbw.melange.common.shading.constants.InterpolationType;
+import gbw.melange.common.shading.services.IShaderPipeline;
+import gbw.melange.shading.components.IFragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,7 +81,7 @@ public class GradientFragmentBuilder implements IGradientBuilder {
             "\tgl_FragColor = color;\n" +
         "}");
 
-        FragmentShader fragment = new FragmentShader(localName, codeBuilder.toString());
+        IFragmentShader fragment = new IFragmentShader(localName, codeBuilder.toString());
         IGradientShader wrapped = new GradientShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(wrapped);

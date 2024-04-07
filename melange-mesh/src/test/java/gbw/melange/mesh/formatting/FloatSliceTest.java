@@ -1,6 +1,6 @@
 package gbw.melange.mesh.formatting;
 
-import gbw.melange.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

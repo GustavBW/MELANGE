@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.events.observability.IFallibleBlockingObservable;
 import gbw.melange.elements.problematic.Element;
 import gbw.melange.events.observability.ObservableValue;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 
 /**
  * <p>LoadingElement class.</p>

@@ -1,6 +1,8 @@
 package gbw.melange.mesh.formatting.slicing;
 
 
+import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
 import gbw.melange.mesh.formatting.FloatSlice;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

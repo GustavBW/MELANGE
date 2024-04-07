@@ -1,10 +1,10 @@
 package gbw.melange.common.builders;
 
-import gbw.melange.shading.constants.GLDrawStyle;
-import gbw.melange.mesh.modifiers.BevelConfig;
-import gbw.melange.shading.services.Colors;
-import gbw.melange.shading.IManagedShader;
-import gbw.melange.shading.postprocessing.IPostProcessShader;
+
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.constants.GLDrawStyle;
+import gbw.melange.common.shading.postprocess.IPostProcessShader;
+import gbw.melange.common.shading.services.Colors;
 
 /**
  * <p>IElementStyleBuilder interface.</p>

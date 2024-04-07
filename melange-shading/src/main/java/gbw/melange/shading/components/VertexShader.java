@@ -1,11 +1,13 @@
 package gbw.melange.shading.components;
 
-import gbw.melange.shading.constants.GLShaderType;
+
+import gbw.melange.common.shading.components.IVertexShader;
+import gbw.melange.common.shading.constants.GLShaderType;
 
 /**
  * String alias for now
  */
-public final class VertexShader extends ShaderComponent implements IShader {
+public final class VertexShader extends ShaderComponent implements IVertexShader {
 
     public VertexShader(String localName, String code) {
         super(GLShaderType.VERTEX, localName, code);

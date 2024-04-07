@@ -5,11 +5,11 @@ import gbw.melange.common.shading.generative.noise.IPerlinNoiseShader;
 import gbw.melange.common.shading.generative.noise.PerlinShaderAttr;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 
 public class PerlinNoiseShader extends GenerativeShader<IPerlinNoiseShader> implements IPerlinNoiseShader {
-    public PerlinNoiseShader(String localName, VertexShader vertex, IFragmentShader fragment, boolean isStatic) {
+    public PerlinNoiseShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

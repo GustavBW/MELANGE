@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import gbw.melange.common.shading.postprocess.BlurShaderAttr;
 import gbw.melange.common.shading.postprocess.IBoxBlurShader;
 import gbw.melange.shading.constants.ShaderClassification;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ public class BoxBlurShader extends PostProcessShader implements IBoxBlurShader {
         super(
                 localName,
                 VertexShader.DEFAULT,
-                new IFragmentShader("FRAG_" + localName, BOX_BLUR, ShaderClassification.COMPLEX, false),
+                new FragmentShader("FRAG_" + localName, BOX_BLUR, ShaderClassification.COMPLEX, false),
                 false
         );
         this.kernelSize = kernelSize;

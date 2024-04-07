@@ -1,0 +1,4 @@
+--patch-module
+melange.common=_
+--add-reads
+melange.common=ALL-UNNAMED

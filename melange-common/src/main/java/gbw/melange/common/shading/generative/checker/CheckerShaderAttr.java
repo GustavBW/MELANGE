@@ -1,6 +1,6 @@
 package gbw.melange.common.shading.generative.checker;
 
-import gbw.melange.shading.generative.gradients.GradientShaderAttr;
+import gbw.melange.common.shading.generative.gradients.GradientShaderAttr;
 /**
  * For all shader attributes used for templating, their toString is overridden to return the glsl value instead for ease of use.
  */

@@ -1,9 +1,8 @@
 package gbw.melange.common;
 
-import gbw.melange.mesh.services.IMeshPipelineConfig;
-import gbw.melange.mesh.services.MeshPipelineConfig;
-import gbw.melange.shading.services.IShadingPipelineConfig;
-import gbw.melange.shading.services.ShadingPipelineConfig;
+import gbw.melange.common.jpms.SPILocator;
+import gbw.melange.common.mesh.services.IMeshPipelineConfig;
+import gbw.melange.common.shading.services.IShadingPipelineConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +20,8 @@ public class MelangeConfig implements IMelangeConfig {
     private boolean glDebugEnabled = false;
     private boolean clearGeneratedOnExit = false;
     private boolean clearGeneratedOnStart = true;
-    private IShadingPipelineConfig shadingConfig = new ShadingPipelineConfig();
-    private IMeshPipelineConfig meshConfig = new MeshPipelineConfig();
+    private IShadingPipelineConfig shadingConfig = SPILocator.getBean(IShadingPipelineConfig.class);
+    private IMeshPipelineConfig meshConfig = SPILocator.getBean(IMeshPipelineConfig.class);
 
     @Override
     public String toString(){

@@ -4,7 +4,7 @@ import gbw.melange.common.elementary.*;
 import gbw.melange.common.elementary.contraints.IReferenceConstraintDefinition;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.elementary.types.IElement;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 
 /**
  * <p>IElementBuilder interface.</p>

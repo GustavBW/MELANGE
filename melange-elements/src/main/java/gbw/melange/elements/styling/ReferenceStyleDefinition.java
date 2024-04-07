@@ -1,5 +1,6 @@
 package gbw.melange.elements.styling;
 
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.common.shading.constants.GLDrawStyle;
 import gbw.melange.common.elementary.styling.IElementStyleDefinition;
@@ -29,7 +30,7 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
     private IManagedShader<?> borderShader = ManagedShader.DEFAULT;
     private GLDrawStyle backgroundDrawStyle = GLDrawStyle.TRIANGLES;
     private GLDrawStyle borderDrawStyle = GLDrawStyle.LINE_LOOP;
-    private BevelConfig bevelConfig = BevelConfig.DEFAULT;
+    private IBevelConfig bevelConfig = BevelConfig.DEFAULT;
 
     /**
      * <p>Constructor for ReferenceStyleDefinition.</p>
@@ -112,13 +113,13 @@ public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 
     /** {@inheritDoc} */
     @Override
-    public BevelConfig borderBevel() {
+    public IBevelConfig borderBevel() {
         return bevelConfig;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void borderBevel(BevelConfig config) {
+    public void borderBevel(IBevelConfig config) {
         this.bevelConfig = config;
     }
 

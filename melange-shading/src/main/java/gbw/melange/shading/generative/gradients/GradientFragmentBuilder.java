@@ -6,7 +6,7 @@ import gbw.melange.common.shading.generative.gradients.IGradientShader;
 import gbw.melange.shading.GLSL;
 import gbw.melange.common.shading.constants.InterpolationType;
 import gbw.melange.common.shading.services.IShaderPipeline;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,7 +81,7 @@ public class GradientFragmentBuilder implements IGradientBuilder {
             "\tgl_FragColor = color;\n" +
         "}");
 
-        IFragmentShader fragment = new IFragmentShader(localName, codeBuilder.toString());
+        FragmentShader fragment = new FragmentShader(localName, codeBuilder.toString());
         IGradientShader wrapped = new GradientShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(wrapped);

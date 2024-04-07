@@ -1,9 +1,9 @@
 package gbw.melange.common.elementary.styling;
 
-import gbw.melange.shading.constants.GLDrawStyle;
-import gbw.melange.mesh.modifiers.BevelConfig;
-import gbw.melange.shading.IManagedShader;
-import gbw.melange.shading.postprocessing.IPostProcessShader;
+import gbw.melange.common.shading.constants.GLDrawStyle;
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.postprocess.IPostProcessShader;
 
 import java.util.List;
 
@@ -65,15 +65,15 @@ public interface IReferenceStyleDefinition {
     /**
      * <p>borderBevel.</p>
      *
-     * @return a {@link BevelConfig} object
+     * @return a {@link IBevelConfig} object
      */
-    BevelConfig borderBevel();
+    IBevelConfig borderBevel();
     /**
      * <p>borderBevel.</p>
      *
-     * @param op a {@link BevelConfig} object
+     * @param op a {@link IBevelConfig} object
      */
-    void borderBevel(BevelConfig op);
+    void borderBevel(IBevelConfig op);
     /**
      * <p>postProcesses.</p>
      *

@@ -1,8 +1,10 @@
 package gbw.melange.mesh.services;
 
 import com.badlogic.gdx.graphics.Mesh;
+import gbw.melange.common.mesh.services.IMeshPipeline;
+import gbw.melange.common.mesh.services.Shapes;
 import gbw.melange.mesh.ManagedMesh;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 import gbw.melange.mesh.constants.MeshTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

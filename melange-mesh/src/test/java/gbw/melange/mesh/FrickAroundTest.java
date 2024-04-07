@@ -6,16 +6,18 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.Matrix4;
 import gbw.melange.common.errors.Errors;
-import gbw.melange.mesh.services.IMeshPipeline;
+import gbw.melange.common.mesh.IManagedMesh;
+import gbw.melange.common.mesh.services.IMeshPipeline;
 import gbw.melange.mesh.services.MeshPipeline;
 import gbw.melange.mesh.services.ShapeService;
-import gbw.melange.mesh.services.Shapes;
-import gbw.melange.shading.IManagedShader;
+import gbw.melange.common.mesh.services.Shapes;
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.constants.GLShaderAttr;
+import gbw.melange.common.shading.services.*;
 import gbw.melange.shading.components.FragmentShader;
-import gbw.melange.shading.constants.GLShaderAttr;
-import gbw.melange.shading.generative.checker.CheckerFragmentBuilder;
-import gbw.melange.shading.generative.checker.CheckerShader;
-import gbw.melange.shading.services.*;
+import gbw.melange.shading.services.ColorService;
+import gbw.melange.shading.services.ShaderPipeline;
+import gbw.melange.shading.services.ShadingPipelineConfig;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.opengl.GL30;
 
@@ -42,7 +44,7 @@ public class FrickAroundTest extends ApplicationAdapter {
                 .setColumns(8)
                 .build();
 
-        debugUV = colorService.fromFragment(FragmentShader.DEBUG_UV);
+        debugUV = (IManagedShader<?>) colorService.fromFragment(FragmentShader.DEBUG_UV);
 
         Errors.escalate(pipeline::compileAndCache);
 

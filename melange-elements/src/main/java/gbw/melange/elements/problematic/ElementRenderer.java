@@ -15,6 +15,7 @@ import gbw.melange.common.errors.Errors;
 import gbw.melange.common.shading.constants.GLDrawStyle;
 import gbw.melange.common.shading.generative.ITexturedShader;
 import gbw.melange.common.shading.postprocess.IPostProcessShader;
+import gbw.melange.shading.generative.TextureShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

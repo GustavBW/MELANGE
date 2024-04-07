@@ -7,7 +7,7 @@ import gbw.melange.common.shading.constants.GLShaderAttr;
 import gbw.melange.common.shading.constants.ShaderClassification;
 import gbw.melange.common.shading.errors.ShaderCompilationIssue;
 import gbw.melange.shading.generative.BlindShader;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 public abstract class ManagedShader<T extends IManagedShader<T>> implements IManagedShader<T> {
     private static final Logger log = LogManager.getLogger();
     public static ManagedShader<?> DEFAULT = new BlindShader("MELANGE_DEFAULT_SHADER", VertexShader.DEFAULT, IFragmentShader.DEFAULT, false);
-    private final IFragmentShader IFragmentShader;
+    private final FragmentShader IFragmentShader;
     private final VertexShader vertexShader;
     private final String localName; //Debugging
     /**
@@ -38,10 +38,10 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
      */
     private int desiredResolution = 500;
 
-    public ManagedShader(String localName, VertexShader vertexShader, IFragmentShader IFragmentShader) {
+    public ManagedShader(String localName, VertexShader vertexShader, FragmentShader IFragmentShader) {
         this(localName, vertexShader, IFragmentShader, true);
     }
-    public ManagedShader(String localName, VertexShader vertex, IFragmentShader fragment, boolean isStatic){
+    public ManagedShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic){
         this.localName = localName;
         this.vertexShader = vertex;
         this.IFragmentShader = fragment;
@@ -113,7 +113,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
         return "Wrapped ShaderProgram: \"" + localName + "\", vertex shader: \"" + vertexShader + "\", fragment shader: \"" + IFragmentShader.name() +"\"";
     }
 
-    public void setCachedTextureProgram(VertexShader vertex, IFragmentShader frag){
+    public void setCachedTextureProgram(VertexShader vertex, FragmentShader frag){
         ShaderProgram cachedTextureProgram = new ShaderProgram(vertex.code(), frag.code());
         if(!cachedTextureProgram.isCompiled()){
             log.warn("Unable to swap to cached texture program because compilation failed");
@@ -162,7 +162,7 @@ public abstract class ManagedShader<T extends IManagedShader<T>> implements IMan
     }
 
     @Override
-    public IFragmentShader getFragment() {
+    public FragmentShader getFragment() {
         return IFragmentShader;
     }
 

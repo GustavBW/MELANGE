@@ -2,11 +2,13 @@ package gbw.melange.core;
 
 import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.hooks.OnInit;
+import gbw.melange.core.app.MelangeApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -23,17 +25,17 @@ public class ParallelMonitoredExecutionEnvironment {
     private static final Logger log = LogManager.getLogger();
     private static ParallelMonitoredExecutionEnvironment instance;
     private static final ExecutorService executor = Executors.newFixedThreadPool(16);
-    private final MelangeApplication<?> appInstance;
-    private ParallelMonitoredExecutionEnvironment(MelangeApplication<?> appInstance){
-        this.appInstance = appInstance;
+    private final ConcurrentLinkedQueue<Runnable> runOnMainThread;
+    private ParallelMonitoredExecutionEnvironment(ConcurrentLinkedQueue<Runnable> runOnMainThread){
+        this.runOnMainThread = runOnMainThread;
     }
     private void runOnMain(Runnable any){
-        appInstance.handleOnMain(any);
+        runOnMainThread.add(any);
     }
 
-    static <T> void setInstance(MelangeApplication<T> appInstance){
-        if(appInstance == null) throw new RuntimeException("Hell no. MelangeApplication instance provided to PMEE is null");
-        instance = new ParallelMonitoredExecutionEnvironment(appInstance);
+    public static <T> void setMainThreadQueue(ConcurrentLinkedQueue<Runnable> runOnMainThread){
+        if(runOnMainThread == null) throw new RuntimeException("Hell no. Threadsafe Queue instance provided to PMEE is null");
+        instance = new ParallelMonitoredExecutionEnvironment(runOnMainThread);
     }
 
     /**
@@ -91,7 +93,7 @@ public class ParallelMonitoredExecutionEnvironment {
         instance.runOnMain(() -> whenCompleteDo.accept(object));
     }
 
-    static void shutdown(){
+    public static void shutdown(){
         executor.shutdown();
     }
 

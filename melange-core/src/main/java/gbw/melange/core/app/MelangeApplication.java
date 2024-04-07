@@ -1,4 +1,4 @@
-package gbw.melange.core;
+package gbw.melange.core.app;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.*;
 import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.MelangeConfig;
 import gbw.melange.common.elementary.space.ISpace;
+import gbw.melange.core.ParallelMonitoredExecutionEnvironment;
 import gbw.melange.core.elementary.ISpaceRegistry;
 import gbw.melange.common.errors.ClassConfigurationIssue;
 import gbw.melange.mesh.errors.InvalidMeshIssue;
@@ -88,6 +89,11 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private SpaceNavigator spaceNavigator;
     private ShaderPipeline shaderPipeline;
     private MeshPipeline meshPipeline;
+    /**
+     * Task backlog from last render pass or within last render pass.
+     * This is used extremely sparingly, as any error occurring here is going to be tremendously annoying to debug.
+     */
+    private final ConcurrentLinkedQueue<Runnable> runOnMainThread = new ConcurrentLinkedQueue<>();
 
     @Override
     public void create(){
@@ -99,7 +105,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
 
         Errors.checkAndThrow("create lifecycle just begun");
 
-        ParallelMonitoredExecutionEnvironment.setInstance(this);
+        ParallelMonitoredExecutionEnvironment.setMainThreadQueue(runOnMainThread);
 
         ISpaceRegistry spaceRegistry;
         InputProcessor inputListener;
@@ -167,15 +173,7 @@ public class MelangeApplication<T> extends ApplicationAdapter {
     private long frames = 0;
     private long timestampOfRenderCycleStart;
 
-    /**
-     * Task backlog from last render pass or within last render pass.
-     * This is used extremely sparingly, as any error occurring here is going to be tremendously annoying to debug.
-     */
-    private final ConcurrentLinkedQueue<Runnable> runOnMainThread = new ConcurrentLinkedQueue<>();
-    void handleOnMain(Runnable any){
-        if(any == null) return;
-        runOnMainThread.add(any);
-    }
+
 
     @Override
     public void render(){

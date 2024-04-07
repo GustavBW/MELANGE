@@ -16,4 +16,5 @@ module melange.core {
     requires spring.beans;
     requires melange.elements;
     requires org.reflections;
+    requires melange.shading;
 }

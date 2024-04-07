@@ -2,7 +2,7 @@ package gbw.melange.welcomeapp;
 
 import gbw.melange.common.IMelangeConfig;
 import gbw.melange.common.MelangeConfig;
-import gbw.melange.core.MelangeApplication;
+import gbw.melange.core.app.MelangeApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

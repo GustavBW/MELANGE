@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"melange.dev","l":"gbw.melange.tooling"}];updateSearchResults();

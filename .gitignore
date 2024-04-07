@@ -1,9 +1,15 @@
 ## Module Specific
-/core/target
-/desktop/target
-/events/target
-/ptg/target
 
+/melange-common.iml
+/melange-core.iml
+/melange.iml
+
+/melange-core/target
+/melange-common/target
+/melange-dev/target
+/melange-mesh/target
+/melange-shading/target
+/melange-events/target
 ## Melange Specific
 /assets/system/generated/*
 

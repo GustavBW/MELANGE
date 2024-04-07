@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"melange.events","l":"gbw.melange.events"},{"m":"melange.events","l":"gbw.melange.events.observability"},{"m":"melange.events","l":"gbw.melange.events.observability.filters"}];updateSearchResults();

@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"gbw.melange.tooling","l":"DevToolingRootMarker"},{"p":"gbw.melange.tooling","l":"DevTools"},{"p":"gbw.melange.tooling","l":"Main"},{"p":"gbw.melange.tooling","l":"SuperDicyInternalReferences"}];updateSearchResults();

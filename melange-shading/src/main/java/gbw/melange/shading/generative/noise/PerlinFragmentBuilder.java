@@ -4,7 +4,7 @@ import gbw.melange.common.shading.constants.ShaderClassification;
 import gbw.melange.common.shading.generative.noise.IPerlinFragmentBuilder;
 import gbw.melange.common.shading.generative.noise.IPerlinNoiseShader;
 import gbw.melange.common.shading.generative.noise.PerlinShaderAttr;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import gbw.melange.common.shading.services.IShaderPipeline;
 
@@ -88,7 +88,7 @@ public class PerlinFragmentBuilder implements IPerlinFragmentBuilder {
                 perlinEntryPoint +
                 mainLoop;
 
-        IFragmentShader fragment = new IFragmentShader(localName, sb, ShaderClassification.COMPLEX);
+        FragmentShader fragment = new FragmentShader(localName, sb, ShaderClassification.COMPLEX);
         IPerlinNoiseShader shader = new PerlinNoiseShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(shader);

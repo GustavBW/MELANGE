@@ -5,11 +5,11 @@ import gbw.melange.common.shading.generative.checker.CheckerShaderAttr;
 import gbw.melange.common.shading.generative.checker.ICheckerShader;
 import gbw.melange.shading.constants.ShaderClassification;
 import gbw.melange.shading.generative.GenerativeShader;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 
 public class CheckerShader extends GenerativeShader<ICheckerShader> implements ICheckerShader {
-    public CheckerShader(String localName, VertexShader vertex, IFragmentShader fragment, boolean isStatic) {
+    public CheckerShader(String localName, VertexShader vertex, FragmentShader fragment, boolean isStatic) {
         super(localName, vertex, fragment, isStatic);
     }
 

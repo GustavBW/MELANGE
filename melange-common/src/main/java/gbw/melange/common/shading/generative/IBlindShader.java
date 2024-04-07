@@ -1,4 +1,6 @@
 package gbw.melange.common.shading.generative;
 
-public interface IBlindShader extends GenerativeShader<IBlindShader> {
+import gbw.melange.common.shading.IManagedShader;
+
+public interface IBlindShader extends IManagedShader<IBlindShader> {
 }

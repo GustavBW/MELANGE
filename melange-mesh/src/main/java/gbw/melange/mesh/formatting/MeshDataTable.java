@@ -119,9 +119,15 @@ public class MeshDataTable implements IMeshDataTable {
 
         //Update indicies
 
-        final int[] combinedIndicies = new int[this.indicies.length + other.getIndicies().length];
+        int lenIndiciesOther = other.getIndicies().length;
+        final int[] otherIndiciesCopy = new int[lenIndiciesOther];
+        for(int i = 0; i < lenIndiciesOther; i++){
+            //Shift so that it lines up when added to this tables indicies
+            otherIndiciesCopy[i] = other.getIndicies()[i] + this.indicies.length;
+        }
+        final int[] combinedIndicies = new int[this.indicies.length + lenIndiciesOther];
         System.arraycopy(this.indicies, 0, combinedIndicies, 0, this.indicies.length);
-        System.arraycopy(other.getIndicies(), 0, combinedIndicies, this.indicies.length, other.getIndicies().length);
+        System.arraycopy(otherIndiciesCopy, 0, combinedIndicies, this.indicies.length, lenIndiciesOther);
 
         this.indicies = combinedIndicies;
         this.vertexCount += other.getVertexCount();
@@ -175,7 +181,6 @@ public class MeshDataTable implements IMeshDataTable {
 
         // If there's not enough data to insert from the specified startIndex, return an error
         if (existingData != null && insertableDataLength + actualStartIndex < existingData.length) {
-            log.error("Insufficient amount of values provided for the attribute: " + attr);
             return new Error("Insufficient data provided. Provided length: " + data.length + ", required: " + (existingData.length - actualStartIndex));
         }
 
@@ -334,7 +339,7 @@ public class MeshDataTable implements IMeshDataTable {
 
         return MeshDataTable.from(copy, this.vertexCount, indiciesCopy);
     }
-    public static MeshDataTable from(Mesh mesh)  {
+    public static IMeshDataTable from(Mesh mesh)  {
         if (mesh == null) {
             log.warn("Mesh is null");
             return from(new LinkedHashMap<>(), 0, new int[0]);
@@ -395,7 +400,7 @@ public class MeshDataTable implements IMeshDataTable {
 
         return from(vertexDataTable, mesh.getNumVertices(), indices);
     }
-    public static MeshDataTable from(LinkedHashMap<IVertAttr<?>, float[]> dataTable, int vertexCount, int[] indicies){
+    public static IMeshDataTable from(LinkedHashMap<IVertAttr<?>, float[]> dataTable, int vertexCount, int[] indicies){
         return new MeshDataTable(dataTable, vertexCount, indicies);
     }
 
@@ -406,24 +411,35 @@ public class MeshDataTable implements IMeshDataTable {
 
     //Mildly dubious stuff below. Approach with caution
 
-    @SuppressWarnings("unchecked")
+
     private <T extends IFloatSlice> void updateCachedSlicesOf(IVertAttr<T> attr, float[] source, int fromIndex) {
-        WeakReference<List<? extends IFloatSlice>> currentCacheValue = retrievalCache.get(attr);
-        if(currentCacheValue == null){
+        List<T> currentCachedSlices = getCurrentCacheEntryOf(attr);
+        if(currentCachedSlices.isEmpty()){
             return;
         }
-        List<T> currentCachedSlices = (List<T>) currentCacheValue.get();
-        if (currentCachedSlices == null) {
-            return;
-        }
-        for(IFloatSlice existingCachedSlice : currentCachedSlices){
-            ((FloatSlice) existingCachedSlice).setSource(source);
-        }
+        updatedSourceOfSlices(currentCachedSlices, source);
         for (int i = 0; i < source.length - fromIndex; i += attr.compCount()) {
             currentCachedSlices.add(attr.representationProvider().create(source, i + fromIndex, attr.compCount()));
         }
     }
 
+    private <T extends IFloatSlice> void updatedSourceOfSlices(List<T> slices, float[] source){
+        for(IFloatSlice existingCachedSlice : slices){
+            ((FloatSlice) existingCachedSlice).setSource(source);
+        }
+    }
+    @SuppressWarnings("unchecked")
+    private <T extends IFloatSlice> List<T> getCurrentCacheEntryOf(IVertAttr<T> attr){
+        WeakReference<List<? extends IFloatSlice>> currentCacheValue = retrievalCache.get(attr);
+        if(currentCacheValue == null){
+            return new ArrayList<>();
+        }
+        List<T> currentCachedSlices = (List<T>) currentCacheValue.get();
+        if (currentCachedSlices == null) {
+            return new ArrayList<>();
+        }
+        return currentCachedSlices;
+    }
 
     @SuppressWarnings("unchecked")
     private <T extends IFloatSlice> List<T> retrieve0(SliceProvider<T> provider, IVertAttr<T> key){

@@ -22,7 +22,7 @@ public final class Errors {
     }
 
     /**
-     * Invokes the logger and prints the message, prepended error code much like {@link gbw.melange.shading.errors.Errors#checkAndThrow(String)},
+     * Invokes the logger and prints the message, prepended error code much like {@link gbw.melange.common.errors.Errors#checkAndThrow(String)},
      * if a gl error is present
      */
     public static void checkAndLog(Logger logger, String msg){ //Delete body on release build

@@ -17,7 +17,7 @@ import gbw.melange.shading.generative.gradients.GradientFragmentBuilder;
 import gbw.melange.common.shading.generative.gradients.IGradientBuilder;
 import gbw.melange.common.shading.generative.noise.IPerlinFragmentBuilder;
 import gbw.melange.shading.generative.noise.PerlinFragmentBuilder;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import gbw.melange.common.shading.generative.voronoi.IVoronoiFragmentBuilder;
 import gbw.melange.shading.generative.voronoi.VoronoiFragmentBuilder;
@@ -55,7 +55,7 @@ public class ColorService implements Colors {
         IManagedShader<?> wrapped = new BlindShader(
                 generateId("CONSTANT_RGBA("+r+","+g+","+b+","+a+")"),
                 VertexShader.DEFAULT,
-                IFragmentShader.constant(color),
+                FragmentShader.constant(color),
                 ShaderClassification.SIMPLE, true);
         pipeline.registerForCompilation(wrapped);
         return wrapped;
@@ -70,7 +70,7 @@ public class ColorService implements Colors {
     /** {@inheritDoc} */
     @Override
     public ITexturedShader image(Texture src) {
-        ITexturedShader wrapped = new TextureShader(generateId("TEXTURE_"), VertexShader.DEFAULT, IFragmentShader.TEXTURE);
+        ITexturedShader wrapped = new TextureShader(generateId("TEXTURE_"), VertexShader.DEFAULT, FragmentShader.TEXTURE);
         wrapped.setTexture(src, GLShaderAttr.TEXTURE.glValue());
         pipeline.registerForCompilation(wrapped);
         return wrapped;
@@ -106,7 +106,7 @@ public class ColorService implements Colors {
 
     /** {@inheritDoc} */
     @Override
-    public IBlindShader fromFragment(IFragmentShader IFragmentShader) {
+    public IBlindShader fromFragment(FragmentShader IFragmentShader) {
         BlindShader wrapped = new BlindShader(generateId("CUSTOM_FRAGMENT_"), VertexShader.DEFAULT, IFragmentShader);
         pipeline.registerForCompilation(wrapped);
         return wrapped;

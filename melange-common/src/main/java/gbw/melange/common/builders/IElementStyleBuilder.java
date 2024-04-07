@@ -1,6 +1,7 @@
 package gbw.melange.common.builders;
 
 
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
 import gbw.melange.common.shading.IManagedShader;
 import gbw.melange.common.shading.constants.GLDrawStyle;
 import gbw.melange.common.shading.postprocess.IPostProcessShader;
@@ -28,7 +29,7 @@ public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder
      * Access various options by grabbing the {@link Colors} service through an autowired field in your view. <br/>
      */
     IElementStyleBuilder<T> setBorderColor(IManagedShader<?> shader);
-    IElementStyleBuilder<T> setBorderRadius(BevelConfig config);
+    IElementStyleBuilder<T> setBorderRadius(IBevelConfig config);
     IElementStyleBuilder<T> setBorderRadius(double width);
     IElementStyleBuilder<T> setBorderRadius(double width, int subdivs);
     IElementStyleBuilder<T> addPostProcess(IPostProcessShader postProcess);

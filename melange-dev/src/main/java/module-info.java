@@ -3,6 +3,7 @@ module melange.dev {
     requires spring.beans;
     requires spring.context;
     requires melange.common;
+    requires gdx;
 
     exports gbw.melange.tooling;
 

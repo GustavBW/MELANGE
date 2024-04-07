@@ -3,7 +3,6 @@ package gbw.melange.mesh.constants;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import gbw.melange.common.mesh.constants.IVertAttr;
-import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
 import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
 import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
 import gbw.melange.common.mesh.formatting.slicing.ISliceVec4;
@@ -24,15 +23,19 @@ import java.util.Set;
  */
 public class KnownAttributes {
 
-    public static final IVertAttr<ISliceVec3> POSITION = new VertAttr<>( 3, "a_position", 1, ISliceVec3.class, IFloatSlice.createVec3);
-    public static final IVertAttr<ISliceVec4> COLOR_UNPACKED = new VertAttr<>( 4, "a_color", 2, ISliceVec4.class, IFloatSlice.createVec4);
-    public static final IVertAttr<ISliceVec4> COLOR_PACKED = new VertAttr<>( 4, "a_color", 4, ISliceVec4.class, IFloatSlice.createVec4);
-    public static final IVertAttr<ISliceVec3> NORMAL = new VertAttr<>( 3, "a_normal", 8, ISliceVec3.class, IFloatSlice.createVec3);
-    public static final IVertAttr<ISliceVec2> UV = new VertAttr<>(2, "a_texCoord0", 16, ISliceVec2.class, IFloatSlice.createVec2); // Primary UV mapping
+    public static final IVertAttr<ISliceVec3> POSITION = new VertAttr<>( 3, "a_position", 1, ISliceVec3.class, SliceProviders.createVec3);
+    public static final IVertAttr<ISliceVec4> COLOR_UNPACKED = new VertAttr<>( 4, "a_color", 2, ISliceVec4.class, SliceProviders.createVec4);
+    public static final IVertAttr<ISliceVec4> COLOR_PACKED = new VertAttr<>( 4, "a_color", 4, ISliceVec4.class, SliceProviders.createVec4);
+    public static final IVertAttr<ISliceVec3> NORMAL = new VertAttr<>( 3, "a_normal", 8, ISliceVec3.class, SliceProviders.createVec3);
+    public static final IVertAttr<ISliceVec2> UV = new VertAttr<>(2, "a_texCoord0", 16, ISliceVec2.class, SliceProviders.createVec2); // Primary UV mapping
     //32 doesn't exist??
-    public static final IVertAttr<ISliceVec2> BONE_WEIGHT = new VertAttr<>(2, "a_boneWeight", 64, ISliceVec2.class, IFloatSlice.createVec2);
-    public static final IVertAttr<ISliceVec3> TANGENT = new VertAttr<>(3, "a_tangent", 128, ISliceVec3.class, IFloatSlice.createVec3);
-    public static final IVertAttr<ISliceVec3> BI_NORMAL = new VertAttr<>( 3, "a_binormal", 256, ISliceVec3.class, IFloatSlice.createVec3);
+    public static final IVertAttr<ISliceVec2> BONE_WEIGHT = new VertAttr<>(2, "a_boneWeight", 64, ISliceVec2.class, SliceProviders.createVec2);
+    public static final IVertAttr<ISliceVec3> TANGENT = new VertAttr<>(3, "a_tangent", 128, ISliceVec3.class, SliceProviders.createVec3);
+    public static final IVertAttr<ISliceVec3> BI_NORMAL = new VertAttr<>( 3, "a_binormal", 256, ISliceVec3.class, SliceProviders.createVec3);
+
+
+
+
 
     private static IVertAttr<?>[] values = null;
     public static IVertAttr<?>[] values() {

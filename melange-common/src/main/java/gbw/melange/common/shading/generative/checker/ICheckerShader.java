@@ -1,6 +1,5 @@
 package gbw.melange.common.shading.generative.checker;
 
-import gbw.melange.shading.IManagedShader;
 import gbw.melange.common.shading.generative.IGenerativeShader;
 
 public interface ICheckerShader extends IGenerativeShader<ICheckerShader> {

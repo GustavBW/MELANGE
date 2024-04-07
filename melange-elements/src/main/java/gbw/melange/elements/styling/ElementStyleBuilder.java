@@ -2,6 +2,7 @@ package gbw.melange.elements.styling;
 
 import gbw.melange.common.builders.IElementBuilder;
 import gbw.melange.common.builders.IElementStyleBuilder;
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
 import gbw.melange.mesh.modifiers.BevelConfig;
 import gbw.melange.common.elementary.styling.IReferenceStyleDefinition;
 import gbw.melange.common.shading.constants.GLDrawStyle;
@@ -61,7 +62,7 @@ public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {
 
     /** {@inheritDoc} */
     @Override
-    public IElementStyleBuilder<T> setBorderRadius(BevelConfig config) {
+    public IElementStyleBuilder<T> setBorderRadius(IBevelConfig config) {
         referenceStyling.borderBevel(config);
         return this;
     }

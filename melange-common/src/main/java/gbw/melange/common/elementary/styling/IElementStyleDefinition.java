@@ -1,10 +1,10 @@
 package gbw.melange.common.elementary.styling;
 
 import com.badlogic.gdx.utils.Disposable;
-import gbw.melange.shading.constants.GLDrawStyle;
-import gbw.melange.mesh.modifiers.BevelConfig;
-import gbw.melange.shading.IManagedShader;
-import gbw.melange.shading.postprocessing.IPostProcessShader;
+import gbw.melange.common.shading.constants.GLDrawStyle;
+import gbw.melange.common.mesh.modifiers.IBevelConfig;
+import gbw.melange.common.shading.IManagedShader;
+import gbw.melange.common.shading.postprocess.IPostProcessShader;
 
 import java.util.List;
 
@@ -45,9 +45,9 @@ public interface IElementStyleDefinition extends Disposable {
     /**
      * <p>getBorderBevel.</p>
      *
-     * @return a {@link BevelConfig} object
+     * @return a {@link IBevelConfig} object
      */
-    BevelConfig getBorderBevel();
+    IBevelConfig getBorderBevel();
     /**
      * <p>getPostProcesses.</p>
      *

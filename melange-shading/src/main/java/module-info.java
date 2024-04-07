@@ -18,5 +18,5 @@ module melange.shading {
 
     exports gbw.melange.shading.components;
 
-
+    provides gbw.melange.common.shading.services.IShadingPipelineConfig with gbw.melange.shading.services.ShadingPipelineConfig;
 }

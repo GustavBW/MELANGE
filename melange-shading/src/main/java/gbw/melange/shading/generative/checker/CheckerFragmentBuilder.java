@@ -6,7 +6,7 @@ import gbw.melange.common.shading.generative.checker.ICheckerBuilder;
 import gbw.melange.common.shading.generative.checker.ICheckerShader;
 import gbw.melange.shading.GLSL;
 import gbw.melange.common.shading.constants.ShaderClassification;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import gbw.melange.common.shading.services.IShaderPipeline;
 
@@ -52,7 +52,7 @@ public class CheckerFragmentBuilder implements ICheckerBuilder {
         String sb = generateOpeningStatement() +
                 generateMainDrawingCode();
 
-        IFragmentShader fragment = new IFragmentShader(localName, sb, ShaderClassification.COMPLEX, true);
+        FragmentShader fragment = new FragmentShader(localName, sb, ShaderClassification.COMPLEX, true);
         ICheckerShader shader = new CheckerShader(localName, VertexShader.DEFAULT, fragment, true);
         if(pipeline != null){
             pipeline.registerForCompilation(shader);

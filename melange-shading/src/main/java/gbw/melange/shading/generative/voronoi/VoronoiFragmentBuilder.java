@@ -14,7 +14,7 @@ import gbw.melange.common.shading.constants.Vec2DistFunc;
 import gbw.melange.common.shading.services.IShaderPipeline;
 import gbw.melange.common.shading.generative.noise.NoiseProvider;
 import gbw.melange.shading.generative.noise.PerlinNoise;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -126,7 +126,7 @@ public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {
                 generateColorInterpolationFunction(interpolationType) +
                 glslMainLoop;
 
-        IFragmentShader fragment = new IFragmentShader(localName, code, ShaderClassification.COMPLEX, true);
+        FragmentShader fragment = new FragmentShader(localName, code, ShaderClassification.COMPLEX, true);
         log.trace("Generated fragment shader henceforth known as: " + localName + "\n " + fragment.code());
         IVoronoiShader wrapped = new VoronoiShader(localName, VertexShader.DEFAULT, fragment, !points.isEmpty());
         if (pipeline != null) {

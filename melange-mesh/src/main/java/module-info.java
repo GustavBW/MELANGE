@@ -4,9 +4,12 @@ module melange.mesh {
     requires melange.common;
     requires org.jetbrains.annotations;
     requires spring.context;
+    requires spring.beans;
 
     exports gbw.melange.mesh.services;
-    exports gbw.melange.common.mesh.errors;
 
-    opens gbw.melange.mesh.services to spring.beans;
+    exports gbw.melange.mesh.constants;
+    exports gbw.melange.mesh.modifiers;
+
+    provides gbw.melange.common.mesh.services.IMeshPipelineConfig with gbw.melange.mesh.services.MeshPipelineConfig;
 }

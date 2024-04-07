@@ -1,11 +1,11 @@
 module melange.common {
 
     requires spring.context;
-    requires melange.mesh;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
     requires gdx;
     requires spring.core;
+    requires org.lwjgl.opengl;
 
     exports gbw.melange.common;
     exports gbw.melange.common.events;

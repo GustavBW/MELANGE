@@ -1,7 +1,7 @@
 package gbw.melange.common.mesh.services;
 
 import com.badlogic.gdx.graphics.Mesh;
-import gbw.melange.mesh.IManagedMesh;
+import gbw.melange.common.mesh.IManagedMesh;
 
 /**
  * Definition for the Shapes api facilitating procedural meshes, loading and modifying existing meshes, and more.

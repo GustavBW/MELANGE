@@ -11,7 +11,7 @@ import gbw.melange.shading.ManagedShader;
 import gbw.melange.common.errors.Errors;
 import gbw.melange.shading.iocache.DiskShaderCacheUtil;
 import gbw.melange.shading.generative.TextureShader;
-import gbw.melange.shading.components.IFragmentShader;
+import gbw.melange.shading.components.FragmentShader;
 import gbw.melange.shading.components.VertexShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,7 +107,7 @@ public class ShaderPipeline implements IShaderPipeline {
             Texture asLoadedFromDisk = new Texture(locationOfTexture);
 
             log.trace("Caching | Setting cached texture for " + shader.getLocalName());
-            ((ManagedShader<?>) shader).setCachedTextureProgram(VertexShader.DEFAULT, IFragmentShader.TEXTURE);
+            ((ManagedShader<?>) shader).setCachedTextureProgram(VertexShader.DEFAULT, FragmentShader.TEXTURE);
             ((ManagedShader<?>) shader).setCachedTexture(asLoadedFromDisk);
 
         }

@@ -1,7 +1,7 @@
 package gbw.melange.common.elementary.rules;
 
 import gbw.melange.common.builders.IBuilder;
-import gbw.melange.rules.Rule;
+import gbw.melange.common.rules.IRule;
 
 /**
  * <p>IElementRuleBuilder interface.</p>
@@ -9,7 +9,7 @@ import gbw.melange.rules.Rule;
  * @author GustavBW
  * @version $Id: $Id
  */
-public interface IElementRuleBuilder extends IBuilder<Rule> {
+public interface IElementRuleBuilder extends IBuilder<IRule> {
     /**
      * <p>clicked.</p>
      *

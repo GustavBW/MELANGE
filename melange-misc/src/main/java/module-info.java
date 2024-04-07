@@ -6,6 +6,7 @@ module melange.misc {
     requires melange.mesh;
     requires melange.shading.pre.atomization;
     requires spring.beans;
-    exports gbw.melange.rules;
+    requires melange.shading;
+
     exports gbw.melange.welcomeapp;
 }

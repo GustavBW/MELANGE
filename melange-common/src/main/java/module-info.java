@@ -7,7 +7,6 @@ module melange.common {
     requires org.apache.logging.log4j.core;
     requires gdx;
     requires spring.core;
-    requires melange.misc;
 
     exports gbw.melange.common;
     exports gbw.melange.common.events;
@@ -25,5 +24,6 @@ module melange.common {
     exports gbw.melange.common.annotations;
     exports gbw.melange.common.elementary.styling;
     exports gbw.melange.common.elementary.rules;
+    exports gbw.melange.common.rules;
 
 }

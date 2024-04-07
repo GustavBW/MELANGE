@@ -5,7 +5,6 @@ module melange.elements {
     requires melange.events;
     requires spring.core;
     requires melange.shading.pre.atomization;
-    requires melange.misc;
     requires org.apache.logging.log4j;
 
     exports gbw.melange.elements;

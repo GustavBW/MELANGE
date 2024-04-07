@@ -16,6 +16,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <module>melange-dev</module>
         <module>melange-misc</module>
         <module>melange-events</module>
+        <module>melange-mesh</module>
+        <module>melange-shading</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -36,17 +38,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.GustavBW</groupId>
-            <artifactId>melange-shading</artifactId>
-            <version>${shading.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.GustavBW</groupId>
-            <artifactId>melange-mesh</artifactId>
-            <version>${mesh.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>

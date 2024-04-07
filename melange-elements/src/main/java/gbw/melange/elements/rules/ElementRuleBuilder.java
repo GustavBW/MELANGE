@@ -4,7 +4,7 @@ import gbw.melange.common.elementary.types.IElement;
 import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 import gbw.melange.common.elementary.rules.IElementUserInteractionRuleBuilder;
 import gbw.melange.common.events.interactions.UserInteractionTypes;
-import gbw.melange.rules.Rule;
+import gbw.melange.common.rules.IRule;
 
 /**
  * <p>ElementRuleBuilder class.</p>
@@ -27,7 +27,7 @@ public class ElementRuleBuilder implements IElementRuleBuilder {
 
     /** {@inheritDoc} */
     @Override
-    public Rule build() {
+    public IRule build() {
         return null;
     }
 

@@ -5,7 +5,7 @@ module melange.common {
     requires org.apache.logging.log4j.core;
     requires gdx;
     requires spring.core;
-    requires org.lwjgl.opengl;
+    requires gdx.backend.lwjgl3;
 
     exports gbw.melange.common;
     exports gbw.melange.common.events;

@@ -2,7 +2,6 @@ module melange.shading {
     requires gdx;
     requires melange.common;
     requires org.lwjgl.opengl;
-    requires org.jetbrains.annotations;
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;

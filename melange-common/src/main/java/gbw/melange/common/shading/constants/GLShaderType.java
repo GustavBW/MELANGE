@@ -1,7 +1,8 @@
 package gbw.melange.common.shading.constants;
 
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
+
+import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.GL32;
 
 public enum GLShaderType {
 

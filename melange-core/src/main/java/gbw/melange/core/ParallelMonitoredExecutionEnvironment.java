@@ -2,7 +2,6 @@ package gbw.melange.core;
 
 import gbw.melange.common.elementary.types.ILoadingElement;
 import gbw.melange.common.hooks.OnInit;
-import gbw.melange.core.app.MelangeApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -2,7 +2,6 @@ module melange.mesh {
     requires gdx;
     requires org.apache.logging.log4j;
     requires melange.common;
-    requires org.jetbrains.annotations;
     requires spring.context;
     requires spring.beans;
 

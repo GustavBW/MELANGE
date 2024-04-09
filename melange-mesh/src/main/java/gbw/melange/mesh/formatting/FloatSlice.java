@@ -1,7 +1,6 @@
 package gbw.melange.mesh.formatting;
 
 import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -99,7 +98,7 @@ public class FloatSlice implements IFloatSlice {
     }
 
     private final FloatIterator theIterator = new FloatIterator();
-    @NotNull
+
     @Override
     public Iterator<Float> iterator() {
         theIterator.reset();

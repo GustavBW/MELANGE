@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import gbw.melange.common.shading.IManagedShader;
 import gbw.melange.common.shading.constants.GLShaderAttr;
-import org.jetbrains.annotations.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +46,7 @@ public class DiskShaderCacheUtil implements Disposable {
      *
      * @return Returns the file handle to the image file which was just generated
      */
-    public FileHandle cacheOrUpdateExisting(@NotNull IManagedShader<?> shader) throws GdxRuntimeException {
+    public FileHandle cacheOrUpdateExisting(IManagedShader<?> shader) throws GdxRuntimeException {
 
         init(); //Just a check
 

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import gbw.melange.common.mesh.constants.IVertAttr;
 import gbw.melange.common.mesh.formatting.providers.SliceProvider;
 import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -66,7 +65,7 @@ public final class VertAttr<T extends IFloatSlice> implements IVertAttr<T> {
     }
 
     @Override
-    public int compareTo(@NotNull IVertAttr<? extends IFloatSlice> other) {
+    public int compareTo(IVertAttr<? extends IFloatSlice> other) {
         if (other == null) return -1;
 
         //TODO: If the usage is the same

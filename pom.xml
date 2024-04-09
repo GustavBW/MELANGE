@@ -34,6 +34,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <maven.javadoc.version>3.6.3</maven.javadoc.version>
         <shading.version>pre-atomization</shading.version>
         <mesh.version>main-5584db4849-1</mesh.version>
+        <surefire.version>3.2.5</surefire.version>
+        <dep.plugin.version>3.6.1</dep.plugin.version>
+        <mvn.comp.version>3.13.0</mvn.comp.version>
     </properties>
 
     <dependencyManagement>
@@ -118,32 +121,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>0.10.2</version>
-                <scope>provided</scope>
+                <scope>compile</scope>
             </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${log4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j2-impl</artifactId>
-                <version>${log4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
+
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
@@ -159,7 +139,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         </dependencies>
     </dependencyManagement>
 
-
     <repositories>
         <repository>
             <id>jitpack.io</id>
@@ -173,12 +152,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.5</version>
+                    <version>${surefire.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>${dep.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -187,72 +166,49 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven.javadoc.version}</version>
                 <inherited>true</inherited>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <debug>false</debug>
-                    <minmemory>256m</minmemory>
-                    <maxmemory>1024m</maxmemory>
-                    <quiet>true</quiet>
-                    <doctitle>${project.name} ${project.version}</doctitle>
-                    <windowtitle>${project.name} ${project.version}</windowtitle>
-                    <splitindex>true</splitindex>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <javadocVersion>${jdk.version}</javadocVersion>
-                    <links>
-                        <link>https://docs.oracle.com/javase/21/docs/api/</link>
-                    </links>
-                    <linksource>true</linksource>
-                    <detectOfflineLinks>false</detectOfflineLinks>
-                    <excludePackageNames>*emu*</excludePackageNames>
-                    <doclint>none</doclint>
-                </configuration>
-            </plugin> <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.12.1</version>
-            <configuration>
-                <source>21</source>
-                <target>21</target>
-            </configuration>
-        </plugin>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <debug>false</debug>
+                        <minmemory>256m</minmemory>
+                        <maxmemory>1024m</maxmemory>
+                        <quiet>true</quiet>
+                        <doctitle>${project.name} ${project.version}</doctitle>
+                        <windowtitle>${project.name} ${project.version}</windowtitle>
+                        <splitindex>true</splitindex>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <javadocVersion>${jdk.version}</javadocVersion>
+                        <links>
+                            <link>https://docs.oracle.com/javase/21/docs/api/</link>
+                        </links>
+                        <linksource>true</linksource>
+                        <detectOfflineLinks>false</detectOfflineLinks>
+                        <excludePackageNames>*emu*</excludePackageNames>
+                        <doclint>none</doclint>
+                    </configuration>
+                </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>Tests.test</Main-Class>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${mvn.comp.version}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
             </plugin>
         </plugins>
     </build>

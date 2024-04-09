@@ -18,8 +18,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
+    <dependencies>
+        <!-- MELANGE STUFF. SHOULD BE "COMPILE" HERE -->
         <dependency>
             <groupId>melange</groupId>
             <artifactId>melange-common</artifactId>
@@ -44,6 +51,7 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <!--- EXTERNAL STUFF, anything the other modules can be compiled with, doesn't have ot be provided, but its hard to know what will make sense rn -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -68,6 +76,14 @@
             <version>${slf4j.version}</version>
             <scope>compile</scope>
         </dependency>
+        <!--- JNIGEN -->
+        <dependency>
+            <groupId>com.github.GustavBW.gdx-jnigen-amtest</groupId>
+            <artifactId>gdx-jnigen</artifactId>
+            <version>master-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--- GDX -->
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>

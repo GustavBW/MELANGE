@@ -17,6 +17,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <module>melange-events</module>
         <module>melange-mesh</module>
         <module>melange-shading</module>
+        <module>melange-example</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -32,8 +33,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <log4j.version>2.23.0</log4j.version>
         <slf4j.version>2.0.12</slf4j.version>
         <maven.javadoc.version>3.6.3</maven.javadoc.version>
-        <shading.version>pre-atomization</shading.version>
-        <mesh.version>main-5584db4849-1</mesh.version>
         <surefire.version>3.2.5</surefire.version>
         <dep.plugin.version>3.6.1</dep.plugin.version>
         <mvn.comp.version>3.13.0</mvn.comp.version>
@@ -138,13 +137,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <build>
         <pluginManagement>

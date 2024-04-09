@@ -7,6 +7,9 @@ module melange.common {
     requires org.lwjgl;
     requires org.apache.logging.log4j.core;
 
+    uses gbw.melange.common.shading.services.IShadingPipelineConfig;
+    uses gbw.melange.common.mesh.services.IMeshPipelineConfig;
+
     exports gbw.melange.common;
     exports gbw.melange.common.events;
     exports gbw.melange.common.events.interactions;

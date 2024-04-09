@@ -1,5 +1,7 @@
 package gbw.melange.common;
 
+import gbw.melange.common.fallback.NoopMeshPipelineConfig;
+import gbw.melange.common.fallback.NoopShadingPipelineConfig;
 import gbw.melange.common.jpms.SPILocator;
 import gbw.melange.common.mesh.services.IMeshPipelineConfig;
 import gbw.melange.common.shading.services.IShadingPipelineConfig;
@@ -20,8 +22,8 @@ public class MelangeConfig implements IMelangeConfig {
     private boolean glDebugEnabled = false;
     private boolean clearGeneratedOnExit = false;
     private boolean clearGeneratedOnStart = true;
-    private IShadingPipelineConfig shadingConfig = SPILocator.getBean(IShadingPipelineConfig.class);
-    private IMeshPipelineConfig meshConfig = SPILocator.getBean(IMeshPipelineConfig.class);
+    private IShadingPipelineConfig shadingConfig = SPILocator.getBeanOr(IShadingPipelineConfig.class, NoopShadingPipelineConfig::new);
+    private IMeshPipelineConfig meshConfig = SPILocator.getBeanOr(IMeshPipelineConfig.class, NoopMeshPipelineConfig::new);
 
     @Override
     public String toString(){

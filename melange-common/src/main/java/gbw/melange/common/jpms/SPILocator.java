@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.ServiceLoader.Provider;
 
@@ -19,7 +20,26 @@ public class SPILocator {
     private static final Map<Class<?>, List<Provider<?>>> servicesProvidersMap = new ConcurrentHashMap<>();
     private static final Map<Class<?>, ServiceLoader<?>> servicesLoaderMap = new ConcurrentHashMap<>();
 
+    /**
+     * Retrieve a new bean of this type, or invoke the supplier if there is no beans available.
+     * @param clazz
+     * @param altSource source of alternative
+     * @return T
+     * @param <T>
+     */
+    public static <T> T getBeanOr(Class<T> clazz, Supplier<T> altSource){
+        T bean = getBean(clazz);
+        if(bean == null){
+            return altSource.get();
+        }
+        return bean;
+    }
+
     public static <T> T getBean(Class<T> clazz){
+        List<T> beans = getBeans(clazz);
+        if(beans == null || beans.isEmpty()){
+            return null;
+        }
         return getBeans(clazz).get(0);
     }
 

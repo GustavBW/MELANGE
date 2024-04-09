@@ -27,13 +27,6 @@
 
     <dependencies>
         <!--- JNIGEN, this is not enough -->
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx-jnigen-loader</artifactId>
-            <version>2.5.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../jnigen/gdx-jnigen-loader-2.5.1-SNAPSHOT.jar</systemPath>
-        </dependency>
         <!-- MELANGE STUFF. SHOULD BE "COMPILE" HERE -->
         <dependency>
             <groupId>melange</groupId>
@@ -84,7 +77,6 @@
             <version>${slf4j.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <!--- GDX -->
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
@@ -156,11 +148,25 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${mvn.shade.version}</version> <!-- Update to the latest version if necessary -->
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.2.0</version> <!-- Use the latest version available -->
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <!--- Maven EXEC -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.2.0</version> <!-- Use the latest version available -->
                 <executions>
                     <execution>
                         <id>exec-java</id>
@@ -174,7 +180,34 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--- Maven Shade -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- If needed, configuration for filtering or transforming resources -->
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>gbw.melange.example.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                            <relocations>
+                                <!-- Relocation configuration to move classes into com.badlogic.gdx.utils -->
+                                <relocation>
+                                    <pattern>gbw.melange.core.loader</pattern>
+                                    <shadedPattern>com.badlogic.gdx.utils</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
 </project>

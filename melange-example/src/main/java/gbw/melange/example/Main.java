@@ -21,6 +21,8 @@ public class Main {
                 .clearGeneratedOnStart(true)
                 .useCaching(true);
 
+        log.info("launching Melange - logged");
+        System.out.println("launching Melange - sout");
         MelangeApplication.run(Main.class, config);
     }
 }

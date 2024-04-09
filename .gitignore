@@ -11,6 +11,8 @@
 /melange-shading/target
 /melange-events/target
 /melange-elements/target
+/melange-example/target
+/melange-example/assets/system
 ## Melange Specific
 /assets/system/generated/*
 

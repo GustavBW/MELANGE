@@ -26,6 +26,14 @@
     </repositories>
 
     <dependencies>
+        <!--- JNIGEN, this is not enough -->
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-jnigen-loader</artifactId>
+            <version>2.5.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../jnigen/gdx-jnigen-loader-2.5.1-SNAPSHOT.jar</systemPath>
+        </dependency>
         <!-- MELANGE STUFF. SHOULD BE "COMPILE" HERE -->
         <dependency>
             <groupId>melange</groupId>
@@ -76,13 +84,7 @@
             <version>${slf4j.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!--- JNIGEN -->
-        <dependency>
-            <groupId>com.github.GustavBW.gdx-jnigen-amtest</groupId>
-            <artifactId>gdx-jnigen</artifactId>
-            <version>master-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+
         <!--- GDX -->
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
@@ -152,5 +154,27 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version> <!-- Use the latest version available -->
+                <executions>
+                    <execution>
+                        <id>exec-java</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>gbw.melange.example.Main</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

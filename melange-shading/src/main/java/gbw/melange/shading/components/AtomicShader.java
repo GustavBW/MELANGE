@@ -12,7 +12,6 @@ import gbw.melange.common.shading.components.IFragmentShader;
 import gbw.melange.common.shading.constants.GLDrawStyle;
 import gbw.melange.common.shading.constants.GLShaderAttr;
 import gbw.melange.common.shading.errors.DynamicRelinkingError;
-import org.jetbrains.annotations.Contract;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL30;
 
@@ -142,7 +141,6 @@ public class AtomicShader implements IAtomicShader {
             GL30.glDeleteShader(shader.getHandle());
         }
     }
-    @Contract(pure = true)
     private static Error replacementPreFlightCheck(IShaderComponent shader){
         if(shader == null) return Error.ON_NULL;
 

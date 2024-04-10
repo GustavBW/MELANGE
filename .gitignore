@@ -12,6 +12,7 @@
 /melange-events/target
 /melange-elements/target
 /melange-example/target
+/melange-model/target
 /melange-example/assets/system
 ## Melange Specific
 /assets/system/generated/*

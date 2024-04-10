@@ -52,6 +52,13 @@
                 <transformer>
                   <mainClass>gbw.melange.example.Main</mainClass>
                 </transformer>
+                <transformer>
+                  <resource>META-INF/services/org.apache.logging.log4j.spi.Provider</resource>
+                </transformer>
+                <transformer>
+                  <resource>log4j2.xml</resource>
+                  <file>${project.basedir}/src/main/resources/log4j2.xml</file>
+                </transformer>
               </transformers>
               <relocations>
                 <relocation>

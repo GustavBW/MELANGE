@@ -9,8 +9,8 @@ import java.util.Set;
 public interface NodeID<T> {
 
     Class<T> clazz();
-    Set<SourceType> sourceOf();
-    Set<IGLAlias> sourceAliasses();
-    void bind(IGLAlias alias);
+    SourceType sourceOf();
+    IGLAlias alsoKnownAs();
+    void bind();
 
 }

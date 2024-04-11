@@ -4,9 +4,11 @@ public enum SourceType {
     /**
      * Source of mesh vertex data.
      */
-    VERTEX_DATA_SOURCE,
+    VERTEX_BUFFER,
     /**
      * Source of mesh face / index / tris data.
      */
-    ELEMENT_DATA_SOURCE;
+    ELEMENT_BUFFER,
+    VERTEX_ATTRIBUTE,
+    GLSL_UNIFORM;
 }

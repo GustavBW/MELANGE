@@ -23,8 +23,8 @@ public class MelangeConfig implements IMelangeConfig {
     private boolean glDebugEnabled = false;
     private boolean clearGeneratedOnExit = false;
     private boolean clearGeneratedOnStart = true;
-    private IShadingPipelineConfig shadingConfig = SPILocator.loadService(SPI.of(IShadingPipelineConfig.class));
-    private IMeshPipelineConfig meshConfig = SPILocator.loadService(SPI.of(IMeshPipelineConfig.class));
+    private IShadingPipelineConfig shadingConfig = SPILocator.loadService(SPI.of(IShadingPipelineConfig.class, NoopShadingPipelineConfig::new));
+    private IMeshPipelineConfig meshConfig = SPILocator.loadService(SPI.of(IMeshPipelineConfig.class, NoopMeshPipelineConfig::new));
 
     @Override
     public String toString(){

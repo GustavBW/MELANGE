@@ -31,7 +31,9 @@ public class SPILocator {
     private static final Map<Class<?>, ServiceLoader<?>> servicesLoaderMap = new ConcurrentHashMap<>();
 
     public static <T> T loadService(SPI<T> spi){
+        System.out.println("SPIL resoliving spi: " + spi);
         List<T> beans = loadServices(spi);
+        System.out.println("SPIL loaded services: " + beans);
         if(beans == null || beans.isEmpty()){
             //Getting here with an unresolvable SPI definition should
             //be impossible without already having thrown a ServiceLoadingFailure (runtime exception)
@@ -72,8 +74,10 @@ public class SPILocator {
                         .collect(Collectors.toCollection(CopyOnWriteArrayList::new))
         );
         if(!initialAttempt.isEmpty()){
+            System.out.println("SPIL wasn't empty: " + initialAttempt);
             return initialAttempt;
         }
+        System.out.println("SPIL checking fallbacks");
         while(spi.hasNextFallback()){
             Class<T> fallback = spi.getNextFallback();
             List<Provider<T>> fallbackAttempt = (List<Provider<T>>) (List<?>) spiProvidersMap.computeIfAbsent(
@@ -85,6 +89,7 @@ public class SPILocator {
                 return fallbackAttempt;
             }
         }
+        System.out.println("SPIL mapping supplier to provider");
         ServiceLoader.Provider<T> fromAssuredSupplier = ProviderSupplierAdapter.from(spi::getFromSupplier, spi.getServiceInterface());
         return (List<Provider<T>>) (List<?>) spiProvidersMap.put(spi, List.of(fromAssuredSupplier));
     }

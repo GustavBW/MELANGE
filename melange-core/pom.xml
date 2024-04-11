@@ -63,7 +63,6 @@
             <artifactId>gdx</artifactId>
             <version>${gdx.version}</version>
             <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>

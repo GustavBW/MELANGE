@@ -3,14 +3,19 @@ package gbw.melange.model.node;
 import gbw.melange.model.SourceType;
 import gbw.melange.model.typealias.IGLAlias;
 
-import java.util.List;
-import java.util.Set;
+public abstract class NodeID<T> implements INodeID<T> {
 
-public interface NodeID<T> {
+    private NodeID(){
 
-    Class<T> clazz();
-    SourceType sourceOf();
-    IGLAlias alsoKnownAs();
-    void bind();
+    }
 
+    public Class<T> clazz(){
+        return null;
+    }
+    public SourceType sourceOf(){
+        return null;
+    }
+    public IGLAlias alsoKnownAs(){
+        return null;
+    }
 }

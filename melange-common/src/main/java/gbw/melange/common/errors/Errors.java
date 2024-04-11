@@ -62,8 +62,9 @@ public final class Errors {
     }
 
     /**
-     * Deescalate anything that throws and return the message as a String instead
+     * Deescalate anything that throws and return the message as an {@link Error} instead
      * @param func void func no args but throws
+     * @return An {@link Error} with the message of the exception, or {@link Error#NONE}
      */
     public static <R extends Throwable> Error deescalate(ThrowingRunn<R> func){
         try{

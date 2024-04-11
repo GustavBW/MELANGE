@@ -1,5 +1,7 @@
 package gbw.melange.common.jpms;
 
+import gbw.melange.common.errors.ServiceLoadingFailure;
+
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,47 +13,43 @@ import java.util.stream.Collectors;
 import java.util.ServiceLoader.Provider;
 
 /**
- * Revised ServiceLoader utility.
+ * Revised ServiceLoader utility with multi-stage caching and bean-like behaviour.
  * @author GustavBW
  */
 public class SPILocator {
-
+    /**
+     * Instantiated beans. Much like an ApplicationContext without @AutoWired
+     */
     private static final Map<Class<?>, List<?>> serviceInstancesMap = new ConcurrentHashMap<>();
-    private static final Map<Class<?>, List<Provider<?>>> servicesProvidersMap = new ConcurrentHashMap<>();
+    /**
+     * Resolved SPI declarations.
+     */
+    private static final Map<SPI<?>, List<Provider<?>>> spiProvidersMap = new ConcurrentHashMap<>();
+    /**
+     * Actual ServiceLoaders for different interfaces. Not resolved. Raw.
+     */
     private static final Map<Class<?>, ServiceLoader<?>> servicesLoaderMap = new ConcurrentHashMap<>();
 
-    /**
-     * Retrieve a new bean of this type, or invoke the supplier if there is no beans available.
-     * @param clazz
-     * @param altSource source of alternative
-     * @return T
-     * @param <T>
-     */
-    public static <T> T getBeanOr(Class<T> clazz, Supplier<T> altSource){
-        T bean = getBean(clazz);
-        if(bean == null){
-            return altSource.get();
-        }
-        return bean;
-    }
-
-    public static <T> T getBean(Class<T> clazz){
-        List<T> beans = getBeans(clazz);
+    public static <T> T loadService(SPI<T> spi){
+        List<T> beans = loadServices(spi);
         if(beans == null || beans.isEmpty()){
-            return null;
+            //Getting here with an unresolvable SPI definition should
+            //be impossible without already having thrown a ServiceLoadingFailure (runtime exception)
+            //but just in case:
+            throw new ServiceLoadingFailure("Unable to resolve " + spi + ". No provided implementations where found for the original interface, any fallbacks and the assured supplier failed too.");
         }
-        return getBeans(clazz).get(0);
+        return beans.get(0);
     }
 
     /**
      * Loads any service providers of said type, caches and returns the instances provided.<br>
      * May throw a ClassCastException on service configuration error.<br>
-     * @param clazz Type implementations to look for<br>
+     * @param spi spi definition. Can be obtained using {@link SPI#of(Class, Supplier, Class[])}
      * @return instances of said type
      */
     @SuppressWarnings("unchecked")
-    public static <T> List<T> getBeans(Class<T> clazz) {
-        return (List<T>) serviceInstancesMap.computeIfAbsent(clazz, k -> getProvidersOf(clazz)
+    public static <T> List<T> loadServices(SPI<T> spi) {
+        return (List<T>) serviceInstancesMap.computeIfAbsent(spi.getServiceInterface(), k -> getProvidersOf(spi)
                 .stream()
                 .map(Provider::get)
                 .collect(Collectors.toCollection(CopyOnWriteArrayList::new))
@@ -60,27 +58,35 @@ public class SPILocator {
 
     /**
      * Loads any service providers of said type, caches and returns the providers.<br>
-     * Duly note that invoking the providers returns a new instance.<br>
+     * Duly note that invoking the providers returns a new instance. If you want access to the services already instantiated,
+     * use {@link SPILocator#loadService(SPI)} or {@link SPILocator#loadServices(SPI)}<br>
      * May throw a ClassCastException on service configuration error.<br>
-     * @param clazz Type of provider to look for<br>
+     * @param spi spi definition
      * @return providers of said type
      */
     @SuppressWarnings("unchecked")
-    public static <T> List<Provider<T>> getProvidersOf(Class<T> clazz){
-        return (List<Provider<T>>) (List<?>) servicesProvidersMap.computeIfAbsent(
-                clazz, k -> getLoader(clazz)
+    public static <T> List<Provider<T>> getProvidersOf(SPI<T> spi){
+        List<Provider<T>> initialAttempt = (List<Provider<T>>) (List<?>) spiProvidersMap.computeIfAbsent(
+                spi, k -> getLoader(spi.getServiceInterface())
                         .stream()
-                        .collect(Collectors.toCollection(CopyOnWriteArrayList::new)));
-    }
-
-    /**
-     * Retrieves a ServiceLoader of said type.<br>
-     * @param clazz Type of service to load<br>
-     * @return a ServiceLoader for that type
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> ServiceLoader<T> getLoaderFor(Class<T> clazz){
-        return (ServiceLoader<T>) getLoader(clazz);
+                        .collect(Collectors.toCollection(CopyOnWriteArrayList::new))
+        );
+        if(!initialAttempt.isEmpty()){
+            return initialAttempt;
+        }
+        while(spi.hasNextFallback()){
+            Class<T> fallback = spi.getNextFallback();
+            List<Provider<T>> fallbackAttempt = (List<Provider<T>>) (List<?>) spiProvidersMap.computeIfAbsent(
+                    spi, k -> getLoader(fallback)
+                            .stream()
+                            .collect(Collectors.toCollection(CopyOnWriteArrayList::new))
+            );
+            if(!fallbackAttempt.isEmpty()){
+                return fallbackAttempt;
+            }
+        }
+        ServiceLoader.Provider<T> fromAssuredSupplier = ProviderSupplierAdapter.from(spi::getFromSupplier, spi.getServiceInterface());
+        return (List<Provider<T>>) (List<?>) spiProvidersMap.put(spi, List.of(fromAssuredSupplier));
     }
 
     private static ServiceLoader<?> getLoader(Class<?> clazz){

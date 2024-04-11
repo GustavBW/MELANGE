@@ -6,7 +6,8 @@ module melange.mesh {
     requires spring.beans;
 
     provides gbw.melange.common.mesh.services.IMeshPipelineConfig with gbw.melange.mesh.services.MeshPipelineConfig;
-    exports gbw.melange.mesh.services to spring.beans, melange.core;
+
+    exports gbw.melange.mesh.services to spring.beans, melange.core, melange.common;
 
     exports gbw.melange.mesh.constants;
     exports gbw.melange.mesh.modifiers;

@@ -1,4 +1,4 @@
-package gbw.melange.common.fallback;
+package gbw.melange.common.jpms.fallback;
 
 import gbw.melange.common.shading.services.IShadingPipelineConfig;
 

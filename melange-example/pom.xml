@@ -181,42 +181,7 @@
                 </executions>
             </plugin>
             <!--- Maven Shade -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <!-- If needed, configuration for filtering or transforming resources -->
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>gbw.melange.example.Main</mainClass>
-                                </transformer>
-                                <!-- Appends files instead of overwriting them -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.apache.logging.log4j.spi.Provider</resource>
-                                </transformer>
-                                <!-- Keeps Log4j2 configuration files from being ignored -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                                    <resource>log4j2.xml</resource>
-                                    <file>${project.basedir}/src/main/resources/log4j2.xml</file>
-                                </transformer>
-                            </transformers>
-                            <relocations>
-                                <!-- Relocation configuration to move classes into com.badlogic.gdx.utils -->
-                                <relocation>
-                                    <pattern>gbw.melange.core.loader</pattern>
-                                    <shadedPattern>com.badlogic.gdx.utils</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
 </project>

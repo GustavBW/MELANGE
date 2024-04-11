@@ -15,14 +15,15 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Set<IMelangeConfig.LogLevel> logLevel = new HashSet<>(Set.of(IMelangeConfig.LogLevel.values()));
 
+        log.info("launching Melange - logged");
+        System.out.println("launching Melange - sout");
+
         IMelangeConfig config = new MelangeConfig()
                 .enableGLDebug(false)
                 .setLoggingAspects(logLevel)
                 .clearGeneratedOnStart(true)
                 .useCaching(true);
 
-        log.info("launching Melange - logged");
-        System.out.println("launching Melange - sout");
         MelangeApplication.run(Main.class, config);
     }
 }

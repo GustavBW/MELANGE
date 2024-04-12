@@ -3,7 +3,7 @@ package gbw.melange.model.node;
 import gbw.melange.model.SourceType;
 import gbw.melange.model.typealias.IGLAlias;
 
-public abstract class NodeID<T> implements INodeID<T> {
+public abstract class NodeID<T> extends INodeID<T> {
 
     private NodeID(){
 

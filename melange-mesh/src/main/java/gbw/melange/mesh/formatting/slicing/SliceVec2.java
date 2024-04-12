@@ -31,22 +31,22 @@ public class SliceVec2 extends FloatSlice implements IFloatSlice, ISliceVec2 {
 
     @Override
     public float x() {
-        return super.get(0);
+        return super.unsafeGet(0);
     }
 
     @Override
     public float y() {
-        return super.get(1);
+        return super.unsafeGet(1);
     }
 
     @Override
     public void x(float value) {
-        super.set(0, value);
+        super.unsafeSet(0, value);
     }
 
     @Override
     public void y(float value) {
-        super.set(1, value);
+        super.unsafeSet(1, value);
     }
 
 }

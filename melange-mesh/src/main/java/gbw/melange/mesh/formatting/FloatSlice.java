@@ -1,6 +1,7 @@
 package gbw.melange.mesh.formatting;
 
 import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
+import gbw.melange.common.mesh.formatting.slicing.ISliceVec2;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -33,6 +34,14 @@ public class FloatSlice implements IFloatSlice {
         if(isIllegalAccess(index)){
             throw new ArrayIndexOutOfBoundsException("Tried to get index " + index + " of " + this + " with a length of " + entryWidth());
         }
+        return unsafeGet(index);
+    }
+
+    /**
+     * Internal method to by-pass error checking. Only possible to safely call from known-size, already-error-checked
+     * {@link ISliceVec2}'s, 3's, & 4's.
+     */
+    protected float unsafeGet(int index){
         return source[indexFirstComp() + index];
     }
     @Override
@@ -40,6 +49,13 @@ public class FloatSlice implements IFloatSlice {
         if(isIllegalAccess(index)){
             throw new ArrayIndexOutOfBoundsException("Tried to set index " + index + " of " + this + " with a length of " + entryWidth());
         }
+        unsafeSet(index, value);
+    }
+    /**
+     * Internal method to by-pass error checking. Only possible to safely call from known-size, already-error-checked
+     * {@link ISliceVec2}'s, 3's, & 4's.
+     */
+    protected void unsafeSet(int index, float value){
         source[indexFirstComp() + index] = value;
     }
     private boolean isIllegalAccess(int index){

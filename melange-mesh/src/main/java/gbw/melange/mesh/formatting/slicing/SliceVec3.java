@@ -25,12 +25,12 @@ public class SliceVec3 extends SliceVec2 implements IFloatSlice, ISliceVec3 {
 
     @Override
     public float z() {
-        return super.get(2);
+        return super.unsafeGet(2);
     }
 
     @Override
     public void z(float value) {
-        super.set(2, value);
+        super.unsafeSet(2, value);
     }
 
 }

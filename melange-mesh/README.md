@@ -1,0 +1,6 @@
+# Melange Mesh Module
+Yet to be further expanded, but currently contains lossless mapping utilities from raw vertex data to more processable, extractable formats as well as caching functionality much like melange-shading.
+Much like its counterpart, melange-shading, it contains the user entry point (knows as "Shapes") which facilitates further functionality.
+The ultimate end-goal is to facilitate generative, procedural modifications like beveling, decimation, voxel-remeshing and the like (also as seen from Blender) which is akind to launching a space program to facilitate a css border radius, but this is too early for compromises.
+Performance is obtained through the aforementioned caching, but since this is raw, cpu bound data manipulation with no dependency on the OpenGL context, this will be easily spun off as well. The ManagedMesh class is established specifically for this purpose.
+This package is also entirely self-contained (aside from melange-common) with the intention of being able to facilitate independent releases.

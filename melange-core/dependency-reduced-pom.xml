@@ -87,7 +87,7 @@
     <dependency>
       <groupId>com.badlogicgames.gdx</groupId>
       <artifactId>gdx-backend-lwjgl3</artifactId>
-      <version>1.12.1</version>
+      <version>1.12.2-EXPERIMENTAL-SNAPSHOT</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>

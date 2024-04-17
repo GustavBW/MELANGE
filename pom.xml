@@ -30,8 +30,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.13.2</junit.version>
         <gdx.version>1.12.2-EXPERIMENTAL-SNAPSHOT</gdx.version>
-        <gdx.backend.version>1.12.1</gdx.backend.version>
-        <gdx.platform.version>${gdx.backend.version}</gdx.platform.version>
+        <gdx.backend.version>${gdx.version}</gdx.backend.version>
+        <gdx.platform.version>1.12.1</gdx.platform.version>
         <gdx.freetype.version>${gdx.backend.version}</gdx.freetype.version>
         <spring.version>6.1.4</spring.version>
         <log4j.version>2.23.0</log4j.version>

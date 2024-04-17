@@ -8,7 +8,7 @@ module melange.shading {
 
     provides gbw.melange.common.shading.services.IShadingPipelineConfig with gbw.melange.shading.services.ShadingPipelineConfig;
 
-    exports gbw.melange.shading.services to spring.beans, melange.core, melange.common;
+    exports gbw.melange.shading.services to melange.core, melange.common;
 
     exports gbw.melange.shading;
     exports gbw.melange.shading.generative;
@@ -17,4 +17,7 @@ module melange.shading {
     exports gbw.melange.shading.generative.voronoi;
     exports gbw.melange.shading.generative.noise;
     exports gbw.melange.shading.components;
+
+    //Spring
+    opens gbw.melange.shading.services to spring.beans, spring.core, spring.context;
 }

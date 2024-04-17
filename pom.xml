@@ -29,7 +29,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <maven.compiler.target>${jdk.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.13.2</junit.version>
-        <gdx.version>1.12.1</gdx.version>
+        <gdx.version>1.12.2-EXPERIMENTAL-SNAPSHOT</gdx.version>
+        <gdx.backend.version>1.12.1</gdx.backend.version>
+        <gdx.platform.version>${gdx.backend.version}</gdx.platform.version>
+        <gdx.freetype.version>${gdx.backend.version}</gdx.freetype.version>
         <spring.version>6.1.4</spring.version>
         <log4j.version>2.23.0</log4j.version>
         <slf4j.version>2.0.12</slf4j.version>
@@ -39,6 +42,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <mvn.comp.version>3.13.0</mvn.comp.version>
         <mvn.shade.version>3.5.2</mvn.shade.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -113,8 +127,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <version>${spring.version}</version>
                 <scope>provided</scope>
             </dependency>
-
-
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
@@ -129,7 +141,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+    
     <build>
         <pluginManagement>
             <plugins>

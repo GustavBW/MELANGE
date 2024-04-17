@@ -81,7 +81,7 @@
     <dependency>
       <groupId>com.badlogicgames.gdx</groupId>
       <artifactId>gdx</artifactId>
-      <version>1.12.1</version>
+      <version>1.12.2-EXPERIMENTAL-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

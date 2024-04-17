@@ -1,7 +1,6 @@
 module melange.core {
     //User-side entry-point
     exports gbw.melange.core.app;
-    exports gbw.melange.core.loader;
     //Melange modules
     requires melange.common;
     requires melange.shading;

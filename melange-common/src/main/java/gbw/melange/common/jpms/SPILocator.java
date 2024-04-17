@@ -91,6 +91,7 @@ public class SPILocator {
         }
         System.out.println("SPIL mapping supplier to provider");
         ServiceLoader.Provider<T> fromAssuredSupplier = ProviderSupplierAdapter.from(spi::getFromSupplier, spi.getServiceInterface());
+        System.out.println("SPIL mapping result: " + fromAssuredSupplier);
         return (List<Provider<T>>) (List<?>) spiProvidersMap.put(spi, List.of(fromAssuredSupplier));
     }
 

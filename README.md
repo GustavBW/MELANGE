@@ -15,8 +15,8 @@ surely an actually compiled language and the best runtime program-introspection 
  - Most existing gui frameworks suffer from the 2010's XML hype to this day (bearing in mind most havn't been updated since) and go out of their way to include external configuration instead of keeping it simple and clean. With proper API design one can make up for any amount of DSL shenanigans, and will be significantly more flexible and intuitive if done right. 
 
 Cool stuff for free:
- - Since this builds on OpenGL, which is an extension on top of LWJGL, nothing prevents you from actually writing the fragment shader for your background gradient. Of course this amount of freedom and customization requires equally adequate abstractions to acquire.
- - A button isn't a square. Its 4 vertexes that happens to form square, and here you can have any amount of vertexes at any possible position. Triangle buttons? Sure. Convex hulls? No problem. For webdev purposes, everything is an svg.
+ - Since this builds on LWJGL, which is an extension on top of OpenGL, nothing prevents you from actually writing the fragment shader for your background gradient. Of course this amount of freedom and customization requires equally adequate abstractions to acquire.
+ - A button isn't a square. Its 4 vertexes that happens to form square, and here you can have any amount of vertexes at any possible position. Triangle buttons? Sure. Convex hulls? No problem.
  - Hardware acceleration. Additionally, the reactive nature of this framework should allow for a good, stable performance almost regardless of GUI complexity.
  - Not to mention the benefits of not having to deal with "undefined" AND null at the same time.
 
@@ -26,11 +26,11 @@ Cool stuff for free:
 * melange-elements, contains the implementations of all element-, constrains, renderes, style definitions, rules, and content renderes. The content renderes themselves is intended to be used through an ECS composition like setup to allow a user 100% type safety through generics, and allowing the system to resolve what content renderer to use underneath.
 * melange-events, not quite clear on what will be here yet.
 * melange-rules, the fundemental implementations facilitating the current proposed interaction scheme.
-* melange-tooling, contains some dev tooling which will be expanded on shortly. However, as it depends on the rest of melange in a bootstrapped-compiler type of situation, it also serves as testing ground for the coherency of it all. Also, when modularized (which is still the plan) it can easily be excluded on a release build.
+* melange-tooling, contains some dev tooling which will be expanded on shortly.
 * melange-mesh, standalone, described in own readme at module root
 * melange-model, standalone, described in own readme at module root
 * melange-shading, standalone, described in own readme at module root
 
-*multiplatform, it has come to my attention that desktop (Windows & Linux) seems to be the only place where the Lwjgl Backends MELANGE currently uses, are kept up to a date that facilitates features and the OpenGL version that is currently required. This even potentially places restrictions on the version of Java that can be used for a release build. The exact impact of this lack of feature support is not known, but I see but 2 paths: Either reduce the feature set and language level used for Melange, or investigate what platforms to officially drop support for. Given that I don't intend to release instant legacy code (as much as is possible for Java), the former is most likely the path not chosen.
+*multiplatform, it has come to my attention that desktop (Windows & Linux) seems to be the only place where the Lwjgl Backends MELANGE currently uses, are kept up to a date that facilitates features and the OpenGL version that is currently required. This places restrictions on even the version of Java that can be used for a release build. The exact impact of this lack of feature support is not known, but I see but 2 paths: Either reduce the feature set and language level used for Melange, or investigate what platforms to officially drop support for. Given that I don't intend to release instant legacy code (as much as is possible for Java), the former is most likely the path not chosen.
 
-Last Update: 13042024T1126 (ddmmyyyyThhmm)
+Last Update: 16032025T1558 (ddmmyyyyThhmm)

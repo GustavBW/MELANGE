@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class MeshDataTable implements IMeshDataTable {
     private static final Logger log = LogManager.getLogger();

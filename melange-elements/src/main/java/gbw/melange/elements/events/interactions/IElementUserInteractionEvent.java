@@ -6,7 +6,7 @@ import gbw.melange.common.events.interactions.UserInteractionTypes;
 /**
  * <p>IElementUserInteractionEvent interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementUserInteractionEvent extends IElementEvent {

@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * <p>ScreenSpace class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ScreenSpace implements IScreenSpace {

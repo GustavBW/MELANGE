@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class ReferenceStyleDefinition implements IReferenceStyleDefinition {
 

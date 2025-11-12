@@ -3,7 +3,7 @@ package gbw.melange.common.structures;
 /**
  * Constant size linked list that can be pushed to any number of times, and simply looses the last value.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class RollOverLinkedList<T> {

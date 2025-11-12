@@ -1,7 +1,7 @@
 package gbw.melange.common.mesh.formatting.slicing;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public interface ISliceVec4 extends ISliceVec3 {
     /**

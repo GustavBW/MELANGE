@@ -11,7 +11,7 @@ import java.util.Collection;
 /**
  * <p>FallibleObservableValue class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class FallibleObservableValue<T> extends ObservableValue<T, IFallibleBiConsumer<T>>

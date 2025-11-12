@@ -3,7 +3,7 @@ package gbw.melange.common.events.observability;
 /**
  * <p>IPrestineBlockingObservable interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IPrestineBlockingObservable<T> extends IPristineObservableValue<T>{

@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Quaternion;
 /**
  * <p>IComputedTransforms interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IComputedTransforms {

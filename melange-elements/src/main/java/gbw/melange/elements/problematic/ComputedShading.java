@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 /**
  * <p>ComputedShading class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ComputedShading {

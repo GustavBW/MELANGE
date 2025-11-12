@@ -15,7 +15,7 @@ import java.util.*;
  * - For each grid, constraints.attachingAnchor is consulted to determine the most fitting cell for the element <br/>
  * - The last most element to be given a cell is given the remaining. <br/>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class AutomaticElementTransformResolver implements IAETR {

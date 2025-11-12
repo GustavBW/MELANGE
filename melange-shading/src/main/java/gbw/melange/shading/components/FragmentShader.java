@@ -6,7 +6,7 @@ import gbw.melange.common.shading.constants.GLShaderType;
 import gbw.melange.common.shading.constants.ShaderClassification;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class FragmentShader extends ShaderComponent implements gbw.melange.common.shading.components.IFragmentShader {
 

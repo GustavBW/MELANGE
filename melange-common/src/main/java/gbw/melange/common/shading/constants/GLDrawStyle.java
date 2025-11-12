@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL30;
 /**
  * <p>GLDrawStyle class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum GLDrawStyle {

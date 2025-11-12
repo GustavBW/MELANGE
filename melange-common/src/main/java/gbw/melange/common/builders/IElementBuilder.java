@@ -10,7 +10,7 @@ import gbw.melange.common.mesh.IManagedMesh;
  * <p>IElementBuilder interface.</p>
  *
  * @param <T> return type of OnInit if any
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementBuilder<T> extends IBuilder<IElement<T>> {

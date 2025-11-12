@@ -25,7 +25,7 @@ import java.util.*;
  * Scans user packages and gathers as much data as possible.
  * The FBI of Melange
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class DiscoveryAgent<T> {

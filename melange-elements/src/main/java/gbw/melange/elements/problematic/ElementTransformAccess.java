@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.types.IConstrainedElement;
  * Temporary adapter solution until MELANGE can be modularized for further visibility control </br>
  * TODO: REMOVE THIS
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementTransformAccess {

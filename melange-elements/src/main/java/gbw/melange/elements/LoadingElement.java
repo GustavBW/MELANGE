@@ -12,7 +12,7 @@ import gbw.melange.common.mesh.IManagedMesh;
 /**
  * <p>LoadingElement class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class LoadingElement<T> extends Element<T> implements ILoadingElement<T> {

@@ -14,7 +14,7 @@ import java.util.ServiceLoader.Provider;
 
 /**
  * Revised ServiceLoader utility with multi-stage caching and bean-like behaviour.
- * @author GustavBW
+ * @author lilybw
  */
 public class SPILocator {
     /**

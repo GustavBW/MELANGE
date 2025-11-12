@@ -4,7 +4,7 @@ import gbw.melange.common.mesh.formatting.slicing.IFloatSlice;
 import gbw.melange.common.mesh.formatting.slicing.ISliceVec3;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class SliceVec3 extends SliceVec2 implements IFloatSlice, ISliceVec3 {
 

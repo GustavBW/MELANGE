@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * <p>IFallibleFilterChain interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IFallibleFilterChain<T,R> extends IFilterChain<IFallibleBiConsumer<T>,R> {

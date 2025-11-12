@@ -12,7 +12,7 @@ import gbw.melange.common.builders.IElementBuilder;
  * A given ISpace may represent an area within which all assigned element's constraints must be resolved. <br/>
  * It is a way to limit cascading events, and to let elements be dynamically sized and positioned efficiently. <br/>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ISpace extends Disposable {

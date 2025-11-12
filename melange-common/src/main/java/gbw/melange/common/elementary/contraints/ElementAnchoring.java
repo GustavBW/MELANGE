@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.contraints;
 /**
  * In relation to the extends and mesh of the element this element is attached to.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum ElementAnchoring {

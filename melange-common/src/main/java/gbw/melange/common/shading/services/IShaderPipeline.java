@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * <p>IShaderPipeline interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IShaderPipeline extends Disposable {

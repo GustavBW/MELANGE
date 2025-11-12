@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.rules;
 /**
  * <p>IElementRuleSet interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementRuleSet {

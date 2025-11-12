@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * <p>ScreenSpaceProvider class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @Service

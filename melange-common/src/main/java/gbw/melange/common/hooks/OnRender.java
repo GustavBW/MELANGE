@@ -3,7 +3,7 @@ package gbw.melange.common.hooks;
 /**
  * Append anything during the render cycle
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @FunctionalInterface

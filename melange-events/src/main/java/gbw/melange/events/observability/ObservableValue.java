@@ -7,7 +7,7 @@ import gbw.melange.common.events.observability.*;
  *
  * @param <T> Type of value being observed
  * @param <R> The OnChange bi consumers that can be appended.
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public abstract class ObservableValue<T, R extends UndeterminedBiConsumer<T>> implements IObservableValue<T, R, Integer> {

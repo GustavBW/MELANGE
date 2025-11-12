@@ -3,7 +3,7 @@ package gbw.melange.common.elementary;
 /**
  * <p>IContentProvider interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @FunctionalInterface

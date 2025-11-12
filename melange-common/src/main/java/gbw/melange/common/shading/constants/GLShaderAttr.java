@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * <p>GLShaderAttr class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum GLShaderAttr {

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 /**
  * For all intends and purposes this is a singleton. However, managed by Spring.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ISpaceProvider<T extends ISpace> {

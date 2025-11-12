@@ -4,7 +4,7 @@ package gbw.melange.elements.events;
 /**
  * <p>ElementEventType class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum ElementEventType {

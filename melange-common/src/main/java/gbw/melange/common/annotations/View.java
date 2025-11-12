@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * <p>View class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @Target(ElementType.TYPE)

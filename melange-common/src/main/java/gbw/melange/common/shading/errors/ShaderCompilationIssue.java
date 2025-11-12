@@ -3,7 +3,7 @@ package gbw.melange.common.shading.errors;
 /**
  * <p>ShaderCompilationIssue class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ShaderCompilationIssue extends Exception {

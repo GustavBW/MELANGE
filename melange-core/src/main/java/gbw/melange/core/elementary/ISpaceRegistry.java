@@ -10,7 +10,7 @@ import java.util.Map;
  * For all intends and purposes this is a singleton. However, managed by Spring.
  * Its a temprorary object used to gather information about all spaces. It is not used during main runtime, see ISpaceNavigator instead.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ISpaceRegistry {

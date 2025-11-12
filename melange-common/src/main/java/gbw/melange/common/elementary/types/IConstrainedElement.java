@@ -8,7 +8,7 @@ import gbw.melange.common.elementary.contraints.IElementConstraints;
 /**
  * Represents any Element with constraints.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IConstrainedElement extends Disposable {

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * <p>VoronoiFragmentBuilder class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class VoronoiFragmentBuilder implements IVoronoiFragmentBuilder {

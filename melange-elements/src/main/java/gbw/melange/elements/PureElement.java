@@ -12,7 +12,7 @@ import gbw.melange.common.mesh.IManagedMesh;
 /**
  * A "PureElement" is static for all intends and purposes. No special handling is required during boot for this element to work correctly.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class PureElement<T> extends Element<T> implements IPureElement<T> {

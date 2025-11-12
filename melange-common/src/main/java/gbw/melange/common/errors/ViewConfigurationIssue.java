@@ -3,7 +3,7 @@ package gbw.melange.common.errors;
 /**
  * <p>ViewConfigurationIssue Exception type.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ViewConfigurationIssue extends ClassConfigurationIssue {

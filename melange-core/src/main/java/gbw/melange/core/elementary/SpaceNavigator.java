@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * <p>SpaceNavigator class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @Service

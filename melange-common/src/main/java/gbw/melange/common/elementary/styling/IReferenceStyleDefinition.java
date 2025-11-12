@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * <p>IReferenceStyleDefinition interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IReferenceStyleDefinition {

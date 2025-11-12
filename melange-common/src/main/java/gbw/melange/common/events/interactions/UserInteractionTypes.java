@@ -3,7 +3,7 @@ package gbw.melange.common.events.interactions;
 /**
  * <p>UserInteractionTypes class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum UserInteractionTypes {

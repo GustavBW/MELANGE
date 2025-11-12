@@ -3,7 +3,7 @@ package gbw.melange.common.builders;
 /**
  * <p>IPartialBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IPartialBuilder<T extends IBuilder<?>> {

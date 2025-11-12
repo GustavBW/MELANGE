@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.types;
 /**
  * <p>IPureElement interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IPureElement<T> extends IElement<T>{

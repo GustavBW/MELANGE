@@ -17,7 +17,7 @@ import java.util.function.Predicate;
  * @param <R> Actual type of the consumer itself
  *
  * TODO: Refactor to ServiceLoader use when modularized
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public abstract class FilterChain<T, R extends UndeterminedBiConsumer<T>>

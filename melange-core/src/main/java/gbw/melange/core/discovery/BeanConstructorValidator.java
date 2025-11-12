@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 /**
  * <p>BeanConstructorValidator class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class BeanConstructorValidator {

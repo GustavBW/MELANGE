@@ -8,7 +8,7 @@ import gbw.melange.common.shading.generative.noise.NoiseProvider;
 /**
  * <p>IVoronoiFragmentBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IVoronoiFragmentBuilder {

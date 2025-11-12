@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 /**
  * OnInit hook implementations can cause Exceptions and may take a lot of time to execute if they blockingly fetch external data.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ParallelMonitoredExecutionEnvironment {

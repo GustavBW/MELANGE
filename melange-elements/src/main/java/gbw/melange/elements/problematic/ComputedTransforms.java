@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import gbw.melange.common.elementary.contraints.IComputedTransforms;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class ComputedTransforms implements IComputedTransforms {
     private final Matrix4 matrix = new Matrix4().translate(new Vector3(0,0,-1));

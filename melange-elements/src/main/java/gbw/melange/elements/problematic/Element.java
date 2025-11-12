@@ -20,7 +20,7 @@ import gbw.melange.common.mesh.IManagedMesh;
 /**
  * <p>Abstract Element class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public abstract class Element<T> implements IElement<T> {

@@ -6,7 +6,7 @@ import gbw.melange.common.mesh.modifiers.MeshModifier;
 import gbw.melange.common.mesh.formatting.IMeshDataTable;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class MeshBeveler implements IBevelModifier {
 

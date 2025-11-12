@@ -12,7 +12,7 @@ import gbw.melange.common.shading.services.IShaderPipeline;
  * Represents a fully self-contained (besides from u_projTrans if applicable), uncompiled, shader program. <br/>
  * Initializing an instance of this through the Colors service will assure that it is managed and compiled automatically before rendering begins.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IManagedShader<T extends IManagedShader<T>> extends Disposable {

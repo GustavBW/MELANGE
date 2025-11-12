@@ -6,7 +6,7 @@ import gbw.melange.common.rules.IRule;
 /**
  * <p>IElementRuleBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementRuleBuilder extends IBuilder<IRule> {

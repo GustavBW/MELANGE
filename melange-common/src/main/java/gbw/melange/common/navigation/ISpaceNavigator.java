@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * <p>ISpaceNavigator interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ISpaceNavigator {

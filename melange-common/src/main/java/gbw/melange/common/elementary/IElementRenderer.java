@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * <p>IElementRenderer interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementRenderer {

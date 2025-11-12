@@ -4,7 +4,7 @@ package gbw.melange.common.events.observability;
  * Promises not to throw exceptions during runtime.
  *
  * @param <T>
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @FunctionalInterface

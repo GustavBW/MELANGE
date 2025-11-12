@@ -5,7 +5,7 @@ package gbw.melange.common.events.observability.filters;
  *
  * @param <T> type of filter, either failing, which is okay, or pristine.
  * @param <R> type of identifier for each filter, managed by the given IFilterChain implementation. If not explicitly given, the equality function used between identifiers will be object equivalence.
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IFilterChain<T, R> {

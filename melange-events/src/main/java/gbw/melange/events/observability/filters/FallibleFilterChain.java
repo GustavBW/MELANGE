@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * <p>FallibleFilterChain class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class FallibleFilterChain<T> extends FilterChain<T, IFallibleBiConsumer<T>>

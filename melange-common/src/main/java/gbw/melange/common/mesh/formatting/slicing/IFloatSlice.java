@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * Note: The implementations does not support spliterator operations. Attempting to
  * call {@link #spliterator()} will result in a {@link RuntimeException}.
  *
- * @author GustavBW
+ * @author lilybw
  */
 public interface IFloatSlice extends Iterable<Float> {
 

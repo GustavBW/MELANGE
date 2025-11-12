@@ -6,7 +6,7 @@ import gbw.melange.common.elementary.types.IElement;
 /**
  * <p>IElementConstraints interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementConstraints {

@@ -8,7 +8,7 @@ import gbw.melange.common.events.interactions.UserInteractionTypes;
 /**
  * <p>ElementUserInteractionRuleBuilder class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementUserInteractionRuleBuilder implements IElementUserInteractionRuleBuilder {

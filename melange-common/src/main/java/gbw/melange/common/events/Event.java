@@ -4,7 +4,7 @@ package gbw.melange.common.events;
  * <p>Event interface.</p>
  *
  * @param <T>
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface Event<T> {

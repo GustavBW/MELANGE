@@ -3,7 +3,7 @@ package gbw.melange.common.mesh.modifiers;
 /**
  * <p>IBevelModifier interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IBevelModifier extends MeshModifier {

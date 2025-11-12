@@ -9,7 +9,7 @@ import gbw.melange.events.observability.filters.FilterChain;
 /**
  * <p>PristineBlockingObservable class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class PristineBlockingObservable<T> extends ObservableValue<T, IPristineBiConsumer<T>>

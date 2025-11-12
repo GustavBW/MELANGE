@@ -11,7 +11,7 @@ import gbw.melange.elements.constraints.ReferenceConstraintDefinition;
 /**
  * <p>SpaceBuilder class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class SpaceBuilder implements ISpaceBuilder {

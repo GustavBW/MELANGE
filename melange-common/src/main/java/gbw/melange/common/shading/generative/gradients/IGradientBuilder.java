@@ -6,7 +6,7 @@ import gbw.melange.common.shading.constants.InterpolationType;
 /**
  * <p>IGradientBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IGradientBuilder {

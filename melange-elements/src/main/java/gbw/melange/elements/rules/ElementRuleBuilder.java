@@ -9,7 +9,7 @@ import gbw.melange.common.rules.IRule;
 /**
  * <p>ElementRuleBuilder class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementRuleBuilder implements IElementRuleBuilder {

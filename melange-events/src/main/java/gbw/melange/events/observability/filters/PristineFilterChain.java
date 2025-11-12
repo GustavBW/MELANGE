@@ -7,7 +7,7 @@ import gbw.melange.common.events.observability.filters.IPristineFilterChain;
  * Intercepting Filter Patten
  *
  * @param <T> Type of the type the consumers (filters) consume
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class PristineFilterChain<T>

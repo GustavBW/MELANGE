@@ -33,7 +33,7 @@ import java.io.IOException;
 
 /**
  * The implementation of the Api detailed by {@link Colors}
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @Service

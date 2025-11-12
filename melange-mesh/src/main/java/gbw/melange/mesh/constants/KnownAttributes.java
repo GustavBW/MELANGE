@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  * <p>KnownAttributes class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class KnownAttributes {

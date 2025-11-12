@@ -9,7 +9,7 @@ import gbw.melange.common.events.observability.filters.IPristineFilterChain;
 /**
  * <p>PristineObservableValue class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class PristineObservableValue<T> extends ObservableValue<T, IPristineBiConsumer<T>>

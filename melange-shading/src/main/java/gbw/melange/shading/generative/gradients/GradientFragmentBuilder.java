@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class GradientFragmentBuilder implements IGradientBuilder {
     private static final Logger log = LogManager.getLogger();

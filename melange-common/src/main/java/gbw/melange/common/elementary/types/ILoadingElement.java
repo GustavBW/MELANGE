@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.types;
 /**
  * <p>ILoadingElement interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ILoadingElement<T> extends IElement<T> {

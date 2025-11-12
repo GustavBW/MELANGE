@@ -10,7 +10,7 @@ import gbw.melange.common.shading.generative.noise.NoiseProvider;
  * <p>This class does not make use of the <i>Random</i> class.</p>
  *
  * @author Matthew A. Johnston (WarmWaffles)
- * @author GustavBW (extended environment functionality)
+ * @author lilybw (extended environment functionality)
  */
 public class PerlinNoise implements NoiseProvider {
     private int    octaves;

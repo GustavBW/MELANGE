@@ -8,7 +8,7 @@ import gbw.melange.common.events.observability.filters.IFilterChain;
  * @param <T> Type of value held by this observable
  * @param <R> Type of on change filters applicable to this observable
  * @param <U> Type of identifier for each filter.
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IObservableValue<T, R extends UndeterminedBiConsumer<T>, U> {

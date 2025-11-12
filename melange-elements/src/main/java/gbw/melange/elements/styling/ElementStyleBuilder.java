@@ -12,7 +12,7 @@ import gbw.melange.common.shading.postprocess.IPostProcessShader;
 /**
  * <p>ElementStyleBuilder class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementStyleBuilder<T> implements IElementStyleBuilder<T> {

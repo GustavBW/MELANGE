@@ -5,7 +5,7 @@ import gbw.melange.common.events.observability.IPristineBiConsumer;
 /**
  * <p>IPristineFilterChain interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IPristineFilterChain<T,R> extends IFilterChain<IPristineBiConsumer<T>,R> {

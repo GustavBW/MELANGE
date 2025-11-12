@@ -6,7 +6,7 @@ import gbw.melange.common.elementary.types.IElement;
 /**
  * <p>ReferenceConstraintDefinition class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ReferenceConstraintDefinition implements IReferenceConstraintDefinition {

@@ -3,7 +3,7 @@ package gbw.melange.common.events.observability;
 /**
  * <p>EqualityFunction interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @FunctionalInterface

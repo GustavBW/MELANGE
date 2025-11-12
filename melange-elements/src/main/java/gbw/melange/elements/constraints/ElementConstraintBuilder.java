@@ -10,7 +10,7 @@ import gbw.melange.common.elementary.types.IElement;
 /**
  * <p>ElementConstraintBuilder class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementConstraintBuilder<T> implements IElementConstraintBuilder<T> {

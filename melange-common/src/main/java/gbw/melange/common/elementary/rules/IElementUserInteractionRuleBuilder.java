@@ -5,7 +5,7 @@ import gbw.melange.common.builders.IPartialBuilder;
 /**
  * <p>IElementUserInteractionRuleBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementUserInteractionRuleBuilder extends IPartialBuilder<IElementRuleBuilder> {

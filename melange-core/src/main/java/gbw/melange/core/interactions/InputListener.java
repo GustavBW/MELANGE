@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 @Service
 public class InputListener implements IInputListener {

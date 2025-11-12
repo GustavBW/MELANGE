@@ -9,7 +9,7 @@ import gbw.melange.common.elementary.rules.IElementRuleBuilder;
 /**
  * <p>IElement interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElement<T> extends Disposable, Comparable<IElement<?>>, IConstrainedElement {

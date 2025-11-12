@@ -3,7 +3,7 @@ package gbw.melange.common.elementary;
 /**
  * <p>ElementState class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum ElementState {

@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.types.IConstrainedElement;
 /**
  * <p>ISpaceBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ISpaceBuilder extends IBuilder<IConstrainedElement>{

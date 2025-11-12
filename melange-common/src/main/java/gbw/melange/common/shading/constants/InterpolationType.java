@@ -3,7 +3,7 @@ package gbw.melange.common.shading.constants;
 /**
  * <p>InterpolationType class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum InterpolationType {

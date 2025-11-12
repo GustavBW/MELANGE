@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * <p>SpaceRegistry class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class SpaceRegistry implements ISpaceRegistry {

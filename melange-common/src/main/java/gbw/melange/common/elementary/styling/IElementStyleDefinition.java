@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * <p>IElementStyleDefinition interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementStyleDefinition extends Disposable {

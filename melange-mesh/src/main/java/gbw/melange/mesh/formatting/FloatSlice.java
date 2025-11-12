@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class FloatSlice implements IFloatSlice {
     protected float[] source; //Officially final. But cache invalidation

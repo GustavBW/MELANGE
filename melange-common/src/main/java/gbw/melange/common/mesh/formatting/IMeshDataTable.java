@@ -30,7 +30,7 @@ import java.util.Set;
  *         .
  * </pre>
  *
- * @author GustavBW
+ * @author lilybw
  */
 public interface IMeshDataTable {
 

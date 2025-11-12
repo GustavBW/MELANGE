@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.VertexAttributes;
  * All vertex parameters (x, y, z) are always within a -1 to 1 space.
  * This effectively centers all meshes for rotation and positional purposes.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum MeshTable {

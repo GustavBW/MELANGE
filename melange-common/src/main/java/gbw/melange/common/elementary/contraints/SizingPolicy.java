@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.contraints;
 /**
  * <p>SizingPolicy class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public enum SizingPolicy {

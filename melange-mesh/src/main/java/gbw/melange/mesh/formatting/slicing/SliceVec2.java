@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * @author GustavBW
+ * @author lilybw
  */
 public class SliceVec2 extends FloatSlice implements IFloatSlice, ISliceVec2 {
 

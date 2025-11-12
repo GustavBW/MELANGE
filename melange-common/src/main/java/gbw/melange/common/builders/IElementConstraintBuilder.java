@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.types.IElement;
 /**
  * <p>IElementConstraintBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementConstraintBuilder<T> extends IPartialBuilder<IElementBuilder<T>>{

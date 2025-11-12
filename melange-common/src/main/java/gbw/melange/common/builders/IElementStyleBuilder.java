@@ -10,7 +10,7 @@ import gbw.melange.common.shading.services.Colors;
 /**
  * <p>IElementStyleBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IElementStyleBuilder<T> extends IPartialBuilder<IElementBuilder<T>> {

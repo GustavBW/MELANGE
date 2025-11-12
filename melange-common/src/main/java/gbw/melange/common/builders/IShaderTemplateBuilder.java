@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 /**
  * <p>IShaderTemplateBuilder interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IShaderTemplateBuilder extends IBuilder<ShaderProgram> {

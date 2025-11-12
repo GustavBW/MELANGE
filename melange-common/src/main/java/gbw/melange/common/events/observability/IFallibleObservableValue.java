@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * <p>IFallibleObservableValue interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IFallibleObservableValue<T> extends IObservableValue<T, IFallibleBiConsumer<T>, Integer> {

@@ -23,7 +23,7 @@ import org.springframework.lang.NonNull;
  * <p>ElementBuilder class.</p>
  *
  * @param <T> the type of result from the given OnInit, if any.
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementBuilder<T> implements IElementBuilder<T> {

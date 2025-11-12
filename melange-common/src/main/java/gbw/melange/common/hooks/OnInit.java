@@ -4,7 +4,7 @@ package gbw.melange.common.hooks;
  * Allows individual elements to fetch external data or other.
  * Additionally, this is managed and failed states and loading states taken care of.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 @FunctionalInterface

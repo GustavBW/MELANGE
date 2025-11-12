@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * <p>Selector class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class Selector {

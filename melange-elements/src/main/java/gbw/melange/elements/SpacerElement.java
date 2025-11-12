@@ -12,7 +12,7 @@ import gbw.melange.elements.constraints.ElementConstraints;
 /**
  * <p>SpacerElement class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class SpacerElement implements ISpacerElement {

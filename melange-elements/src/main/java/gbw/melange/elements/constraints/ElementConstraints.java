@@ -7,7 +7,7 @@ import gbw.melange.common.elementary.types.IElement;
  * Physical relations between a given Element and another.
  * A Child will always render on top of a parent
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementConstraints implements IElementConstraints {

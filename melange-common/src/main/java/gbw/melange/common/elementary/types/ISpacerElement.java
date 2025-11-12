@@ -3,7 +3,7 @@ package gbw.melange.common.elementary.types;
 /**
  * Represents empty space. If a nearby element has {@link gbw.melange.common.elementary.contraints.SizingPolicy#FIT_CONTENT}, it will take priority in terms of space use.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface ISpacerElement extends IConstrainedElement {

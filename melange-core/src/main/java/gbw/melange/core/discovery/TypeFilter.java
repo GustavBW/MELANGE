@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 /**
  * <p>TypeFilter class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class TypeFilter {

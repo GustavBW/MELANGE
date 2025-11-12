@@ -3,7 +3,7 @@ package gbw.melange.mesh.modifiers;
 /**
  * <p>MeshDecimator class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class MeshDecimator {

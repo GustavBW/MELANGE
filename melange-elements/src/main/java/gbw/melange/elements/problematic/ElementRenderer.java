@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * <p>ElementRenderer class.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public class ElementRenderer implements IElementRenderer {

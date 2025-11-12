@@ -4,7 +4,7 @@ package gbw.melange.common.events.observability;
 /**
  * <p>IPristineObservableValue interface.</p>
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface IPristineObservableValue<T> extends IObservableValue<T, IPristineBiConsumer<T>, Integer> {

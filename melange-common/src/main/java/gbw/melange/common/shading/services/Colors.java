@@ -17,7 +17,7 @@ import gbw.melange.common.shading.postprocess.IBoxBlurShader;
  * Spring-distributed entry point for the melange colors api.
  * Allows for quick and easy configuration of procedural shaders.
  *
- * @author GustavBW
+ * @author lilybw
  * @version $Id: $Id
  */
 public interface Colors {
